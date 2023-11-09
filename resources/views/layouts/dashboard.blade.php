@@ -4,12 +4,12 @@
 <div class="flex">
     <div class="min-w-[260px] bg-[#F7FAFC] h-screen mt-[30px]">
         <div class="text-2xl text-center p-4">Nazim</div>
-        <x-menu activate-by-route active-bg-color="bg-[#EDF2F7]" class="border border-dashed">
+        <x-menu activate-by-route active-bg-color="text-purple-500 font-semibold" class="border border-dashed">
             <div class="flex flex-col justify-center gap-3 text-[17px]">
 
                 <div class="text-[12px] text-[#757575] pl-2 pt-6">ARTICLES</div>
-                <x-menu-item title="Generate Articles" icon="o-plus" />
-                <x-menu-item title="History" icon="o-clock" />
+                <x-menu-item title="Generate Articles" icon="o-plus"  link="{{ route('dashboard') }}"/>
+                <x-menu-item title="History" icon="o-clock"  link="{{ route('history') }}"/>
 
                 <div class="text-[12px] text-[#757575] pl-2 pt-6">CUSTOMIZATION</div>
                 <x-menu-item title="Presets" icon="s-square-3-stack-3d" />
@@ -32,7 +32,7 @@
         </x-menu>
     </div>
     <div class="w-3/4 bg-white h-screen">
-        cccc
+        @yield('dashboard-content')
     </div>
 </div>
 @endsection

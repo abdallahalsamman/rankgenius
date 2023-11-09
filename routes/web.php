@@ -21,6 +21,7 @@ Route::post('/login', [PasswordlessAuthenticationController::class, 'sendLink'])
 Route::get('/login/{user}', [PasswordlessAuthenticationController::class, 'authenticateUser'])->name('passwordless.authenticate');
 
 Route::middleware(['auth'])->group(function () {
-    Route::view('/dashboard', 'dashboard');
+    Route::view('/dashboard', 'generate-articles')->name('dashboard');
+    Route::view('/history', 'history')->name('history');
     Route::post('/logout', [PasswordlessAuthenticationController::class, 'logout'])->name('logout');
 });
