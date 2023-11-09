@@ -5,7 +5,14 @@
     <div class="min-w-[260px] bg-base-300 h-full">
         <x-menu activate-by-route active-bg-color="text-purple-500 font-semibold" class="border p-0 border-dashed h-full">
             <div class="h-full text-[17px] grid grid-rows-[50px_minmax(300px,_1fr)_160px]">
-                <div class="text-2xl text-center border-b-[1px] border-[#bebebe]">Nazim</div>
+                <div class="border-b-[1px] w-full px-2 border-[#bebebe]">
+                    <a href="{{ route('dashboard') }}">
+                        <div class="w-full h-full flex items-center pl-[11px]">
+                            <x-icon name="iconsax.bul-ranking" class="w-[30px] h-[30px]" />
+                            <span class="text-[25px] pl-2 font-bold">ContentAIO</span>
+                        </div>
+                    </a>
+                </div>
                 <div class="flex flex-col gap-[0.4rem] overflow-scroll pb-8 p-2 scrollable-div" id="menu-with-links">
                     <div class="text-[12px] text-[#757575] pl-2 pt-6">ARTICLES</div>
                     <x-menu-item title="Generate Articles" icon="o-plus" link="{{ route('dashboard') }}" />
