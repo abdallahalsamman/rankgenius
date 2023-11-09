@@ -3,10 +3,10 @@
 @section('content')
 <div class="flex">
     <div class="w-1/4 bg-gray-100 h-screen">
-        <x-menu activate-by-route active-bg-color="bg-blue-50" class="border border-dashed">
+        <x-menu activate-by-route active-bg-color="text-purple-500 font-semibold" class="border border-dashed">
 
-            <x-menu-item title="Generate Articles" icon="o-plus" />
-            <x-menu-item title="Navigate to Alert docs" icon="o-arrow-right" link="/docs/components/alert" />
+            <x-menu-item title="Generate Articles" icon="o-plus" link="{{ route('dashboard') }}" />
+            <x-menu-item title="History" icon="o-arrow-right" link="{{ route('history') }}" />
 
             <x-menu-separator />
 
@@ -32,7 +32,7 @@
         </x-menu>
     </div>
     <div class="w-3/4 bg-white h-screen">
-        cccc
+        @yield('dashboard-content')
     </div>
 </div>
 @endsection
