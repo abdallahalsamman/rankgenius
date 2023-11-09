@@ -1,3 +1,22 @@
 @tailwind base;
 @tailwind components;
-@tailwind utilities
+@tailwind utilities;
+
+.scrollable-div {
+    position: relative;
+    overflow: auto;
+    box-shadow: inset 0px 10px 8px -10px #000000,
+                inset 0px -10px 8px -10px #000000;
+}
+
+.shadow-top {
+    box-shadow: inset 0px 10px 8px -10px #000000;
+}
+
+.shadow-bottom {
+    box-shadow: inset 0px -10px 8px -10px #000000;
+}
+
+.shadow-none {
+    box-shadow: none;
+}
