@@ -23,5 +23,5 @@ Route::get('/login/{user}', [PasswordlessAuthenticationController::class, 'authe
 Route::middleware(['auth'])->group(function () {
     Route::view('/dashboard', 'generate-articles')->name('dashboard');
     Route::view('/history', 'history')->name('history');
-    Route::post('/logout', [PasswordlessAuthenticationController::class, 'logout'])->name('logout');
+    Route::get('/logout', [PasswordlessAuthenticationController::class, 'logout'])->name('logout');
 });
