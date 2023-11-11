@@ -1,5 +1,5 @@
 <div>
-    <x-header class="text-[40px]" title="Generate Articles" subtitle="Fill the information below to start generating articles for your business." />
+    <x-header size="text-xl font-[700] mb-10" class="" title="Generate Articles" subtitle="Fill the information below to start generating articles for your business." />
 
     <x-tabs wire:model="selectedTab" selected="simple-mode-tab">
 

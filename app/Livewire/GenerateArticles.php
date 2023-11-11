@@ -12,12 +12,6 @@ class GenerateArticles extends Component
     public $articleCount = 1, $outputLanguage = "en";
     public $preset = 0;
 
-        const STATUS = [
-            'DONE' => 'DONE',
-            'CANCELED' => 'CANCELED',
-            'GENERATING' => 'GENERATING',
-        ];
-
     public function mount()
     {
         $this->outputLanguage = "en";
@@ -33,7 +27,7 @@ class GenerateArticles extends Component
             Batch::create([
                 'id' => Str::uuid(),
                 'summary' => $this->businessUrl . "\n" . $this->businessDescription,
-                'status' => self::STATUS['GENERATING'],
+                'status' => Batch::$STATUS['IN_PROGRESS'],
             ]);
 
             redirect()->route('history');

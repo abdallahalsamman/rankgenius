@@ -17,23 +17,23 @@
                     <div class="text-[12px] text-[#757575] pl-2 pt-6">ARTICLES</div>
                     <x-menu-item title="Generate Articles" icon="o-plus" link="{{ route('dashboard') }}" />
                     <x-menu-item title="History" icon="o-clock" link="{{ route('history') }}" />
-                    <x-menu-item title="All Articles" icon="bi.grid-3x3-gap-fill" link="{{ route('history') }}" />
+                    <x-menu-item title="All Articles" icon="bi.grid-3x3-gap-fill" />
 
                     <span class="text-[12px] text-[#757575] pl-2 pt-6">CUSTOMIZATION</span>
                     <x-menu-item title="Presets" icon="s-square-3-stack-3d" />
-                    <x-menu-item title="Brands" icon="m-globe-asia-australia" />
-                    <x-menu-item title="Custom Images" icon="m-photo" />
+                    <!-- <x-menu-item title="Brands" icon="m-globe-asia-australia" />
+                    <x-menu-item title="Custom Images" icon="m-photo" /> -->
 
                     <span class="text-[12px] text-[#757575] pl-2 pt-6">AUTOMATION</span>
                     <x-menu-item title="AutoBlogs" icon="fas.robot" />
                     <x-menu-item title="Integrations" icon="fab.wordpress" />
-                    <x-menu-item title="Calendar" icon="s-calendar-days" />
-                    <x-menu-item title="Indexers" icon="phosphor.list-checks-bold" />
+                    <!-- <x-menu-item title="Calendar" icon="s-calendar-days" /> -->
+                    <!-- <x-menu-item title="Indexers" icon="phosphor.list-checks-bold" /> -->
                     <x-menu-item title="Publications" icon="phosphor.telegram-logo-thin" />
-                    <x-menu-item title="Keyword Monitors" icon="m-magnifying-glass" />
+                    <!-- <x-menu-item title="Keyword Monitors" icon="m-magnifying-glass" /> -->
 
                     <span class="text-[12px] text-[#757575] pl-2 pt-6">ACCOUNT</span>
-                    <x-menu-item title="Invite users" icon="s-user-group" />
+                    <!-- <x-menu-item title="Invite users" icon="s-user-group" /> -->
                     <x-menu-item title="Subscription" icon="m-credit-card" />
                 </div>
 
