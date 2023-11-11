@@ -1,11 +1,11 @@
-@extends("layouts.app")
+@extends("components.layouts.app")
 
 @section('content')
-<div class="flex h-screen max-h-screen">
-    <div class="min-w-[260px] bg-base-300 h-full">
+<div class="flex w-full md:flex-col h-screen max-h-screen md:h-full md:max-h-full">
+    <div class="min-w-[260px] md:w-full bg-base-300 h-full">
         <x-menu activate-by-route active-bg-color="text-purple-500 font-semibold" class="border p-0 border-dashed h-full">
-            <div class="h-full text-[17px] grid grid-rows-[50px_minmax(300px,_1fr)_160px]">
-                <div class="border-b-[1px] w-full px-2 border-[#bebebe]">
+            <div class="h-full text-[17px] grid grid-rows-[60px_minmax(300px,_1fr)_160px] md:block">
+                <div class="h-[60px] md:mt-6 md:pb-5 border-b-[1px] w-full px-2 border-[#bebebe]">
                     <a href="{{ route('dashboard') }}">
                         <div class="w-full h-full flex items-center pl-[11px]">
                             <x-icon name="iconsax.bul-ranking" class="w-[30px] h-[30px]" />
@@ -13,10 +13,11 @@
                         </div>
                     </a>
                 </div>
-                <div class="flex flex-col gap-[0.4rem] overflow-scroll pb-8 p-2 scrollable-div" id="menu-with-links">
+                <div class="flex flex-col border-b-[1px] border-[#bebebe] gap-[0.4rem] overflow-scroll pb-8 p-2 scrollable-div" id="menu-with-links">
                     <div class="text-[12px] text-[#757575] pl-2 pt-6">ARTICLES</div>
                     <x-menu-item title="Generate Articles" icon="o-plus" link="{{ route('dashboard') }}" />
                     <x-menu-item title="History" icon="o-clock" link="{{ route('history') }}" />
+                    <x-menu-item title="All Articles" icon="bi.grid-3x3-gap-fill" link="{{ route('history') }}" />
 
                     <span class="text-[12px] text-[#757575] pl-2 pt-6">CUSTOMIZATION</span>
                     <x-menu-item title="Presets" icon="s-square-3-stack-3d" />
@@ -49,6 +50,13 @@
                 const div = document.getElementById('menu-with-links');
 
                 const checkScroll = () => {
+                    if (window.innerWidth < 756) {
+                        div.classList.remove('shadow-top');
+                        div.classList.remove('shadow-bottom');
+                        div.classList.remove('scrollable-div');
+                        return
+                    }
+
                     if (div.scrollTop === 0) {
                         div.classList.remove('shadow-top');
                         div.classList.add('shadow-bottom');
@@ -64,11 +72,12 @@
 
                 checkScroll();
                 div.addEventListener('scroll', checkScroll);
+                div.addEventListener('touchmove', checkScroll);
             });
         </script>
     </div>
-    <div class="w-3/4 bg-white">
-        @yield('dashboard-content')
+    <div class="w-full bg-white p-10">
+        {{ $slot }}
     </div>
 </div>
 @endsection

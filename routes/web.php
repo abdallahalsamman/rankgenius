@@ -1,5 +1,8 @@
 <?php
 
+use App\Livewire\History;
+use App\Livewire\HistoryView;
+use App\Livewire\GenerateArticles;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\PasswordlessAuthenticationController;
 
@@ -16,12 +19,16 @@ use App\Http\Controllers\Auth\PasswordlessAuthenticationController;
 
 Route::view('/', 'welcome');
 
-Route::view('/login', 'auth.login');
-Route::post('/login', [PasswordlessAuthenticationController::class, 'sendLink'])->middleware('throttle:3,1')->name('login');
-Route::get('/login/{user}', [PasswordlessAuthenticationController::class, 'authenticateUser'])->name('passwordless.authenticate');
+Route::middleware(['guest'])->group(function () {
+    Route::view('/login', 'auth.login');
+    Route::post('/login', [PasswordlessAuthenticationController::class, 'sendLink'])->middleware('throttle:3,1')->name('login');
+    Route::get('/login/{user}', [PasswordlessAuthenticationController::class, 'authenticateUser'])->name('passwordless.authenticate');
+});
 
 Route::middleware(['auth'])->group(function () {
-    Route::view('/dashboard', 'generate-articles')->name('dashboard');
-    Route::view('/history', 'history')->name('history');
+    Route::get('/dashboard', GenerateArticles::class)->name('dashboard');
+    Route::get('/history', History::class)->name('history');
+    Route::get('/history/{id}', HistoryView::class)->name('history-view');
     Route::get('/logout', [PasswordlessAuthenticationController::class, 'logout'])->name('logout');
 });
+
