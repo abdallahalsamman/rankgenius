@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="flex w-full md:flex-col h-screen max-h-screen md:h-full md:max-h-full">
-    <div class="min-w-[260px] md:w-full bg-base-300 h-full">
+    <div class="min-w-[260px] md:w-full bg-[#f7fafc] h-full">
         <x-menu activate-by-route active-bg-color="text-purple-500 font-semibold" class="border p-0 border-dashed h-full">
             <div class="h-full text-[17px] grid grid-rows-[60px_minmax(300px,_1fr)_160px] md:block">
                 <div class="h-[60px] md:mt-6 md:pb-5 border-b-[1px] w-full px-2 border-[#bebebe]">
@@ -13,7 +13,7 @@
                         </div>
                     </a>
                 </div>
-                <div class="flex flex-col border-b-[1px] border-[#bebebe] gap-[0.4rem] overflow-scroll pb-8 p-2 scrollable-div" id="menu-with-links">
+                <div class="flex flex-col border-b-[1px] border-[#bebebe] gap-[0.4rem] overflow-y-scroll pb-8 p-2 scrollable-div">
                     <div class="text-[12px] text-[#757575] pl-2 pt-6">ARTICLES</div>
                     <x-menu-item title="Generate Articles" icon="o-plus" link="{{ route('dashboard') }}" />
                     <x-menu-item title="History" icon="o-clock" link="{{ route('history') }}" />
@@ -45,38 +45,8 @@
 
             </div>
         </x-menu>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const div = document.getElementById('menu-with-links');
-
-                const checkScroll = () => {
-                    if (window.innerWidth < 756) {
-                        div.classList.remove('shadow-top');
-                        div.classList.remove('shadow-bottom');
-                        div.classList.remove('scrollable-div');
-                        return
-                    }
-
-                    if (div.scrollTop === 0) {
-                        div.classList.remove('shadow-top');
-                        div.classList.add('shadow-bottom');
-                    } else if (div.scrollHeight - div.scrollTop === div.clientHeight) {
-                        div.classList.remove('shadow-bottom');
-                        div.classList.add('shadow-top');
-                    } else {
-                        div.classList.remove('shadow-top');
-                        div.classList.remove('shadow-bottom');
-                        div.classList.add('scrollable-div');
-                    }
-                };
-
-                checkScroll();
-                div.addEventListener('scroll', checkScroll);
-                div.addEventListener('touchmove', checkScroll);
-            });
-        </script>
     </div>
-    <div class="w-full bg-white p-10">
+    <div class="w-full max-w-full bg-white p-10 overflow-y-scroll">
         {{ $slot }}
     </div>
 </div>

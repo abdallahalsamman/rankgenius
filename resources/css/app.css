@@ -3,20 +3,8 @@
 @tailwind utilities;
 
 .scrollable-div {
-    position: relative;
-    overflow: auto;
-    box-shadow: inset 0px 10px 8px -10px #000000,
-                inset 0px -10px 8px -10px #000000;
-}
-
-.shadow-top {
-    box-shadow: inset 0px 10px 8px -10px #000000;
-}
-
-.shadow-bottom {
-    box-shadow: inset 0px -10px 8px -10px #000000;
-}
-
-.shadow-none {
-    box-shadow: none;
+    background: linear-gradient(#f7fafc 33%,rgba(247,250,252,0)),linear-gradient(rgba(247,250,252,0),#f7fafc 66%) 0 100%,radial-gradient(farthest-side at 50% 0,rgba(34,34,34,.5),rgba(0,0,0,0)),radial-gradient(farthest-side at 50% 100%,rgba(34,34,34,.5),rgba(0,0,0,0)) 0 100%;
+    background-repeat: no-repeat;
+    background-attachment: local,local,scroll,scroll;
+    background-size: 100% 36px,100% 36px,100% 12px,100% 12px;
 }

@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('batches', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('mode');
+            $table->string('language');
+            $table->integer('quantity');
             $table->string('summary');
             $table->string('status');
             $table->timestamps();

@@ -9,7 +9,11 @@
 
     @endphp
 
-    <x-table :headers="$headers" :rows="$batches">
+    <x-table class="" :headers="$headers" :rows="$batches">
+        @scope('cell_summary', $batch)
+            {{ Str::limit($batch->summary, 80, ' ...') }}
+        @endscope
+
         @scope('cell_status', $batch)
         @inject('Batch', \App\Models\Batch::class)
         @php
@@ -20,7 +24,7 @@
             $STATUS['CANCELLED'] => "bg-red-100 text-error-content"
         ];
         @endphp
-        <div class="{{ $statusColor[$batch->status] }} rounded text-sm w-fit font-medium py-1 px-2">{{ $batch->status }}</div>
+        <div class="{{ $statusColor[$batch->status] }} whitespace-nowrap rounded text-sm w-fit font-medium py-1 px-2">{{ $batch->status }}</div>
         @endscope
 
         @scope('actions', $batch)

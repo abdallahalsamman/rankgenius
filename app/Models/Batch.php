@@ -18,5 +18,11 @@ class Batch extends Model
         'IN_PROGRESS' => 'In Progress',
     ];
 
-    protected $fillable = ['id', 'summary', 'status'];
+    public static $MODES = [
+        'SIMPLE' => '',
+        'CANCELLED' => 'Cancelled',
+        'IN_PROGRESS' => 'In Progress',
+    ];
+
+    protected $fillable = ['id', 'mode', 'summary', 'language', 'quantity', 'status'];
 }

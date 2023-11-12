@@ -18,24 +18,23 @@
         </div>
 
         <div class="w-full flex items-center px-6 py-3  border-b-[1px] border-base-200 ">
-            <div class="w-1/2 font-bold text-sm text-gray-600">CONTEXT</div>
+            <div class="w-1/2 font-bold text-sm text-gray-600">{{ $batch->mode }}</div>
             <div class="w-1/2">
-                Gorgeous Laravel blade UI components
-                made for Livewire 3 and styled around daisyUI + Tailwind
-            </div>
+                <pre>{{ $batch->summary }}</pre>
+        </div>
         </div>
 
         <div class="w-full flex items-center px-6 py-3  border-b-[1px] border-base-200 ">
             <div class="w-1/2 font-bold text-sm text-gray-600">LANGUAGE</div>
             <div class="w-1/2">
-                English
+                {{ $batch->language }}
             </div>
         </div>
 
         <div class="w-full flex items-center px-6 py-3  border-b-[1px] border-base-200 ">
             <div class="w-1/2 font-bold text-sm text-gray-600">ARTICLES</div>
             <div class="w-1/2">
-                1 / 1
+                1 / {{ $batch->quantity }}
             </div>
         </div>
 
