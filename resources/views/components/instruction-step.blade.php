@@ -1,3 +1,4 @@
-<div class="font-bold mt-5">
-    <span class="bg-primary text-white px-[10px] mr-1 py-[4px] rounded-md">{{ $number }}</span> {{ $instruction }}
+<div class="{{ $class ?? '' }}">
+    <span class="font-normal bg-primary text-white text-center mr-1 rounded-md {{ $numberClass ?? '' }}">{{ $number }}</span>
+    {{ $instruction }}
 </div>

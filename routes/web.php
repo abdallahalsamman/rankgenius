@@ -5,6 +5,9 @@ use App\Livewire\HistoryView;
 use App\Livewire\GenerateArticles;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\PasswordlessAuthenticationController;
+use App\Livewire\PresetEdit;
+use App\Livewire\Presets;
+use App\Livewire\PresetView;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +32,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', GenerateArticles::class)->name('dashboard');
     Route::get('/history', History::class)->name('history');
     Route::get('/history/{id}', HistoryView::class)->name('history-view');
+    Route::get('/presets', Presets::class)->name('presets');
+    Route::get('/presets/create', PresetView::class)->name('preset-view');
+    Route::get('/presets/{id}', PresetEdit::class)->name('preset-edit');
     Route::get('/logout', [PasswordlessAuthenticationController::class, 'logout'])->name('logout');
 });
 

@@ -1,34 +1,37 @@
 <div>
-    <x-header size="text-xl font-[700]" title="History" subtitle="Your latest batches." />
+    <x-header size="text-xl font-[700] mb-5" title="History" subtitle="Your latest batches." />
 
     @php
     $headers = [
-        ['key' => 'summary', 'label' => 'SUMMARY', 'class' => 'text-gray-600 tracking-wider'],
-        ['key' => 'status', 'label' => 'STATUS', 'class' => 'text-gray-600 tracking-wider'],
+    ['key' => 'summary', 'label' => 'SUMMARY', 'class' => 'text-gray-600 tracking-wider'],
+    ['key' => 'status', 'label' => 'STATUS', 'class' => 'text-gray-600 tracking-wider'],
     ];
 
     @endphp
 
     <x-table class="" :headers="$headers" :rows="$batches">
         @scope('cell_summary', $batch)
-            {{ Str::limit($batch->summary, 80, ' ...') }}
+        <strong>{{ Str::title($batch->mode) }}</strong><br>
+        {{ Str::limit($batch->summary, 80, ' ...') }}
         @endscope
 
         @scope('cell_status', $batch)
-        @inject('Batch', \App\Models\Batch::class)
         @php
-        $STATUS = $Batch::$STATUS;
         $statusColor = [
-            $STATUS['IN_PROGRESS'] => "bg-blue-100 text-info-content",
-            $STATUS['DONE'] => "bg-green-100 text-success-content",
-            $STATUS['CANCELLED'] => "bg-red-100 text-error-content"
+            \App\Enums\BatchStatusEnum::IN_PROGRESS->value => "bg-blue-100 text-info-content",
+            \App\Enums\BatchStatusEnum::DONE->value => "bg-green-100 text-success-content",
+            \App\Enums\BatchStatusEnum::CANCELLED->value => "bg-red-100 text-error-content"
         ];
         @endphp
-        <div class="{{ $statusColor[$batch->status] }} whitespace-nowrap rounded text-sm w-fit font-medium py-1 px-2">{{ $batch->status }}</div>
+        <div class="{{ $statusColor[$batch->status] }} whitespace-nowrap rounded text-sm w-fit font-medium py-1 px-2">{{ Str::title($batch->status) }}</div>
         @endscope
 
         @scope('actions', $batch)
         <x-button label="View" link="{{ route('history-view', ['id' => $batch->id]) }}" spinner class="btn-sm" />
         @endscope
     </x-table>
+
+    @if(empty($batches))
+    <div class="text-center py-2 rounded-b-md text-[#a0aec0] bg-[#edf2f7]">All your batches will show up here.</div>
+    @endif
 </div>

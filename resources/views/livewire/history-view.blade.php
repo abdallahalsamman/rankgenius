@@ -4,16 +4,14 @@
         <div class="w-full flex items-center px-6 py-3  border-b-[1px] border-base-200 ">
             <div class="w-1/2 font-bold text-sm text-gray-600">STATUS</div>
             <div class="w-1/2">
-                @inject('Batch', \App\Models\Batch::class)
                 @php
-                $STATUS = $Batch::$STATUS;
                 $statusColor = [
-                $STATUS['IN_PROGRESS'] => "bg-blue-100 text-info-content",
-                $STATUS['DONE'] => "bg-green-100 text-success-content",
-                $STATUS['CANCELLED'] => "bg-red-100 text-error-content"
+                    \App\Enums\BatchStatusEnum::IN_PROGRESS->value => "bg-blue-100 text-info-content",
+                    \App\Enums\BatchStatusEnum::DONE->value => "bg-green-100 text-success-content",
+                    \App\Enums\BatchStatusEnum::CANCELLED->value => "bg-red-100 text-error-content"
                 ];
                 @endphp
-                <div class="{{ $statusColor[$batch->status] }} rounded text-sm w-fit font-medium py-1 px-2">{{ $batch->status }}</div>
+                <div class="{{ $statusColor[$batch->status] }} rounded text-sm w-fit font-medium py-1 px-2">{{ Str::title($batch->status) }}</div>
             </div>
         </div>
 

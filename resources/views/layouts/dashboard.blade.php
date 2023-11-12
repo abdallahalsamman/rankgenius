@@ -20,7 +20,7 @@
                     <x-menu-item title="All Articles" icon="bi.grid-3x3-gap-fill" />
 
                     <span class="text-[12px] text-[#757575] pl-2 pt-6">CUSTOMIZATION</span>
-                    <x-menu-item title="Presets" icon="s-square-3-stack-3d" />
+                    <x-menu-item title="Presets" icon="s-square-3-stack-3d" link="{{ route('presets') }}" />
                     <!-- <x-menu-item title="Brands" icon="m-globe-asia-australia" />
                     <x-menu-item title="Custom Images" icon="m-photo" /> -->
 

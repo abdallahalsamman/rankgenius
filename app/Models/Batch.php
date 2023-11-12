@@ -12,17 +12,5 @@ class Batch extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    public static $STATUS = [
-        'DONE' => 'Done',
-        'CANCELLED' => 'Cancelled',
-        'IN_PROGRESS' => 'In Progress',
-    ];
-
-    public static $MODES = [
-        'SIMPLE' => '',
-        'CANCELLED' => 'Cancelled',
-        'IN_PROGRESS' => 'In Progress',
-    ];
-
     protected $fillable = ['id', 'mode', 'summary', 'language', 'quantity', 'status'];
 }

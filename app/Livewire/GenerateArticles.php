@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use App\Enums\BatchModeEnum;
+use App\Enums\BatchStatusEnum;
 use App\Models\Batch;
 use Livewire\Component;
 use Illuminate\Support\Str;
@@ -27,7 +29,7 @@ class GenerateArticles extends Component
             'quantity' => "required|integer|in:" . join(",", $this->simple_mode_allowed_article_quantity)
         ]);
 
-        $mode = "CONTEXT";
+        $mode = BatchModeEnum::CONTEXT;
         $summary = trim($this->businessUrl . "\n" . $this->businessDescription);
         $quantity = $this->quantity;
         return $this->generateArticles($mode, $summary, $quantity);
@@ -38,14 +40,14 @@ class GenerateArticles extends Component
             'titles' => "required|min:10|max:2000",
         ]);
 
-        $mode = "TITLES";
+        $mode = BatchModeEnum::TITLE;
         $summary = $this->titles;
         $quantity = substr_count($this->titles, "\n") + 1;
         return $this->generateArticles($mode, $summary, $quantity);
     }
 
     public function keywordMode() {
-        $mode = "KEYWORDS";
+        $mode = BatchModeEnum::KEYWORD;
         $summary = $this->keywords;
         $quantity = substr_count($this->titles, "\n") + 1;
         return $this->generateArticles($mode, $summary, $quantity);
@@ -56,8 +58,9 @@ class GenerateArticles extends Component
             'quantity' => "required|integer|in:" . join(",", $this->preset_mode_allowed_article_quantity)
         ]);
 
-        $mode = "PRESET";
-        $summary = Preset::where('id', $this->preset)->first()->Name;
+        $preset = Preset::where('id', $this->preset)->first();
+        $summary = $preset->summary;
+        $mode = $preset->mode;
         $quantity = $this->quantity;
         return $this->generateArticles($mode, $summary, $quantity);
     }
@@ -70,7 +73,7 @@ class GenerateArticles extends Component
             'summary' => $summary,
             'language' => $this->language,
             'quantity' => $quantity,
-            'status' => Batch::$STATUS['IN_PROGRESS'],
+            'status' => BatchStatusEnum::IN_PROGRESS,
         ]);
 
         return redirect()->route('history');
