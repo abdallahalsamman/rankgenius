@@ -2,17 +2,31 @@
 
 namespace App\Livewire;
 
-use App\Enums\BatchModeEnum;
 use Livewire\Component;
+use Illuminate\Support\Str;
+use App\Enums\BatchModeEnum;
 
 class PresetView extends Component
 {
     public $language = "English";
     public $generationMode;
+    public $extraLinksCount = [];
 
     public function mount()
     {
         $this->generationMode = BatchModeEnum::CONTEXT->value;
+    }
+
+    public function incrementLinkCount()
+    {
+        $this->extraLinksCount[] = (string) Str::uuid();
+    }
+
+    public function removeLink($id)
+    {
+        $this->extraLinksCount = array_filter($this->extraLinksCount, function($link) use ($id) {
+            return $link !== $id;
+        });
     }
 
     public function save()

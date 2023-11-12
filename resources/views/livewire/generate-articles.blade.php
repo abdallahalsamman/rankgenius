@@ -79,7 +79,7 @@ What are the different types of bread?"
                 <x-form wire:submit="presetMode">
                     <div class="flex justify-between items-end">
                         <x-instruction-step number-class="px-[10px] py-[4px]" number="1" class="font-bold mt-5" instruction="Choose your preset" />
-                        <x-button label="+ Create Preset" class="btn-outline btn-xs btn-primary" tooltip="Mary" />
+                        <x-button icon="bi.plus" label="Create Preset" class="btn-outline btn-xs btn-primary" />
                     </div>
                     @php
                         $presets = [['id' => 0, 'name' => 'Please select a preset.', 'disabled' => true]];
