@@ -11,6 +11,8 @@ class PresetView extends Component
     public $language = "English";
     public $generationMode;
     public $extraLinksCount = [];
+    public $externalLinksEnabled = false, $featureImageEnabled= true, $inArticleImageEnabled = false;
+    public $automateYoutubeVideosEnabled = false;
 
     public function mount()
     {
