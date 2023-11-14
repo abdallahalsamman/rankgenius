@@ -8,3 +8,9 @@
     background-attachment: local,local,scroll,scroll;
     background-size: 100% 36px,100% 36px,100% 12px,100% 12px;
 }
+
+.popUpMessage {
+    .modal-box {
+        max-width: 42rem;
+    }
+}
