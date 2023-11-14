@@ -3,9 +3,9 @@
         subtitle="Create a new Preset that instructs Journalist AI the type of articles you want to generate." />
 
     <x-form wire:submit="save">
-
-        <x-input label="Name" placeholder="My Special Preset" wire:model="name" class="mb-4" />
-
+        <div class="mb-4">
+            <x-input label="Name" placeholder="My Special Preset" wire:model="name" />
+        </div>
         <div>
             {{-- Number 1 --}}
             <div tabindex="0" class="collapse collapse-arrow border border-base-300 rounded-md rounded-b-none">
@@ -98,7 +98,7 @@
 
                     <div class="mb-2 mr-3 pt-5 font-medium">Tone of Voice</div>
                     <div class="max-w-sm">
-                        <x-input placeholder="Neutral" wire:model="toneOfVoice" />
+                        <x-input placeholder="Neutral" maxlength="80" wire:model="toneOfVoice" />
                     </div>
                     <div class="text-sm mt-2">Examples: <span class="bg-[#e2e8f0] text-xs">funny</span> <span
                             class="bg-[#e2e8f0] text-xs">informal</span> <span
@@ -136,7 +136,7 @@
                             <div class="bg-[#feebc8] text-[#7b341e] text-sm rounded-md px-2 py-1">Advanced</div>
                         </div>
                         <x-textarea wire:model="customInstructions" placeholder="Short and punchy phrases."
-                            class="text-[16px] min-h-[80px] max-h-[400px]" maxlength="1024" />
+                            class="text-[16px] min-h-[80px] max-h-[400px]" maxlength="250" />
                     </div>
                     <div class="text-sm text-gray-600">We'll use these instructions to generate each paragraph.</div>
                     <div class="text-sm text-gray-600">intructions <span class="font-bold">do not affect the
@@ -154,7 +154,7 @@
                 </div>
                 <div class="collapse-content">
                     <div class="mb-2 mr-3 font-medium mt-5">Call-To-Action</div>
-                    <x-input type="text" placeholder="https://mywebsite.com" wire:model="callToAction"
+                    <x-input type="text" maxlength="255" placeholder="https://mywebsite.com" wire:model="callToAction"
                         class="mb-2" />
                     <div class="text-sm">
                         We'll add an extra <span class="bg-[#e2e8f0] text-xs px-0.5">h3</span> to your articles with a
@@ -178,7 +178,7 @@
                 </div>
                 <div class="collapse-content">
                     <div class="mb-2 mr-3 font-medium mt-5">Sitemap URL</div>
-                    <x-input type="text" wire:model="sitemapUrl" placeholder="https://mywebsite.com/sitemap.xml"
+                    <x-input type="text" maxlength="255" wire:model="sitemapUrl" placeholder="https://mywebsite.com/sitemap.xml"
                         class="mb-2" />
                     <div class="text-sm">A website can have multiple sitemaps. Provide the sitemap of your blog posts.
                         <br>
@@ -187,7 +187,7 @@
                     </div>
 
                     <div class="mb-2 mr-3 font-medium mt-5">Filter Sitemap</div>
-                    <x-input type="text" wire:model="sitemapFilter" placeholder="/example/" class="mb-2" />
+                    <x-input type="text" maxlength="255" wire:model="sitemapFilter" placeholder="/example/" class="mb-2" />
                     <div class="text-sm">
                         We will <strong>only</strong> use URLs from the sitemap that contain this pattern.
                         <br>
@@ -224,9 +224,9 @@
                     @foreach ($extraLinks as $id => $extraLink)
                         <div wire:key="{{ $id }}"
                             class="grid grid-cols-[1fr,1fr,1fr] gap-5 w-full my-3 text-center items-center">
-                            <x-input class="btn-sm text-sm" wire:model="extraLinks.{{ $id }}.url"
+                            <x-input class="btn-sm text-sm" maxlength="255" wire:model="extraLinks.{{ $id }}.url"
                                 placeholder="{{ url('/') }}">URL</x-input>
-                            <x-input class="btn-sm text-sm" wire:model="extraLinks.{{ $id }}.anchor"
+                            <x-input class="btn-sm text-sm" maxlength="255" wire:model="extraLinks.{{ $id }}.anchor"
                                 placeholder="Leave blank to auto generate">Anchor</x-input>
                             <div class="flex items-center gap-3">
                                 <x-button icon="m-minus-small"
@@ -319,7 +319,7 @@
                     @if (!$automateYoutubeVideosEnabled)
                         <div class="font-medium mt-4">
                             <div class="mb-2 mr-3 pt-5 font-medium">Youtube Videos (1 link per line)</div>
-                            <x-textarea wire:model="youtubeVideos"
+                            <x-textarea wire:model="youtubeVideos" maxlength="1000"
                                 placeholder="https://www.youtube.com/watch?v=P56_I4s9L9Q"
                                 class="text-[16px] min-h-[80px] max-h-[400px]" maxlength="1024" />
                         </div>
@@ -331,7 +331,8 @@
             </div>
         </div>
         <div class="grid grid-cols-2 gap-5 w-full mt-5">
-            <x-button label="Cancel" link="{{route('presets')}}" class="btn-primary btn-outline text-base text-base-100 w-full" />
+            <x-button label="Cancel" link="{{ route('presets') }}"
+                class="btn-primary btn-outline text-base text-base-100 w-full" />
             <x-button type="submit" label="Create New Preset" class="btn-primary text-base text-base-100 w-full" />
         </div>
     </x-form>

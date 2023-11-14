@@ -17,7 +17,7 @@
                     <div class="text-[12px] text-[#757575] pl-2 pt-6">ARTICLES</div>
                     <x-menu-item title="Generate Articles" icon="o-plus" link="{{ route('dashboard') }}" />
                     <x-menu-item title="History" icon="o-clock" link="{{ route('history') }}" />
-                    <x-menu-item title="All Articles" icon="bi.grid-3x3-gap-fill" />
+                    <x-menu-item title="All Articles" icon="bi.grid-3x3-gap-fill" link="{{ route('articles') }}" />
 
                     <span class="text-[12px] text-[#757575] pl-2 pt-6">CUSTOMIZATION</span>
                     <x-menu-item title="Presets" icon="s-square-3-stack-3d" link="{{ route('presets') }}" />

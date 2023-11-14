@@ -6,7 +6,12 @@ use Livewire\Component;
 
 class Presets extends Component
 {
-    public $presets = [];
+    public $presets;
+
+    public function delete($id) {
+        $this->presets->find($id)->delete();
+        $this->presets = auth()->user()->presets;
+    }
 
     public function mount()
     {

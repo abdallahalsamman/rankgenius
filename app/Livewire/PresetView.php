@@ -49,6 +49,24 @@ class PresetView extends Component
 
     public function save()
     {
+        $this->validate([
+            'name' => 'required|max:32',
+            'details' => 'required|min:50|max:1024',
+            'toneOfVoice' => 'nullable|max:80',
+            'customInstructions' => 'nullable|max:250',
+            'language' => 'nullable|max:20',
+            'creativity' => 'nullable|integer|min:0|max:20',
+            'pointOfView' => 'nullable|max:50',
+            'callToAction' => 'nullable|url:http,https|max:255',
+            'sitemapUrl' => 'nullable|url:http,https|max:255',
+            'sitemapFilter' => 'nullable|max:255',
+            'youtubeVideos' => 'nullable|url:http,https|max:1000',
+            'extraLinks.*.url' => 'nullable|url:http,https|max:255',
+            'extraLinks.*.anchor' => 'nullable|max:255',
+        ], [
+            'details.required' => 'Please fill this field.',
+        ]);
+
         Preset::create([
             'id' => Str::uuid(),
             'name' => $this->name,
@@ -70,6 +88,7 @@ class PresetView extends Component
             'youtube_videos' => $this->automateYoutubeVideosEnabled ? null : $this->youtubeVideos,
             'user_id' => auth()->user()->id
         ]);
+
         return redirect()->route('presets');
     }
 

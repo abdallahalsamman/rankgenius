@@ -40,4 +40,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Preset::class);
     }
+
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
 }

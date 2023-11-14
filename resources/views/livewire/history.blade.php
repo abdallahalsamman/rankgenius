@@ -31,7 +31,7 @@
         @endscope
     </x-table>
 
-    @if(empty($batches))
+    @if($batches->isEmpty())
     <div class="text-center py-2 rounded-b-md text-[#a0aec0] bg-[#edf2f7]">All your batches will show up here.</div>
     @endif
 </div>
