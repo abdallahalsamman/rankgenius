@@ -4,12 +4,14 @@
     <x-tabs selected="simple-mode-tab">
         <x-tab name="simple-mode-tab" label="Simple mode">
             <x-form wire:submit="simpleMode">
-                <x-instruction-step number-class="px-[10px] py-[4px]" number="1" class="font-bold mt-5" instruction="Tell us your business" />
+                <x-instruction-step number-class="px-[10px] py-[4px]" number="1" class="font-bold mt-5"
+                    instruction="Tell us your business" />
                 <x-input wire:model="businessUrl" placeholder="Your business URL" suffix="Optional" />
                 <x-textarea wire:model="businessDescription" placeholder="Description of your business" rows="3"
                     class="resize-none text-[16px]" maxlength="1024" />
 
-                <x-instruction-step number-class="px-[10px] py-[4px]" number="2" class="font-bold mt-5" instruction="Generate Articles" />
+                <x-instruction-step number-class="px-[10px] py-[4px]" number="2" class="font-bold mt-5"
+                    instruction="Generate Articles" />
 
                 <div class="grid grid-cols-[1fr_1fr_100px] gap-5">
                     @php
@@ -44,7 +46,8 @@
 Best recipes for making bread
 What are the different types of bread?"
                         rows="7" class="resize-none text-[16px] leading-6" />
-                    <x-instruction-step number-class="px-[10px] py-[4px]" number="2" class="font-bold mt-5" instruction="Generate Articles" />
+                    <x-instruction-step number-class="px-[10px] py-[4px]" number="2" class="font-bold mt-5"
+                        instruction="Generate Articles" />
                     <div class="grid grid-cols-[1fr_100px] gap-5">
                         <x-select class="text-base" option_value="name" :options="$languages" wire:model="language" />
                         <x-button label="Generate" type="submit" class="btn-primary text-white text-base"
@@ -64,7 +67,8 @@ What are the different types of bread?"
 Best recipes for making bread
 What are the different types of bread?"
                         rows="7" class="resize-none text-[16px] leading-6" />
-                    <x-instruction-step number-class="px-[10px] py-[4px]" number="2" class="font-bold mt-5" instruction="Generate Articles" />
+                    <x-instruction-step number-class="px-[10px] py-[4px]" number="2" class="font-bold mt-5"
+                        instruction="Generate Articles" />
                     <div class="grid grid-cols-[1fr_100px] gap-5">
                         <x-select class="text-base" option_value="name" :options="$languages" wire:model="language" />
                         <x-button label="Generate" type="submit" class="btn-primary text-white text-base"
@@ -73,19 +77,24 @@ What are the different types of bread?"
                 </x-form>
             </div>
         </x-tab>
-
+        {{-- presets --}}
         <x-tab name="advanced-mode-tab" label="Advanced mode">
             <div>
                 <x-form wire:submit="presetMode">
                     <div class="flex justify-between items-end">
-                        <x-instruction-step number-class="px-[10px] py-[4px]" number="1" class="font-bold mt-5" instruction="Choose your preset" />
-                        <x-button icon="bi.plus" label="Create Preset" class="btn-outline btn-xs btn-primary" />
+                        <x-instruction-step number-class="px-[10px] py-[4px]" number="1" class="font-bold mt-5"
+                            instruction="Choose your preset" />
+                        <x-button icon="bi.plus" label="Create Preset" link="{{ route('preset-view') }}"
+                            class="btn-outline btn-xs btn-primary" />
                     </div>
                     @php
-                        $presets = [['id' => 0, 'name' => 'Please select a preset.', 'disabled' => true]];
+                        $presets = array_merge([
+                            ['id' => 0, 'name' => 'Please select a preset.', 'disabled' => true],
+                        ], $presetOptions);
                     @endphp
                     <x-select class="text-base" :options="$presets" wire:model="preset" />
-                    <x-instruction-step number-class="px-[10px] py-[4px]" number="2" class="font-bold mt-5" instruction="Generate Articles" />
+                    <x-instruction-step number-class="px-[10px] py-[4px]" number="2" class="font-bold mt-5"
+                        instruction="Generate Articles" />
                     <div class="grid grid-cols-[1fr_100px] gap-5">
                         @php
                             $article_counts = [];

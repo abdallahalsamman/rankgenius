@@ -40,23 +40,28 @@
                             <span class="loading loading-dots loading-lg"></span>
                         </div>
 
+                        @php
+                            $generationOptions = [
+                                \App\Enums\BatchModeEnum::CONTEXT->value => [
+                                    'label' => 'Context Description',
+                                    'placeholder' => 'SpaceX is a company that produces rockets.',
+                                ],
+                                \App\Enums\BatchModeEnum::TITLE->value => [
+                                    'label' => 'Titles (1 per line)',
+                                    'placeholder' => 'How to bake bread?',
+                                ],
+                                \App\Enums\BatchModeEnum::KEYWORD->value => [
+                                    'label' => 'Keywords (1 per line)',
+                                    'placeholder' => 'How to bake bread?',
+                                ],
+                            ];
+                        @endphp
+
                         <div wire:loading.remove wire:target="generationMode" class="pt-5">
-                            @if ($generationMode === \App\Enums\BatchModeEnum::CONTEXT->value)
-                                <div class="mb-2 mr-3 font-medium">Context Description</div>
-                                <x-textarea wire:model="businessDescription"
-                                    placeholder="SpaceX is a company that produces rockets."
-                                    class="text-[16px] min-h-[80px] max-h-[400px]" maxlength="1024" />
-                            @elseif ($generationMode === \App\Enums\BatchModeEnum::TITLE->value)
-                                <div class="mb-2 mr-3 font-medium">Titles (1 per line)</div>
-                                <x-textarea wire:model="titles" placeholder="How to bake bread?"
-                                    class="text-[16px] min-h-[80px] max-h-[400px]" maxlength="1024"
-                                    hint="We'll generate an article for each keyword." />
-                            @elseif ($generationMode === \App\Enums\BatchModeEnum::KEYWORD->value)
-                                <div class="mb-2 mr-3 font-medium">Keywords (1 per line)</div>
-                                <x-textarea wire:model="keywords" placeholder="How to bake bread?"
-                                    class="text-[16px] min-h-[80px] max-h-[400px]" maxlength="1024"
-                                    hint="We'll generate an article for each keyword." />
-                            @endif
+                            <div class="mb-2 mr-3 font-medium">{{ $generationOptions[$generationMode]['label'] }}</div>
+                            <x-textarea wire:model="details"
+                                placeholder="{{ $generationOptions[$generationMode]['placeholder'] }}"
+                                class="text-[16px] min-h-[80px] max-h-[400px]" maxlength="1024" />
                         </div>
                     </div>
                 </div>
@@ -101,7 +106,7 @@
                     </div>
                     <div class="mb-2 mr-3 pt-5 font-medium">Point of View</div>
                     @php
-                        $users = [
+                        $pointOfViewOptions = [
                             [
                                 'id' => 1,
                                 'name' => 'Automatic',
@@ -124,13 +129,13 @@
                             ],
                         ];
                     @endphp
-                    <x-select :options="$users" wire:model="selectedUser3" class="text-base" />
+                    <x-select :options="$pointOfViewOptions" wire:model="pointOfView" class="text-base" />
                     <div class="font-medium mt-4 max-w-md">
                         <div class="flex justify-between mb-2 items-center">
                             <div>Custom Instructions</div>
                             <div class="bg-[#feebc8] text-[#7b341e] text-sm rounded-md px-2 py-1">Advanced</div>
                         </div>
-                        <x-textarea wire:model="customInstruction" placeholder="Short and punchy phrases."
+                        <x-textarea wire:model="customInstructions" placeholder="Short and punchy phrases."
                             class="text-[16px] min-h-[80px] max-h-[400px]" maxlength="1024" />
                     </div>
                     <div class="text-sm text-gray-600">We'll use these instructions to generate each paragraph.</div>
@@ -149,7 +154,8 @@
                 </div>
                 <div class="collapse-content">
                     <div class="mb-2 mr-3 font-medium mt-5">Call-To-Action</div>
-                    <x-input type="text" placeholder="https://mywebsite.com" class="mb-2" />
+                    <x-input type="text" placeholder="https://mywebsite.com" wire:model="callToAction"
+                        class="mb-2" />
                     <div class="text-sm">
                         We'll add an extra <span class="bg-[#e2e8f0] text-xs px-0.5">h3</span> to your articles with a
                         call-to-action to this URL.
@@ -172,7 +178,8 @@
                 </div>
                 <div class="collapse-content">
                     <div class="mb-2 mr-3 font-medium mt-5">Sitemap URL</div>
-                    <x-input type="text" placeholder="https://mywebsite.com/sitemap.xml" class="mb-2" />
+                    <x-input type="text" wire:model="sitemapUrl" placeholder="https://mywebsite.com/sitemap.xml"
+                        class="mb-2" />
                     <div class="text-sm">A website can have multiple sitemaps. Provide the sitemap of your blog posts.
                         <br>
                         Example: <a class="text-blue-500 hover:underline"
@@ -180,7 +187,7 @@
                     </div>
 
                     <div class="mb-2 mr-3 font-medium mt-5">Filter Sitemap</div>
-                    <x-input type="text" placeholder="/example/" class="mb-2" />
+                    <x-input type="text" wire:model="sitemapFilter" placeholder="/example/" class="mb-2" />
                     <div class="text-sm">
                         We will <strong>only</strong> use URLs from the sitemap that contain this pattern.
                         <br>
@@ -214,17 +221,18 @@
                         <span class="text-sm font-semibold">URL</span>
                         <span class="text-sm font-semibold">Anchor</span>
                     </div>
-                    @foreach ($extraLinksCount as $uuid)
-                        <div wire:key="{{ $uuid }}"
+                    @foreach ($extraLinks as $id => $extraLink)
+                        <div wire:key="{{ $id }}"
                             class="grid grid-cols-[1fr,1fr,1fr] gap-5 w-full my-3 text-center items-center">
-                            <x-input class="btn-sm text-sm" placeholder="{{ url('/') }}">URL</x-input>
-                            <x-input class="btn-sm text-sm"
+                            <x-input class="btn-sm text-sm" wire:model="extraLinks.{{ $id }}.url"
+                                placeholder="{{ url('/') }}">URL</x-input>
+                            <x-input class="btn-sm text-sm" wire:model="extraLinks.{{ $id }}.anchor"
                                 placeholder="Leave blank to auto generate">Anchor</x-input>
                             <div class="flex items-center gap-3">
                                 <x-button icon="m-minus-small"
                                     class="btn-xs border-transparent bg-transparent w-fit p-0 px-0.5"
-                                    wire:click="removeLink('{{ $uuid }}')" />
-                                <span wire:loading wire:target="removeLink('{{ $uuid }}')"
+                                    wire:click="removeLink('{{ $id }}')" />
+                                <span wire:loading wire:target="removeLink('{{ $id }}')"
                                     class="loading loading-spinner loading-xs"></span>
                             </div>
                         </div>
@@ -308,23 +316,23 @@
                             </div>
                         </label>
                     </div>
-                    @if(!$automateYoutubeVideosEnabled)
-                    <div class="font-medium mt-4">
-                        <div class="mb-2 mr-3 pt-5 font-medium">Youtube Videos (1 link per line)</div>
-                        <x-textarea wire:model="customInstruction"
-                            placeholder="https://www.youtube.com/watch?v=P56_I4s9L9Q"
-                            class="text-[16px] min-h-[80px] max-h-[400px]" maxlength="1024" />
-                    </div>
-                    <div class="text-sm text-gray-600">We'll insert at least one youtube video and place it in your
-                        article.
-                    </div>
+                    @if (!$automateYoutubeVideosEnabled)
+                        <div class="font-medium mt-4">
+                            <div class="mb-2 mr-3 pt-5 font-medium">Youtube Videos (1 link per line)</div>
+                            <x-textarea wire:model="youtubeVideos"
+                                placeholder="https://www.youtube.com/watch?v=P56_I4s9L9Q"
+                                class="text-[16px] min-h-[80px] max-h-[400px]" maxlength="1024" />
+                        </div>
+                        <div class="text-sm text-gray-600">We'll insert at least one youtube video and place it in your
+                            article.
+                        </div>
                     @endif
                 </div>
             </div>
         </div>
         <div class="grid grid-cols-2 gap-5 w-full mt-5">
-            <x-button label="Cancel" class="btn-primary btn-outline text-base text-base-100 w-full" />
-            <x-button label="Create New Preset" class="btn-primary text-base text-base-100 w-full" />
+            <x-button label="Cancel" link="{{route('presets')}}" class="btn-primary btn-outline text-base text-base-100 w-full" />
+            <x-button type="submit" label="Create New Preset" class="btn-primary text-base text-base-100 w-full" />
         </div>
     </x-form>
 </div>

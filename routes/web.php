@@ -35,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/presets', Presets::class)->name('presets');
     Route::get('/presets/create', PresetView::class)->name('preset-view');
     Route::get('/presets/{id}', PresetEdit::class)->name('preset-edit');
+
     Route::get('/logout', [PasswordlessAuthenticationController::class, 'logout'])->name('logout');
 });
 

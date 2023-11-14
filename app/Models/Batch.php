@@ -12,5 +12,15 @@ class Batch extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['id', 'mode', 'summary', 'language', 'quantity', 'status'];
+    protected $fillable = ['id', 'mode', 'details', 'language', 'quantity', 'status', 'user_id'];
+
+    /**
+     * Define the relationship with the User model.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

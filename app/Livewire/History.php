@@ -12,7 +12,7 @@ class History extends Component
 
     public function mount()
     {
-        $this->batches = Batch::take(50)->get();
+        $this->batches = auth()->user()->batches->take(50);
     }
 
     public function render()

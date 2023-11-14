@@ -3,16 +3,16 @@
 
     @php
     $headers = [
-    ['key' => 'summary', 'label' => 'SUMMARY', 'class' => 'text-gray-600 tracking-wider'],
+    ['key' => 'details', 'label' => 'SUMMARY', 'class' => 'text-gray-600 tracking-wider'],
     ['key' => 'status', 'label' => 'STATUS', 'class' => 'text-gray-600 tracking-wider'],
     ];
 
     @endphp
 
-    <x-table class="" :headers="$headers" :rows="$batches">
-        @scope('cell_summary', $batch)
+    <x-table :headers="$headers" :rows="$batches">
+        @scope('cell_details', $batch)
         <strong>{{ Str::title($batch->mode) }}</strong><br>
-        {{ Str::limit($batch->summary, 80, ' ...') }}
+        {{ Str::limit($batch->details, 80, ' ...') }}
         @endscope
 
         @scope('cell_status', $batch)
