@@ -11,7 +11,7 @@ class Presets extends Component
     public function delete($id) {
         $this->presets->find($id)->delete();
         $this->presets = auth()->user()->presets;
-        $deleteModal = false;
+        $this->deleteModal = false;
     }
 
     public function mount()

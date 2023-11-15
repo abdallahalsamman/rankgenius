@@ -4,10 +4,15 @@ namespace App\Livewire;
 
 use Livewire\Component;
 
-class Articleview extends Component
+class ArticleView extends Component
 {
+
+    public function mount()
+    {
+    }
+
     public function render()
     {
-        return view('livewire.articleview')->layout('layouts.dashboard');
+        return view('livewire.article-view');
     }
 }

@@ -35,7 +35,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/history', History::class)->name('history');
     Route::get('/history/{id}', HistoryView::class)->name('history-view');
     Route::get('/articles', Articles::class)->name('articles');
-    Route::get('/articles/{id}', Articleview::class)->name('article-view');
     Route::get('/presets', Presets::class)->name('presets');
     Route::get('/presets/create', PresetView::class)->name('preset-view');
     Route::get('/presets/{id}', PresetEdit::class)->name('preset-edit');

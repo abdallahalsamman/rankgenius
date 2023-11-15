@@ -7,17 +7,19 @@ use Livewire\Component;
 class Articles extends Component
 {
 
-    public $articles, $selectedArticle, $myModal = false;
+    public $articles, $selectedArticle, $articleModal = false;
 
     public function mount()
     {
         $this->articles = auth()->user()->articles->take(50);
+        $this->articleModal = true;
+        $this->selectedArticle = $this->articles->first();
     }
 
     public function viewArticle($id)
     {
         $this->selectedArticle = $this->articles->find($id);
-        $this->myModal = true;
+        $this->articleModal = true;
     }
 
     public function render()

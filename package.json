@@ -2,7 +2,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "dev": "vite --host 192.168.1.102",
+        "dev": "vite",
         "build": "vite build"
     },
     "devDependencies": {
@@ -15,5 +15,8 @@
         "prettier-plugin-tailwindcss": "^0.5.7",
         "tailwindcss": "^3.3.5",
         "vite": "^4.0.0"
+    },
+    "dependencies": {
+        "@geoffcodesthings/tailwind-md-base": "^1.1.0"
     }
 }

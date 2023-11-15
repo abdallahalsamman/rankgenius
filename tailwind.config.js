@@ -1,5 +1,11 @@
 /** @type {import('tailwindcss').Config} */
+
+const defaultTheme = require('tailwindcss/resolveConfig')(
+    require('tailwindcss/defaultConfig'),
+  ).theme;
+
 export default {
+
   content: [
     // You will probably also need these lines
     "./resources/**/**/*.blade.php",
@@ -9,6 +15,31 @@ export default {
     "./vendor/robsontenorio/mary/src/View/Components/**/*.php"
   ],
   theme: {
+
+    markdownBase: {
+        h1: {
+            fontSize: defaultTheme.fontSize['2xl'],
+            marginTop: defaultTheme.spacing[5],
+        },
+        h2: {
+            fontSize: defaultTheme.fontSize['xl'],
+            marginTop: defaultTheme.spacing[5],
+            marginBottom: defaultTheme.spacing[10],
+            fontWeight: defaultTheme.fontWeight.medium,
+            borderBottomWidth: defaultTheme.borderWidth[4],
+            borderColor: defaultTheme.colors.blue[600],
+          },
+          h3: {
+            fontSize: defaultTheme.fontSize['lg'],
+            marginTop: defaultTheme.spacing[2.5],
+            marginBottom: defaultTheme.spacing[5],
+            paddingLeft: defaultTheme.spacing[2.5],
+            borderLeftWidth: defaultTheme.borderWidth[2],
+            borderColor: defaultTheme.colors.blue[600],
+            fontWeight: defaultTheme.fontWeight.medium,
+          },
+      },
+
     screens: {
         lg: { max: "1024px" },
         // => @media (max-width: 991px) { ... }
@@ -19,9 +50,13 @@ export default {
         xs: { max: "320px" },
         // => @media (max-width: 320px) { ... }
       },
+
     extend: {},
   },
-  plugins: [require("daisyui")],
+  plugins: [
+    require('@geoffcodesthings/tailwind-md-base')(),
+    require("daisyui")
+    ],
   daisyui: {
     themes: [
       "light",

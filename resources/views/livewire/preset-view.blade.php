@@ -333,7 +333,7 @@
         <div class="grid grid-cols-2 gap-5 w-full mt-5">
             <x-button label="Cancel" link="{{ route('presets') }}"
                 class="btn-primary btn-outline text-base text-base-100 w-full" />
-            <x-button type="submit" label="Create New Preset" class="btn-primary text-base text-base-100 w-full" />
+            <x-button type="submit" wire:loading.attr="disabled" label="Create New Preset" class="btn-primary text-base text-base-100 w-full" />
         </div>
     </x-form>
 </div>

@@ -9,8 +9,10 @@
     background-size: 100% 36px,100% 36px,100% 12px,100% 12px;
 }
 
-.popUpMessage {
-    .modal-box {
-        max-width: 42rem;
-    }
+.popUpMessage .modal-box {
+    max-width: 42rem;
+    padding: 0;
+    border-radius:.4rem;
+    overflow: hidden;
+    height: 100%;
 }
