@@ -12,16 +12,11 @@ class History extends Component
 
     public function mount()
     {
-        $this->batches = auth()->user()->batches->take(50);
+        $this->batches = auth()->user()->batches->take(50)->sortByDesc('created_at');
     }
 
     public function render()
     {
         return view('livewire.history')->layout('layouts.dashboard');
-    }
-
-    public function delete()
-    {
-
     }
 }

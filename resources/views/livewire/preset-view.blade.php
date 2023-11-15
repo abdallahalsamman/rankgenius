@@ -1,18 +1,24 @@
 <div>
-    <x-header size="text-xl font-[700] mb-10" class="" title="Presets / Create"
-        subtitle="Create a new Preset that instructs Journalist AI the type of articles you want to generate." />
+    @php
+    @endphp
+    <x-header class="" size="text-xl font-[700] mb-10"
+        subtitle="Create a new Preset that instructs ContentAIO the type of articles you want to generate."
+        title="Presets / Create" />
 
     <x-form wire:submit="save">
         <div class="mb-4">
-            <x-input label="Name" placeholder="My Special Preset" wire:model="name" />
+            <x-input label="Name" maxlength="100" placeholder="My Special Preset"
+                wire:model="preset.name" />
         </div>
         <div>
             {{-- Number 1 --}}
-            <div tabindex="0" class="collapse collapse-arrow border border-base-300 rounded-md rounded-b-none">
-                <input type="checkbox" class="peer min-h-[10px]" checked />
-                <div class="collapse-title font-medium min-h-[10px] bg-[#f7fafc] py-2">
-                    <x-instruction-step number="1" instruction="Base" class="text-base"
-                        number-class="py-[2px] px-[8px]" />
+            <div class="collapse-arrow collapse rounded-md rounded-b-none border border-base-300"
+                tabindex="0">
+                <input checked class="peer min-h-[10px]" type="checkbox" />
+                <div
+                    class="collapse-title min-h-[10px] bg-[#f7fafc] py-2 font-medium">
+                    <x-instruction-step class="text-base" instruction="Base"
+                        number-class="py-[2px] px-[8px]" number="1" />
                 </div>
 
                 <div class="collapse-content">
@@ -33,11 +39,15 @@
                                 ],
                             ];
                         @endphp
-                        <div class="mb-2 mr-3 pt-5 font-medium">Generation Mode</div>
-                        <x-select class="text-base" hint="Each option provides a different way to generate content."
-                            :options="$generationModes" wire:model.change="generationMode" />
-                        <div wire:loading wire:target="generationMode" class="w-full text-center py-2">
-                            <span class="loading loading-dots loading-lg"></span>
+                        <div class="mb-2 mr-3 pt-5 font-medium">Generation Mode
+                        </div>
+                        <x-select :options="$generationModes" class="text-base"
+                            hint="Each option provides a different way to generate content."
+                            wire:model.change="preset.generationMode" />
+                        <div class="w-full py-2 text-center" wire:loading
+                            wire:target="preset.generationMode">
+                            <span
+                                class="loading loading-dots loading-lg"></span>
                         </div>
 
                         @php
@@ -57,11 +67,16 @@
                             ];
                         @endphp
 
-                        <div wire:loading.remove wire:target="generationMode" class="pt-5">
-                            <div class="mb-2 mr-3 font-medium">{{ $generationOptions[$generationMode]['label'] }}</div>
-                            <x-textarea wire:model="details"
-                                placeholder="{{ $generationOptions[$generationMode]['placeholder'] }}"
-                                class="text-[16px] min-h-[80px] max-h-[400px]" maxlength="1024" />
+                        <div class="pt-5" wire:loading.remove
+                            wire:target="preset.generationMode">
+                            <div class="mb-2 mr-3 font-medium">
+                                {{ $generationOptions[$preset['generationMode']]['label'] }}
+                            </div>
+                            <x-textarea
+                                class="max-h-[400px] min-h-[80px] text-[16px]"
+                                maxlength="1024"
+                                placeholder="{{ $generationOptions[$preset['generationMode']]['placeholder'] }}"
+                                wire:model="preset.details" />
                         </div>
                     </div>
                 </div>
@@ -69,11 +84,13 @@
             </div>
 
             {{-- Number 2 --}}
-            <div tabindex="0" class="collapse collapse-arrow border border-base-300 border-t-0 rounded-none">
-                <input type="checkbox" class="peer min-h-[10px]" checked />
-                <div class="collapse-title font-medium min-h-[10px] bg-[#f7fafc] py-2">
-                    <x-instruction-step number="2" instruction="Content" class="text-base"
-                        number-class="py-[2px] px-[8px]" />
+            <div class="collapse-arrow collapse rounded-none border border-t-0 border-base-300"
+                tabindex="0">
+                <input checked class="peer min-h-[10px]" type="checkbox" />
+                <div
+                    class="collapse-title min-h-[10px] bg-[#f7fafc] py-2 font-medium">
+                    <x-instruction-step class="text-base" instruction="Content"
+                        number-class="py-[2px] px-[8px]" number="2" />
                 </div>
 
                 <div class="collapse-content">
@@ -86,21 +103,25 @@
                             );
                         @endphp
                         <div class="mb-2 mr-3 pt-5 font-medium">Language</div>
-                        <x-select class="text-base" option_value="name" :options="$languages" wire:model="language" />
+                        <x-select :options="$languages" class="text-base"
+                            option_value="name" wire:model="preset.language" />
                     </div>
 
                     <div class="mb-2 mr-3 pt-5 font-medium">Creativity</div>
-                    <input type="range" min="0" max="20" value="10" wire:model="creativity"
-                        class="range range-xs range-primary" />
+                    <input class="range range-primary range-xs" max="20"
+                        min="0" type="range" value="10"
+                        wire:model="preset.creativity" />
                     <div class="flex justify-between text-xs">
                         <span>Correct/Factual</span><span>Creative/Original</span>
                     </div>
 
                     <div class="mb-2 mr-3 pt-5 font-medium">Tone of Voice</div>
                     <div class="max-w-sm">
-                        <x-input placeholder="Neutral" maxlength="80" wire:model="toneOfVoice" />
+                        <x-input maxlength="80" placeholder="Neutral"
+                            wire:model="preset.toneOfVoice" />
                     </div>
-                    <div class="text-sm mt-2">Examples: <span class="bg-[#e2e8f0] text-xs">funny</span> <span
+                    <div class="mt-2 text-sm">Examples: <span
+                            class="bg-[#e2e8f0] text-xs">funny</span> <span
                             class="bg-[#e2e8f0] text-xs">informal</span> <span
                             class="bg-[#e2e8f0] text-xs">academic</span>
                     </div>
@@ -129,130 +150,174 @@
                             ],
                         ];
                     @endphp
-                    <x-select :options="$pointOfViewOptions" wire:model="pointOfView" class="text-base" />
-                    <div class="font-medium mt-4 max-w-md">
-                        <div class="flex justify-between mb-2 items-center">
+                    <x-select :options="$pointOfViewOptions" class="text-base"
+                        wire:model="preset.pointOfView" />
+                    <div class="mt-4 max-w-md font-medium">
+                        <div class="mb-2 flex items-center justify-between">
                             <div>Custom Instructions</div>
-                            <div class="bg-[#feebc8] text-[#7b341e] text-sm rounded-md px-2 py-1">Advanced</div>
+                            <div
+                                class="rounded-md bg-[#feebc8] px-2 py-1 text-sm text-[#7b341e]">
+                                Advanced</div>
                         </div>
-                        <x-textarea wire:model="customInstructions" placeholder="Short and punchy phrases."
-                            class="text-[16px] min-h-[80px] max-h-[400px]" maxlength="250" />
+                        <x-textarea
+                            class="max-h-[400px] min-h-[80px] text-[16px]"
+                            maxlength="250"
+                            placeholder="Short and punchy phrases."
+                            wire:model="preset.customInstructions" />
                     </div>
-                    <div class="text-sm text-gray-600">We'll use these instructions to generate each paragraph.</div>
-                    <div class="text-sm text-gray-600">intructions <span class="font-bold">do not affect the
+                    <div class="text-sm text-gray-600">We'll use these
+                        instructions to generate each paragraph.</div>
+                    <div class="text-sm text-gray-600">intructions <span
+                            class="font-bold">do not affect the
                             headings.</span>
                     </div>
                 </div>
             </div>
 
             {{-- Number 3 --}}
-            <div tabindex="0" class="collapse collapse-arrow border border-base-300 border-t-0 rounded-none">
-                <input type="checkbox" class="peer min-h-[10px]" checked />
-                <div class="collapse-title font-medium min-h-[10px] bg-[#f7fafc] py-2">
-                    <x-instruction-step number="3" instruction="Structure" class="text-base"
-                        number-class="py-[2px] px-[8px]" />
+            <div class="collapse-arrow collapse rounded-none border border-t-0 border-base-300"
+                tabindex="0">
+                <input checked class="peer min-h-[10px]" type="checkbox" />
+                <div
+                    class="collapse-title min-h-[10px] bg-[#f7fafc] py-2 font-medium">
+                    <x-instruction-step class="text-base"
+                        instruction="Structure" number-class="py-[2px] px-[8px]"
+                        number="3" />
                 </div>
                 <div class="collapse-content">
-                    <div class="mb-2 mr-3 font-medium mt-5">Call-To-Action</div>
-                    <x-input type="text" maxlength="255" placeholder="https://mywebsite.com" wire:model="callToAction"
-                        class="mb-2" />
+                    <div class="mb-2 mr-3 mt-5 font-medium">Call-To-Action</div>
+                    <x-input class="mb-2" maxlength="255"
+                        placeholder="https://mywebsite.com" type="text"
+                        wire:model="preset.callToAction" />
                     <div class="text-sm">
-                        We'll add an extra <span class="bg-[#e2e8f0] text-xs px-0.5">h3</span> to your articles with a
+                        We'll add an extra <span
+                            class="bg-[#e2e8f0] px-0.5 text-xs">h3</span> to
+                        your articles with a
                         call-to-action to this URL.
                         <br>
                         Leave blank to opt-out.
                     </div>
                     {{-- <div class="mb-2 mr-3 font-medium mt-5">Automate Headings</div>
                     <div class="w-fit">
-                        <x-toggle label="Auto-generated" wire:change="item1" />
+                        <x-custom-toggle :enabled="0" label="Auto-generated" wire:model.change="item1" />
                     </div> --}}
                 </div>
             </div>
 
             {{-- Number 4 --}}
-            <div tabindex="0" class="collapse collapse-arrow border border-base-300 border-t-0 rounded-none">
-                <input type="checkbox" class="peer min-h-[10px]" checked />
-                <div class="collapse-title font-medium min-h-[10px] bg-[#f7fafc] py-2">
-                    <x-instruction-step number="4" instruction="Internal Linking" class="text-base"
-                        number-class="py-[2px] px-[8px]" />
+            <div class="collapse-arrow collapse rounded-none border border-t-0 border-base-300"
+                tabindex="0">
+                <input checked class="peer min-h-[10px]" type="checkbox" />
+                <div
+                    class="collapse-title min-h-[10px] bg-[#f7fafc] py-2 font-medium">
+                    <x-instruction-step class="text-base"
+                        instruction="Internal Linking"
+                        number-class="py-[2px] px-[8px]" number="4" />
                 </div>
                 <div class="collapse-content">
-                    <div class="mb-2 mr-3 font-medium mt-5">Sitemap URL</div>
-                    <x-input type="text" maxlength="255" wire:model="sitemapUrl" placeholder="https://mywebsite.com/sitemap.xml"
-                        class="mb-2" />
-                    <div class="text-sm">A website can have multiple sitemaps. Provide the sitemap of your blog posts.
+                    <div class="mb-2 mr-3 mt-5 font-medium">Sitemap URL</div>
+                    <x-input class="mb-2" maxlength="255"
+                        placeholder="https://mywebsite.com/sitemap.xml"
+                        type="text" wire:model="preset.sitemapUrl" />
+                    <div class="text-sm">A website can have multiple sitemaps.
+                        Provide the sitemap of your blog posts.
                         <br>
                         Example: <a class="text-blue-500 hover:underline"
                             href="https://www.wpbeginner.com/post-sitemap.xml">https://www.wpbeginner.com/post-sitemap.xml</a>.
                     </div>
 
-                    <div class="mb-2 mr-3 font-medium mt-5">Filter Sitemap</div>
-                    <x-input type="text" maxlength="255" wire:model="sitemapFilter" placeholder="/example/" class="mb-2" />
+                    <div class="mb-2 mr-3 mt-5 font-medium">Filter Sitemap
+                    </div>
+                    <x-input class="mb-2" maxlength="255"
+                        placeholder="/example/" type="text"
+                        wire:model="preset.sitemapFilter" />
                     <div class="text-sm">
-                        We will <strong>only</strong> use URLs from the sitemap that contain this pattern.
+                        We will <strong>only</strong> use URLs from the sitemap
+                        that contain this pattern.
                         <br>
-                        Examples: <span class="bg-[#e2e8f0] text-xs px-0.5">/my-category/</span>, <span
-                            class="bg-[#e2e8f0] text-xs px-0.5">/blog/</span>.
+                        Examples: <span
+                            class="bg-[#e2e8f0] px-0.5 text-xs">/my-category/</span>,
+                        <span
+                            class="bg-[#e2e8f0] px-0.5 text-xs">/blog/</span>.
                     </div>
                 </div>
             </div>
 
             {{-- Number 5 --}}
-            <div tabindex="0" class="collapse collapse-arrow border border-base-300 border-t-0 rounded-none">
-                <input type="checkbox" class="peer min-h-[10px]" checked />
-                <div class="collapse-title font-medium min-h-[10px] bg-[#f7fafc] py-2">
-                    <x-instruction-step number="5" instruction="External Linking" class="text-base"
-                        number-class="py-[2px] px-[8px]" />
+            <div class="collapse-arrow collapse rounded-none border border-t-0 border-base-300"
+                tabindex="0">
+                <input checked class="peer min-h-[10px]" type="checkbox" />
+                <div
+                    class="collapse-title min-h-[10px] bg-[#f7fafc] py-2 font-medium">
+                    <x-instruction-step class="text-base"
+                        instruction="External Linking"
+                        number-class="py-[2px] px-[8px]" number="5" />
                 </div>
                 <div class="collapse-content">
-                    <div class="mb-2 mr-3 font-medium mt-5 w-fit">
+                    <div class="mb-2 mr-3 mt-5 w-fit font-medium">
                         <label>
                             Automatic External Links
                             <div class="mt-3 w-fit">
-                                <x-toggle :label="$externalLinksEnabled ? 'Enabled' : 'Disabled'" wire:model.change="externalLinksEnabled" />
+                                <x-custom-toggle :enabled="$preset['externalLinksEnabled']"
+                                    :label="$preset['externalLinksEnabled']
+                                        ? 'Enabled'
+                                        : 'Disabled'"
+                                    wire:model.change="preset.externalLinksEnabled" />
                             </div>
                         </label>
                     </div>
-                    <div class="text-sm mt-2">We'll scrape the internet for relevant articles in your niche & language.
+                    <div class="mt-2 text-sm">We'll scrape the internet for
+                        relevant articles in your niche & language.
                     </div>
 
-                    <div class="mb-2 mr-3 font-medium mt-5">Extra Links</div>
-                    <div class="grid grid-cols-[1fr,1fr,1fr] w-full my-3 text-center">
+                    <div class="mb-2 mr-3 mt-5 font-medium">Extra Links</div>
+                    <div
+                        class="my-3 grid w-full grid-cols-[1fr,1fr,1fr] text-center">
                         <span class="text-sm font-semibold">URL</span>
                         <span class="text-sm font-semibold">Anchor</span>
                     </div>
-                    @foreach ($extraLinks as $id => $extraLink)
-                        <div wire:key="{{ $id }}"
-                            class="grid grid-cols-[1fr,1fr,1fr] gap-5 w-full my-3 text-center items-center">
-                            <x-input class="btn-sm text-sm" maxlength="255" wire:model="extraLinks.{{ $id }}.url"
-                                placeholder="{{ url('/') }}">URL</x-input>
-                            <x-input class="btn-sm text-sm" maxlength="255" wire:model="extraLinks.{{ $id }}.anchor"
-                                placeholder="Leave blank to auto generate">Anchor</x-input>
+                    @foreach ($preset['extraLinks'] as $id => $extraLink)
+                        <div class="my-3 grid w-full grid-cols-[1fr,1fr,1fr] items-center gap-5 text-center"
+                            wire:key="{{ $id }}">
+                            <x-input class="btn-sm text-sm" maxlength="255"
+                                placeholder="{{ url('/') }}"
+                                wire:model="preset.extraLinks.{{ $id }}.url">URL</x-input>
+                            <x-input class="btn-sm text-sm" maxlength="255"
+                                placeholder="Leave blank to auto generate"
+                                wire:model="preset.extraLinks.{{ $id }}.anchor">Anchor</x-input>
                             <div class="flex items-center gap-3">
-                                <x-button icon="m-minus-small"
-                                    class="btn-xs border-transparent bg-transparent w-fit p-0 px-0.5"
+                                <x-button
+                                    class="btn-xs w-fit border-transparent bg-transparent p-0 px-0.5"
+                                    icon="m-minus-small"
                                     wire:click="removeLink('{{ $id }}')" />
-                                <span wire:loading wire:target="removeLink('{{ $id }}')"
-                                    class="loading loading-spinner loading-xs"></span>
+                                <span
+                                    class="loading loading-spinner loading-xs"
+                                    wire:loading
+                                    wire:target="preset.removeLink('{{ $id }}')"></span>
                             </div>
                         </div>
                     @endforeach
-                    <div wire:loading wire:target="incrementLinkCount" class="w-full text-center py-2">
+                    <div class="w-full py-2 text-center" wire:loading
+                        wire:target="preset.incrementLinkCount">
                         <span class="loading loading-dots loading-lg"></span>
                     </div>
-                    <x-button icon="bi.plus" label="Add Link" class="btn-outline btn-xs btn-primary"
+                    <x-button class="btn-primary btn-outline btn-xs"
+                        icon="bi.plus" label="Add Link"
                         wire:click="incrementLinkCount" />
-                    <div class="text-sm mt-2">We'll randomly select up to 1 link per paragraph.</div>
+                    <div class="mt-2 text-sm">We'll randomly select up to 1
+                        link per paragraph.</div>
 
                 </div>
             </div>
 
             {{-- Number 6 --}}
-            <div tabindex="0" class="collapse collapse-arrow border border-base-300 border-t-0 rounded-none">
-                <input type="checkbox" class="peer min-h-[10px]" checked />
-                <div class="collapse-title font-medium min-h-[10px] bg-[#f7fafc] py-2">
-                    <x-instruction-step number="6" instruction="Images" class="text-base"
-                        number-class="py-[2px] px-[8px]" />
+            <div class="collapse-arrow collapse rounded-none border border-t-0 border-base-300"
+                tabindex="0">
+                <input checked class="peer min-h-[10px]" type="checkbox" />
+                <div
+                    class="collapse-title min-h-[10px] bg-[#f7fafc] py-2 font-medium">
+                    <x-instruction-step class="text-base" instruction="Images"
+                        number-class="py-[2px] px-[8px]" number="6" />
                 </div>
                 <div class="collapse-content">
                     {{-- <div class="mb-2 mr-3 font-medium mt-5">Image Provider</div>
@@ -277,21 +342,27 @@
                         ],
                     ];
                 @endphp
-                <x-select :options="$users" wire:model="selectedUser3" class="text-base" /> --}}
-                    <div class="mb-2 mr-3 font-medium mt-5 w-fit">
+                <x-select :options="$users" wire:model="preset.selectedUser3" class="text-base" /> --}}
+                    <div class="mb-2 mr-3 mt-5 w-fit font-medium">
                         <label>
                             Featured Image
                             <div class="mt-3 w-fit">
-                                <x-toggle :label="$featureImageEnabled ? 'Enabled' : 'Disabled'" wire:model.change="featureImageEnabled" />
+                                <x-custom-toggle :label="$preset['featureImageEnabled']
+                                    ? 'Enabled'
+                                    : 'Disabled'" :enabled="$preset['featureImageEnabled']"
+                                    wire:model.change="preset.featureImageEnabled" />
                             </div>
                         </label>
                     </div>
 
-                    <div class="mb-2 mr-3 font-medium mt-5 w-fit">
+                    <div class="mb-2 mr-3 mt-5 w-fit font-medium">
                         <label>
                             In-Article Images
                             <div class="mt-3 w-fit">
-                                <x-toggle :label="$inArticleImageEnabled ? 'Enabled' : 'Disabled'" wire:model.change="inArticleImageEnabled" />
+                                <x-custom-toggle :label="$preset['inArticleImageEnabled']
+                                    ? 'Enabled'
+                                    : 'Disabled'" :enabled="$preset['inArticleImageEnabled']"
+                                    wire:model.change="preset.inArticleImageEnabled" />
                             </div>
                         </label>
                     </div>
@@ -300,40 +371,56 @@
             </div>
 
             {{-- Number 7 --}}
-            <div tabindex="0"
-                class="collapse collapse-arrow border border-base-300 border-t-0 rounded-md rounded-t-none">
-                <input type="checkbox" class="peer min-h-[10px]" checked />
-                <div class="collapse-title font-medium min-h-[10px] bg-[#f7fafc] py-2">
-                    <x-instruction-step number="7" instruction="Videos" class="text-base"
-                        number-class="py-[2px] px-[8px]" />
+            <div class="collapse-arrow collapse rounded-md rounded-t-none border border-t-0 border-base-300"
+                tabindex="0">
+                <input checked class="peer min-h-[10px]" type="checkbox" />
+                <div
+                    class="collapse-title min-h-[10px] bg-[#f7fafc] py-2 font-medium">
+                    <x-instruction-step class="text-base" instruction="Videos"
+                        number-class="py-[2px] px-[8px]" number="7" />
                 </div>
                 <div class="collapse-content">
-                    <div class="mb-2 mr-3 font-medium mt-5 w-fit">
+                    <div class="mb-2 mr-3 mt-5 w-fit font-medium">
                         <label>
                             Automate Youtube Videos
                             <div class="mt-3 w-fit">
-                                <x-toggle :label="$automateYoutubeVideosEnabled ? 'Enabled' : 'Disabled'" wire:model.change="automateYoutubeVideosEnabled" />
+                                <x-custom-toggle :enabled="$preset[
+                                    'automateYoutubeVideosEnabled'
+                                ]"
+                                    :label="$preset[
+                                        'automateYoutubeVideosEnabled'
+                                    ]
+                                        ? 'Enabled'
+                                        : 'Disabled'"
+                                    wire:model.change="preset.automateYoutubeVideosEnabled" />
                             </div>
                         </label>
                     </div>
-                    @if (!$automateYoutubeVideosEnabled)
-                        <div class="font-medium mt-4">
-                            <div class="mb-2 mr-3 pt-5 font-medium">Youtube Videos (1 link per line)</div>
-                            <x-textarea wire:model="youtubeVideos" maxlength="1000"
+                    @if (!$preset['automateYoutubeVideosEnabled'])
+                        <div class="mt-4 font-medium">
+                            <div class="mb-2 mr-3 pt-5 font-medium">Youtube
+                                Videos (1 link per line)</div>
+                            <x-textarea
+                                class="max-h-[400px] min-h-[80px] text-[16px]"
+                                maxlength="1000" maxlength="1024"
                                 placeholder="https://www.youtube.com/watch?v=P56_I4s9L9Q"
-                                class="text-[16px] min-h-[80px] max-h-[400px]" maxlength="1024" />
+                                wire:model="preset.youtubeVideos" />
                         </div>
-                        <div class="text-sm text-gray-600">We'll insert at least one youtube video and place it in your
+                        <div class="text-sm text-gray-600">We'll insert at
+                            least one youtube video and place it in your
                             article.
                         </div>
                     @endif
                 </div>
             </div>
         </div>
-        <div class="grid grid-cols-2 gap-5 w-full mt-5">
-            <x-button label="Cancel" link="{{ route('presets') }}"
-                class="btn-primary btn-outline text-base text-base-100 w-full" />
-            <x-button type="submit" wire:loading.attr="disabled" label="Create New Preset" class="btn-primary text-base text-base-100 w-full" />
+        <div class="mt-5 grid w-full grid-cols-2 gap-5">
+            <x-button
+                class="btn-primary btn-outline w-full text-base text-base-100"
+                label="Cancel" link="{{ route('presets') }}" />
+            <x-button :label="$action === 'create' ? 'Create New Preset' : 'Save'"
+                class="btn-primary w-full text-base text-base-100"
+                type="submit" wire:loading.attr="disabled" />
         </div>
     </x-form>
 </div>

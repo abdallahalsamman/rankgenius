@@ -33,11 +33,11 @@ Route::middleware(['guest'])->group(function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', GenerateArticles::class)->name('dashboard');
     Route::get('/history', History::class)->name('history');
-    Route::get('/history/{id}', HistoryView::class)->name('history-view');
+    Route::get('/history/{id}', HistoryView::class)->name('history.view');
     Route::get('/articles', Articles::class)->name('articles');
     Route::get('/presets', Presets::class)->name('presets');
-    Route::get('/presets/create', PresetView::class)->name('preset-view');
-    Route::get('/presets/{id}', PresetEdit::class)->name('preset-edit');
+    Route::get('/presets/create', PresetView::class)->name('preset.create');
+    Route::get('/presets/{id}', PresetView::class)->name('preset.edit');
 
     Route::get('/logout', [PasswordlessAuthenticationController::class, 'logout'])->name('logout');
 });

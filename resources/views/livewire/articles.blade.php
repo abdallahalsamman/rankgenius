@@ -22,18 +22,14 @@
         <x-modal class="popUpMessage" wire:model="articleModal">
             <div class="flex flex-col relative h-full">
                 <div class="bg-white">
-                    <div class="flex items-center gap-5 py-4 px-6">
-                        {{-- <x-button icon="o-arrow-small-left" class="btn-sm btn-outline btn-primary" label="Previous" />
-                        <div class="w-full">
-                            <x-select class="btn-sm" />
-                        </div>
-                        <x-button icon-right="o-arrow-small-right" label="Next"
-                            class="btn-sm btn-outline btn-primary" /> --}}
+                    <div class="flex items-center justify-end gap-5 py-4 px-6">
                         <x-button class="btn-sm px-[6px] bg-transparent border-0" icon="bi.x-lg"
                             @click="$wire.articleModal = false" />
                     </div>
                 </div>
-                <x-article-view :$selectedArticle />
+                @if ($selectedArticle)
+                    <x-article-view :$selectedArticle />
+                @endif
             </div>
         </x-modal>
     </div>

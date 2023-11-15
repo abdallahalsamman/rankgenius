@@ -27,7 +27,7 @@
         @endscope
 
         @scope('actions', $batch)
-        <x-button label="View" link="{{ route('history-view', ['id' => $batch->id]) }}" spinner class="btn-sm" />
+        <x-button label="View" link="{{ route('history.view', ['id' => $batch->id]) }}" spinner class="btn-sm" />
         @endscope
     </x-table>
 

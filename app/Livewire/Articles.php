@@ -11,9 +11,7 @@ class Articles extends Component
 
     public function mount()
     {
-        $this->articles = auth()->user()->articles->take(50);
-        $this->articleModal = true;
-        $this->selectedArticle = $this->articles->first();
+        $this->articles = auth()->user()->articles->take(50)->sortByDesc('created_at');
     }
 
     public function viewArticle($id)
