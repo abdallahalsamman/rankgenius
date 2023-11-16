@@ -43,4 +43,9 @@ class Preset extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function autoBlogs()
+    {
+        return $this->hasMany(AutoBlog::class);
+    }
 }

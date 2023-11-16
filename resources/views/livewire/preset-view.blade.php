@@ -1,9 +1,7 @@
 <div>
-    @php
-    @endphp
     <x-header class="" size="text-xl font-[700] mb-10"
         subtitle="Create a new Preset that instructs ContentAIO the type of articles you want to generate."
-        title="Presets / Create" />
+        title="Presets / {{ $action == 'create' ? 'Create' : $preset['name'] }}" />
 
     <x-form wire:submit="save">
         <div class="mb-4">

@@ -25,7 +25,7 @@
                     <x-menu-item title="Custom Images" icon="m-photo" /> -->
 
                     <span class="text-[12px] text-[#757575] pl-2 pt-6">AUTOMATION</span>
-                    <x-menu-item title="AutoBlogs" icon="fas.robot" />
+                    <x-menu-item title="AutoBlogs" icon="fas.robot" link="{{ route('autoblogs') }}" />
                     <x-menu-item title="Integrations" icon="fab.wordpress" />
                     <!-- <x-menu-item title="Calendar" icon="s-calendar-days" /> -->
                     <!-- <x-menu-item title="Indexers" icon="phosphor.list-checks-bold" /> -->
