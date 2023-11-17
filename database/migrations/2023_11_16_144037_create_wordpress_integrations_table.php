@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('author');
             $table->string('status');
             $table->integer('time_gap');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

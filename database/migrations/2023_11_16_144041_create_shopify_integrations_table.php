@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('access_token');
             $table->string('blog');
             $table->string('author');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

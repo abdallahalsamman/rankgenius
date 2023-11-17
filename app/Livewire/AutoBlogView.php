@@ -15,7 +15,7 @@ class AutoBlogView extends Component
     public $autoBlog = [
         'name' => null,
         'quantity' => 1,
-        'interval' => 0,
+        'interval' => 24,
         'status' => false,
         'preset_id' => 0,
         'integration_id' => 0,
@@ -29,7 +29,7 @@ class AutoBlogView extends Component
 
         if ($this->action === 'edit') {
             $this->autoBlogId = Route::current()->parameter('id');
-            $autoBlog = autoBlog::where('id', $this->autoBlogId)->first()->toArray();
+            $autoBlog = AutoBlog::where('id', $this->autoBlogId)->first()->toArray();
             $this->autoBlog = [
                 'name' => $autoBlog['name'],
                 'quantity' => $autoBlog['quantity'],

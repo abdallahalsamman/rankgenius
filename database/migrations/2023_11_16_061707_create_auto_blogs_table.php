@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('preset_id')->constrained();
             $table->foreignId('integration_id')->constrained();
             $table->foreignId('user_id')->constrained();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

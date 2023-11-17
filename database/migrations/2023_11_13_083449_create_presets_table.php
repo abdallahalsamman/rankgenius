@@ -31,6 +31,7 @@ return new class extends Migration
             $table->boolean('in_article_images')->nullable();
             $table->boolean('automatic_youtube_videos')->nullable();
             $table->text('youtube_videos')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
