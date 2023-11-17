@@ -3,11 +3,13 @@
 namespace App\Exceptions;
 
 use Throwable;
+use Mary\Traits\Toast;
 use Illuminate\Http\Exceptions\ThrottleRequestsException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
+    use Toast;
     /**
      * The list of the inputs that are never flashed to the session on validation exceptions.
      *
@@ -30,6 +32,14 @@ class Handler extends ExceptionHandler
 
         $this->renderable(function (ThrottleRequestsException $e) {
             return back()->withErrors(['errors' => 'Too many attempts, Please try again in a minute.']);
+        });
+
+        $this->renderable(function (ToastException $e) {
+            $this->error(
+                'It will last just 1 second ...',
+                timeout: 1000,
+                position: 'toast-bottom toast-start'
+            );
         });
     }
 }

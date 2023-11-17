@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Exceptions\ToastException;
+
 # curl -X GET -H "Content-Type: application/json" -u 'abodandnazim:2x3q9NjrDA6cw34wcZ3KG8Lo' https://luggagenboxes.com/wp-json/wp/v2/tags
 
 class WordPressService {
@@ -25,10 +27,10 @@ class WordPressService {
 
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_USERPWD, $username . ':' . $app_password);
-        curl_setopt($ch, CURLOPT_PROXY, 'http://localhost:8888');
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', 'User-Agent: ContentAIO/0.0.1'));
+        // curl_setopt($ch, CURLOPT_USERPWD, $username . ':' . $app_password);
+        // curl_setopt($ch, CURLOPT_PROXY, 'http://localhost:8888');
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -36,9 +38,11 @@ class WordPressService {
 
         $data = json_decode($response, true);
 
+        dd($data);
         if ($httpCode != 200) {
-            if ($data['code'] === 'incorrect_password') {
-                throw new \Exception($data['message']);
+            dd('status:200');
+            if(isset($data['message'])) {
+                throw new ToastException($data['message']);
             }
         }
 

@@ -11,6 +11,7 @@
 </head>
 
 <body>
+    <x-toast />  
     @yield('content')
 
     @livewireScripts
