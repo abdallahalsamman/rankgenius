@@ -3,6 +3,18 @@
         subtitle="Create a new AutoBlog to automatically generate & publish articles to your website."
         title="AutoBlogs / {{ $action == 'create' ? 'Create' : $integration['name'] }}" />
 
+    <div
+        class="flex items-center justify-between rounded-md bg-[#feebc8] px-4 py-3 mb-10">
+        <div class="flex items-center justify-center">
+            <x-icon class="mr-3 w-6 text-[#dd6b20]"
+                name="phosphor.warning-circle-fill" />
+            <div>You must upgrade to <strong>AutoBlog</strong> to use
+                Integrations.</div>
+        </div>
+        <x-button class="btn-primary btn-sm text-white" icon-right="o-arrow-small-right"
+            label="Subscription" />
+    </div>
+
     <x-tabs selected="wordPress">
         {{-- Wordpress part --}}
         <x-tab icon="bi.wordpress" label="WordPress" name="wordPress">
@@ -48,8 +60,9 @@
                             maxlength="255"
                             placeholder="Pnaz HXK8 ZYZW oc8l 5J1l 6WxR" spinner
                             type="text"
-                            wire:model.live.debounce.1500ms="wordpressIntegration.app_password" />
+                            wire:model.change="wordpressIntegration.app_password" />
                     </div>
+
                     <div>
                         <div class="mb-2 mr-3 pt-5 font-medium">Author
                         </div>
@@ -131,7 +144,58 @@
         <x-tab icon="fab.shopify" label="Shopify" name="shopify">
             <div>
                 <x-form wire:submit="shopify">
-
+                    <div>
+                        <div class="mb-2 mr-3 mt-5 font-medium">Integration Name
+                        </div>
+                        <x-input class="mb-2" maxlength="255"
+                            placeholder="My Wordpress Website" type="text"
+                            wire:model="preset.callToAction" />
+                    </div>
+                    <div>
+                        <div class="mb-2 mr-3 mt-5 font-medium">Shop Name
+                        </div>
+                        <x-input class="mb-2" maxlength="255"
+                            placeholder="My Wordpress Website" type="text"
+                            wire:model="preset.callToAction" />
+                    </div>
+                    <div>
+                        <div class="mb-2 mt-5 flex items-end justify-between">
+                            <div class="mr-3 font-medium">Application
+                                Password
+                            </div>
+                            <x-button class="btn-primary btn-outline btn-xs"
+                                icon-right="phosphor.youtube-logo-fill"
+                                label="Watch Tutorial"
+                                link="{{ route('preset.create') }}" />
+                        </div>
+                        <x-input class="mb-2" maxlength="255"
+                            placeholder="My Wordpress Website" type="text"
+                            wire:model="preset.callToAction" />
+                    </div>
+                    <div>
+                        <div class="mb-2 mr-3 pt-5 font-medium">Blog
+                        </div>
+                        <x-choices :options="$tagsOption"
+                            no-result-text="Ops! Nothing here ..."
+                            search-function="searchMulti" searchable
+                            wire:model="users_multi_searchable_ids" />
+                    </div>
+                    <div>
+                        <div class="mb-2 mr-3 mt-5 font-medium">Author Name
+                        </div>
+                        <x-input class="mb-2" maxlength="255"
+                            placeholder="My Wordpress Website" type="text"
+                            wire:model="preset.callToAction" />
+                    </div>
+                    <div class="mt-5 grid w-full grid-cols-2 gap-5">
+                        <x-button
+                            class="btn-primary btn-outline w-full text-base text-base-100"
+                            label="Cancel"
+                            link="{{ route('integrations') }}" />
+                        <x-button :label="$action === 'create' ? 'Create New integration' : 'Save'"
+                            class="btn-primary w-full text-base text-base-100"
+                            type="submit" wire:loading.attr="disabled" />
+                    </div>
                 </x-form>
             </div>
         </x-tab>

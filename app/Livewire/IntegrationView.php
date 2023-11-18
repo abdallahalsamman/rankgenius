@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Mary\Traits\Toast;
 use Livewire\Component;
+use App\Exceptions\ToastException;
 use App\Services\WordPressService;
 use Illuminate\Support\Facades\Route;
 
@@ -21,8 +22,8 @@ class IntegrationView extends Component
 
     public $wordpressIntegration = [
         "url" => "https://luggagenboxes.com/?",
-        "username" => "abodandnazim",
-        "app_password" => "",
+        "username" => "abboo",
+        "app_password" => "cXCw10FGY87fX0Uh9e9JjNZ8",
         "status" => "",
         "categories" => "",
         "tags" => "",
@@ -36,11 +37,33 @@ class IntegrationView extends Component
         $app_password = str_replace(' ', '', $app_password);
 
         if (!empty($website) && !empty($username) && !empty($app_password)) {
-            // $tags = $wordPressService::getTags($website, $username, $app_password);
-            // dd($tags);
-            // $statuses = $wordPressService::getStatuses($website, $username, $app_password);
-            // $categories = $wordPressService::getCategories($website, $username, $app_password);
-            $authors = $wordPressService::getAuthors($website, $username, $app_password);
+            try {
+                $tags = $wordPressService->getTags($website, $username, $app_password);
+                $statuses = $wordPressService->getStatuses($website, $username, $app_password);
+                $categories = $wordPressService->getCategories($website, $username, $app_password);
+                $authors = $wordPressService->getAuthors($website, $username, $app_password);
+
+
+                $this->toast(
+                    type: 'success',
+                    title: 'Logged in to WordPress successfully',
+                    description: null,
+                    position: 'toast-top toast-end',
+                    timeout: 3000,
+                    redirectTo: null
+                );
+
+            } catch (ToastException $e) {
+                $this->toast(
+                    type: 'error',
+                    title: strip_tags($e->getMessage()),
+                    description: null,
+                    position: 'toast-top toast-end',
+                    timeout: 3000,
+                    redirectTo: null
+                );
+            }
+
         }
     }
 

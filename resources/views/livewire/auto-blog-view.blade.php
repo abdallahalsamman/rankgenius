@@ -14,7 +14,7 @@
                 <div>You must upgrade to <strong>AutoBlog</strong> to use
                     AutoBlogs.</div>
             </div>
-            <x-button class="btn-primary btn-sm" icon-right="o-arrow-small-right"
+            <x-button class="btn-primary btn-sm text-white" icon-right="o-arrow-small-right"
                 label="Subscription" />
         </div>
         <div class="mb-4">

@@ -33,13 +33,5 @@ class Handler extends ExceptionHandler
         $this->renderable(function (ThrottleRequestsException $e) {
             return back()->withErrors(['errors' => 'Too many attempts, Please try again in a minute.']);
         });
-
-        $this->renderable(function (ToastException $e) {
-            $this->error(
-                'It will last just 1 second ...',
-                timeout: 1000,
-                position: 'toast-bottom toast-start'
-            );
-        });
     }
 }
