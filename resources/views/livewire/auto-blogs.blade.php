@@ -1,6 +1,6 @@
 <div>
     <x-header class="" size="text-xl font-[700] mb-10"
-        subtitle="An Autoblog allows ContentAIO to generate articles in a certain schedule and send them to one of your integrations."
+        subtitle="An Autoblog allows {{ env('APP_NAME') }} to generate articles in a certain schedule and send them to one of your integrations."
         title="AutoBlogs" />
 
     <div class="grid grid-cols-[_6fr_1fr_1fr_1fr] gap-3 border-b-[1px]">

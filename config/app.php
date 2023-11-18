@@ -159,6 +159,7 @@ return [
         /*
          * Package Service Providers...
          */
+        MadeITBelgium\WordPress\WordPressServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -183,7 +184,6 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
-        // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
 ];

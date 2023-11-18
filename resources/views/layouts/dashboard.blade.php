@@ -9,7 +9,7 @@
                     <a href="{{ route('dashboard') }}">
                         <div class="w-full h-full flex items-center pl-[11px]">
                             <x-icon name="iconsax.bul-ranking" class="w-[30px] h-[30px]" />
-                            <span class="text-[25px] pl-2 font-bold">ContentAIO</span>
+                            <span class="text-[25px] pl-2 font-bold">{{ env('APP_NAME') }}</span>
                         </div>
                     </a>
                 </div>
@@ -21,19 +21,19 @@
 
                     <span class="text-[12px] text-[#757575] pl-2 pt-6">CUSTOMIZATION</span>
                     <x-menu-item title="Presets" icon="s-square-3-stack-3d" link="{{ route('presets') }}" />
-                    <!-- <x-menu-item title="Brands" icon="m-globe-asia-australia" />
-                    <x-menu-item title="Custom Images" icon="m-photo" /> -->
+                    {{-- <!-- <x-menu-item title="Brands" icon="m-globe-asia-australia" /> --}}
+                    {{-- <x-menu-item title="Custom Images" icon="m-photo" /> --> --}}
 
                     <span class="text-[12px] text-[#757575] pl-2 pt-6">AUTOMATION</span>
                     <x-menu-item title="AutoBlogs" icon="fas.robot" link="{{ route('autoblogs') }}" />
                     <x-menu-item title="Integrations" icon="fab.wordpress" link="{{ route('integrations') }}" />
-                    <!-- <x-menu-item title="Calendar" icon="s-calendar-days" /> -->
-                    <!-- <x-menu-item title="Indexers" icon="phosphor.list-checks-bold" /> -->
+                    {{-- <!-- <x-menu-item title="Calendar" icon="s-calendar-days" /> --> --}}
+                    {{-- <!-- <x-menu-item title="Indexers" icon="phosphor.list-checks-bold" /> --> --}}
                     <x-menu-item title="Publications" icon="phosphor.telegram-logo-thin" />
-                    <!-- <x-menu-item title="Keyword Monitors" icon="m-magnifying-glass" /> -->
+                    {{-- <!-- <x-menu-item title="Keyword Monitors" icon="m-magnifying-glass" /> --> --}}
 
                     <span class="text-[12px] text-[#757575] pl-2 pt-6">ACCOUNT</span>
-                    <!-- <x-menu-item title="Invite users" icon="s-user-group" /> -->
+                    {{-- <!-- <x-menu-item title="Invite users" icon="s-user-group" /> --> --}}
                     <x-menu-item title="Subscription" icon="m-credit-card" />
                 </div>
 

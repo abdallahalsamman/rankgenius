@@ -1,31 +1,31 @@
 <div>
-    <x-header class="" size="text-xl font-[700] mb-10"
+    {{-- <x-header class="" size="text-xl font-[700] mb-10"
         subtitle="Create a new AutoBlog to automatically generate & publish articles to your website."
-        title="AutoBlogs / {{ $action == 'create' ? 'Create' : $integration['name'] }}" />
+        title="AutoBlogs / {{ $action == 'create' ? 'Create' : $integration['name'] }}" /> --}}
 
     <div
-        class="flex items-center justify-between rounded-md bg-[#feebc8] px-4 py-3 mb-10">
+        class="mb-10 flex items-center justify-between rounded-md bg-[#feebc8] px-4 py-3">
         <div class="flex items-center justify-center">
             <x-icon class="mr-3 w-6 text-[#dd6b20]"
                 name="phosphor.warning-circle-fill" />
             <div>You must upgrade to <strong>AutoBlog</strong> to use
                 Integrations.</div>
         </div>
-        <x-button class="btn-primary btn-sm text-white" icon-right="o-arrow-small-right"
-            label="Subscription" />
+        <x-button class="btn-primary btn-sm text-white"
+            icon-right="o-arrow-small-right" label="Subscription" />
     </div>
 
     <x-tabs selected="wordPress">
         {{-- Wordpress part --}}
         <x-tab icon="bi.wordpress" label="WordPress" name="wordPress">
             <div>
-                <x-form wire:submit="wordPress">
+                <x-form wire:submit="wordPress" >
                     <div>
                         <div class="mb-2 mr-3 mt-5 font-medium">Integration Name
                         </div>
                         <x-input class="mb-2" maxlength="255"
                             placeholder="My Wordpress Website" type="text"
-                            wire:model="preset.callToAction" />
+                            wire:model="wordpressIntegration.name" />
                     </div>
                     <div>
                         <div class="mb-2 mr-3 mt-5 font-medium">Wordpress URL
@@ -58,7 +58,7 @@
                         <x-input class="mb-2"
                             hint="This is not your normal password. This is a special Wordpress password for integrations. Watch the tutorial to learn more."
                             maxlength="255"
-                            placeholder="Pnaz HXK8 ZYZW oc8l 5J1l 6WxR" spinner
+                            placeholder="Pnaz HXK8 ZYZW oc8l 5J1l 6WxR"
                             type="text"
                             wire:model.change="wordpressIntegration.app_password" />
                     </div>
@@ -66,14 +66,15 @@
                     <div>
                         <div class="mb-2 mr-3 pt-5 font-medium">Author
                         </div>
-                        <x-select :options="[]" class="text-base"
-                            wire:model.change="preset.generationMode" />
+                        <x-select :options="$authorsOptions" class="text-base"
+                            wire:model="authorsOptions"
+                            hint="Only admins are allowed to be authors." />
                     </div>
                     <div>
                         <div class="mb-2 mr-3 pt-5 font-medium">Status
                         </div>
-                        <x-select :options="[]" class="text-base"
-                            wire:model.change="preset.generationMode" />
+                        <x-select :options="$statusesOptions" class="text-base"
+                            wire:model="wordpressIntegration.status" />
                     </div>
                     <div>
                         <div class="mb-2 mr-3 pt-5 font-medium">Time gap between
@@ -108,25 +109,25 @@
                             ];
                         @endphp
                         <x-select :options="$timeGapOptions" class="text-base"
-                            wire:model.change="preset.generationMode" />
+                            wire:model="wordpressIntegration.time_gap" />
                     </div>
 
                     <div>
                         <div class="mb-2 mr-3 pt-5 font-medium">Categories
                         </div>
-                        <x-choices :options="$categoriesOption"
+                        <x-choices :options="$categoriesOptions" {{-- search-function="searchMulti" searchable --}}
+                            hint="Please select from your Categories"
                             no-result-text="Ops! Nothing here ..."
-                            search-function="searchMulti" searchable
-                            wire:model="users_multi_searchable_ids" />
+                            wire:model="wordpressIntegration.categories" />
                     </div>
 
                     <div>
                         <div class="mb-2 mr-3 pt-5 font-medium">Tags
                         </div>
-                        <x-choices :options="$tagsOption"
+                        <x-choices :options="$tagsOptions" {{-- search-function="searchMulti" searchable --}}
+                            hint="Please select from your Tags"
                             no-result-text="Ops! Nothing here ..."
-                            search-function="searchMulti" searchable
-                            wire:model="users_multi_searchable_ids" />
+                            wire:model="wordpressIntegration.tags" />
                     </div>
                     <div class="mt-5 grid w-full grid-cols-2 gap-5">
                         <x-button
@@ -141,7 +142,7 @@
         </x-tab>
 
         {{-- Shopify part --}}
-        <x-tab icon="fab.shopify" label="Shopify" name="shopify">
+        {{-- <x-tab icon="fab.shopify" label="Shopify" name="shopify">
             <div>
                 <x-form wire:submit="shopify">
                     <div>
@@ -156,7 +157,7 @@
                         </div>
                         <x-input class="mb-2" maxlength="255"
                             placeholder="My Wordpress Website" type="text"
-                            wire:model="preset.callToAction" />
+                            wire:model="wordpressIntegration.callToAction" />
                     </div>
                     <div>
                         <div class="mb-2 mt-5 flex items-end justify-between">
@@ -169,13 +170,13 @@
                                 link="{{ route('preset.create') }}" />
                         </div>
                         <x-input class="mb-2" maxlength="255"
-                            placeholder="My Wordpress Website" type="text"
-                            wire:model="preset.callToAction" />
+                            placeholder="" type="text"
+                            wire:model="wordpressIntegration.app_password" />
                     </div>
                     <div>
                         <div class="mb-2 mr-3 pt-5 font-medium">Blog
                         </div>
-                        <x-choices :options="$tagsOption"
+                        <x-choices :options="[]"
                             no-result-text="Ops! Nothing here ..."
                             search-function="searchMulti" searchable
                             wire:model="users_multi_searchable_ids" />
@@ -185,7 +186,7 @@
                         </div>
                         <x-input class="mb-2" maxlength="255"
                             placeholder="My Wordpress Website" type="text"
-                            wire:model="preset.callToAction" />
+                            wire:model="wordpressIntegration.author" />
                     </div>
                     <div class="mt-5 grid w-full grid-cols-2 gap-5">
                         <x-button
@@ -198,6 +199,6 @@
                     </div>
                 </x-form>
             </div>
-        </x-tab>
+        </x-tab> --}}
     </x-tabs>
 </div>

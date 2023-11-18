@@ -2,17 +2,18 @@
 
 namespace App\Livewire;
 
+use Exception;
 use Mary\Traits\Toast;
 use Livewire\Component;
-use App\Exceptions\ToastException;
-use App\Services\WordPressService;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Str;
+use MadeITBelgium\WordPress\WordPress;
 
 class IntegrationView extends Component
 {
     use Toast;
 
-    public $action, $categoriesOption = [], $tagsOption = [];
+    public $action;
+    public $categoriesOptions = [], $tagsOptions = [], $statusesOptions = [], $authorsOptions = [];
 
     public $integration = [
         'name' => null,
@@ -22,15 +23,17 @@ class IntegrationView extends Component
 
     public $wordpressIntegration = [
         "url" => "https://luggagenboxes.com/?",
-        "username" => "abboo",
+        "username" => "abbood",
         "app_password" => "cXCw10FGY87fX0Uh9e9JjNZ8",
-        "status" => "",
-        "categories" => "",
-        "tags" => "",
+        "status" => null,
+        "categories" => [],
+        "tags" => [],
+        "author" => null,
         "time_gap" => "",
     ];
 
-    public function updated($key, $value, WordPressService $wordPressService) {
+    public function updateWordPressInfo()
+    {
         $website = $this->wordpressIntegration['url'];
         $username = $this->wordpressIntegration['username'];
         $app_password = $this->wordpressIntegration['app_password'];
@@ -38,25 +41,45 @@ class IntegrationView extends Component
 
         if (!empty($website) && !empty($username) && !empty($app_password)) {
             try {
-                $tags = $wordPressService->getTags($website, $username, $app_password);
-                $statuses = $wordPressService->getStatuses($website, $username, $app_password);
-                $categories = $wordPressService->getCategories($website, $username, $app_password);
-                $authors = $wordPressService->getAuthors($website, $username, $app_password);
+                $wp = (new WordPress($website))->setUsername($username)->setApplicationPassword($app_password);
 
+                // Auth Test
+                $tag = $wp->postCall('/wp-json/wp/v2/tags', ['name' => env('APP_NAME') . '_test']);
+                $wp->deleteCall('/wp-json/wp/v2/tags/' . $tag->id . '?force=true');
 
-                $this->toast(
-                    type: 'success',
-                    title: 'Logged in to WordPress successfully',
-                    description: null,
-                    position: 'toast-top toast-end',
-                    timeout: 3000,
-                    redirectTo: null
-                );
+                $tags = $wp->getCall('/wp-json/wp/v2/tags?per_page=100');
+                $statuses = $wp->getCall('/wp-json/wp/v2/statuses?per_page=100');
+                $categories = $wp->getCall('/wp-json/wp/v2/categories?per_page=100');
+                $authors = $wp->getCall('/wp-json/wp/v2/users?per_page=100');
 
-            } catch (ToastException $e) {
-                $this->toast(
+                $this->toast('success', 'Logged in to WordPress successfully', position: 'toast-top toast-end');
+                $this->tagsOptions = $this->makeOptions($tags);
+                $this->statusesOptions = $this->makeOptions($statuses);
+                $this->categoriesOptions = $this->makeOptions($categories);
+                $this->authorsOptions = $this->makeOptions($authors);
+            } catch (Exception $e) {
+                $errorMap = [
+                    [
+                        'match' => 'Could not resolve host: ',
+                        'error' => $website . ' is not responding.',
+                    ],
+                    [
+                        'match' => 'Unauthorized',
+                        'error' => 'Invalid Username or Application Password.',
+                    ],
+                ];
+
+                $error = $e->getMessage();
+                foreach ($errorMap as $error) {
+                    if (Str::contains($e->getMessage(), $error['match'])) {
+                        $error = $error['error'];
+                        break;
+                    }
+                }
+
+                return $this->toast(
                     type: 'error',
-                    title: strip_tags($e->getMessage()),
+                    title: strip_tags($error),
                     description: null,
                     position: 'toast-top toast-end',
                     timeout: 3000,
@@ -67,10 +90,28 @@ class IntegrationView extends Component
         }
     }
 
+    public function updated()
+    {
+        $this->updateWordPressInfo();
+    }
+
+    private function makeOptions($data)
+    {
+        $options = [];
+        foreach ($data as $item) {
+            $item = (array) $item;
+            $options[] = [
+                'id' => $item['id'] ?? $item['slug'],
+                'name' => $item['name'],
+            ];
+        }
+        return $options;
+    }
+
     public function mount()
     {
-        // $this->integrations = auth()->user()->integrations->toArray();
-        $this->action = Route::currentRouteName() === "integration.create" ? "create" : "edit";
+        // $this->updateWordPressInfo();
+        // $this->action = Route::currentRouteName() === "integration.create" ? "create" : "edit";
 
         // if ($this->action === 'edit') {
         //     $this->autoBlogId = Route::current()->parameter('id');

@@ -1,6 +1,6 @@
 <div>
     <x-header size="text-xl font-[700] mb-10" class="" title="Presets"
-        subtitle="Presets tell ContentAIO how articles should be generated. You can modify a Preset and reuse it multiple times." />
+        subtitle="Presets tell {{ env('APP_NAME') }} how articles should be generated. You can modify a Preset and reuse it multiple times." />
 
     <div class="grid grid-cols-[_3fr_1fr] gap-3 border-b-[1px]">
         <div class="text-gray-600 tracking-wider py-2 font-bold text-xs">NAME</div>
