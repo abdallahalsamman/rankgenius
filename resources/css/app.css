@@ -16,3 +16,13 @@
     overflow: hidden;
     height: 100%;
 }
+
+.toasts-container {
+    top: 0 !important;
+    right: 10px !important;
+    bottom: auto !important;
+}
+
+.toasts-container > div {
+    box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.15);
+}

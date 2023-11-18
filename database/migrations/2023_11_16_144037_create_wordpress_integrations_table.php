@@ -12,6 +12,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('integration_id');
             $table->string('url');
+            $table->string('username');
+            $table->string('app_password');
             $table->string('categories');
             $table->string('tags');
             $table->string('author');

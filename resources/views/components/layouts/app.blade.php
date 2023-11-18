@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="light">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" dir="ltr" data-theme="light">
 
 <head>
     <meta charset="utf-8">
@@ -11,10 +11,11 @@
 </head>
 
 <body>
-    <x-toast />
+    <livewire:toasts />
+
     @yield('content')
 
-    @livewireScripts
+    @livewireScriptConfig
 </body>
 
 </html>

@@ -14,9 +14,11 @@
         "laravel/tinker": "^2.8",
         "livewire/livewire": "^3.1",
         "livewire/volt": "^1.4",
+        "madeitbelgium/wordpress-php-sdk": "^1.5",
         "owenvoke/blade-fontawesome": "^2.4",
         "robsontenorio/mary": "^1.2",
-        "saade/blade-iconsax": "^1.1"
+        "saade/blade-iconsax": "^1.1",
+        "usernotnull/tall-toasts": "^2.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",

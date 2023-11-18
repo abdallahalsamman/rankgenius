@@ -14,8 +14,8 @@
                 <div>You must upgrade to <strong>AutoBlog</strong> to use
                     AutoBlogs.</div>
             </div>
-            <x-button class="btn-primary btn-sm text-white" icon-right="o-arrow-small-right"
-                label="Subscription" />
+            <x-button class="btn-primary btn-sm text-white"
+                icon-right="o-arrow-small-right" label="Subscription" />
         </div>
         <div class="mb-4">
             <x-input label="Name" maxlength="100"
@@ -26,7 +26,11 @@
             $presetOptions = array_merge([['id' => 0, 'name' => 'Please select a preset.', 'disabled' => true]], $presets);
         @endphp
         <div class="mb-4">
-            <div class="mb-2 mr-3 font-medium">Preset</div>
+            <div class="mb-2 flex items-center justify-between">
+                <div class="mr-3 font-medium">Preset</div>
+                <x-button class="btn-primary btn-outline btn-xs" icon="bi.plus"
+                    label="Create Preset" link="{{ route('preset.create') }}" />
+            </div>
             <x-select :options="$presetOptions" class="text-base"
                 wire:model="autoBlog.preset_id" />
         </div>
@@ -79,7 +83,12 @@
             $integrationOptions = array_merge([['id' => 0, 'name' => 'Please select a preset.', 'disabled' => true]], $integrations);
         @endphp
         <div class="mb-4">
-            <div class="mb-2 mr-3 font-medium">Integration</div>
+            <div class="mb-2 flex items-center justify-between">
+                <div class="mr-3 font-medium">Integration</div>
+                <x-button class="btn-primary btn-outline btn-xs" icon="bi.plus"
+                    label="Create Preset"
+                    link="{{ route('integration.create') }}" />
+            </div>
             <x-select :options="$integrationOptions" class="text-base"
                 wire:model="autoBlog.integration_id" />
         </div>

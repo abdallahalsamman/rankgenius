@@ -29,6 +29,7 @@ class Integrations extends Component
 
     public function mount()
     {
+        
         $this->setAndSortPresets();
     }
 
