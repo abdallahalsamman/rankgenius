@@ -29,7 +29,7 @@
                     <x-menu-item title="Integrations" icon="fab.wordpress" link="{{ route('integrations') }}" />
                     {{-- <!-- <x-menu-item title="Calendar" icon="s-calendar-days" /> --> --}}
                     {{-- <!-- <x-menu-item title="Indexers" icon="phosphor.list-checks-bold" /> --> --}}
-                    <x-menu-item title="Publications" icon="phosphor.telegram-logo-thin" />
+                    <x-menu-item title="Publications" icon="phosphor.telegram-logo-thin" link="{{ route('publications') }}"/>
                     {{-- <!-- <x-menu-item title="Keyword Monitors" icon="m-magnifying-glass" /> --> --}}
 
                     <span class="text-[12px] text-[#757575] pl-2 pt-6">ACCOUNT</span>

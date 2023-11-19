@@ -18,9 +18,9 @@
         @scope('cell_status', $batch)
         @php
         $statusColor = [
-            \App\Enums\BatchStatusEnum::IN_PROGRESS->value => "bg-blue-100 text-info-content",
-            \App\Enums\BatchStatusEnum::DONE->value => "bg-green-100 text-success-content",
-            \App\Enums\BatchStatusEnum::CANCELLED->value => "bg-red-100 text-error-content"
+            \App\Enums\BatchStatusEnum::IN_PROGRESS->value => "bg-blue-200 text-info-content",
+            \App\Enums\BatchStatusEnum::DONE->value => "bg-green-200 text-success-content",
+            \App\Enums\BatchStatusEnum::CANCELLED->value => "bg-red-200 text-error-content"
         ];
         @endphp
         <div class="{{ $statusColor[$batch->status] }} whitespace-nowrap rounded text-sm w-fit font-medium py-1 px-2">{{ Str::title($batch->status) }}</div>

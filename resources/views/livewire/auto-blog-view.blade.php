@@ -93,7 +93,7 @@
                 wire:model="autoBlog.integration_id" />
         </div>
 
-        <div class="mb-4">
+        <div class="mb-4 w-fit">
             <div class="mb-2 mr-3 font-medium">Status</div>
             <x-custom-toggle :enabled="$autoBlog['status']" :label="$autoBlog['status'] ? 'Active' : 'Paused'"
                 class="text-base" wire:model.change="autoBlog.status" />

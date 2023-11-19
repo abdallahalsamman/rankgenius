@@ -1,45 +1,56 @@
 <div>
-    <x-header size="text-xl font-[700] mb-10" class="" title="Presets"
-        subtitle="Presets tell {{ env('APP_NAME') }} how articles should be generated. You can modify a Preset and reuse it multiple times." />
+    <x-header class="" size="text-xl font-[700] mb-10"
+        subtitle="Presets tell {{ env('APP_NAME') }} how articles should be generated. You can modify a Preset and reuse it multiple times."
+        title="Presets" />
 
     <div class="grid grid-cols-[_3fr_1fr] gap-3 border-b-[1px]">
-        <div class="text-gray-600 tracking-wider py-2 font-bold text-xs">NAME</div>
-        <div class="text-gray-600 tracking-wider py-2 font-bold text-xs text-center">ACTIONS</div>
+        <div class="py-2 text-xs font-bold tracking-wider text-gray-600 ml-3">NAME
+        </div>
+        <div
+            class="py-2 text-center text-xs font-bold tracking-wider text-gray-600">
+            ACTIONS</div>
     </div>
-    <div class="grid grid-cols-[_3fr_1fr] gap-3 pt-2">
-        @foreach ($presets as $preset)
-            <div>{{ Str::limit($preset->name, 80, ' ...') }}</div>
+    @foreach ($presets as $preset)
+        <div class="grid grid-cols-[_3fr_1fr] gap-3 py-2 items-center hover:bg-base-200/50">
+            <div class="ml-3">{{ Str::limit($preset->name, 80, ' ...') }}</div>
 
-            <div class="px-10 flex justify-around ">
+            <div class="flex justify-around px-10">
                 <div>
-                    <x-button icon="bi.trash" wire:click="deleteConfirm('{{ $preset->id }}')" spinner
-                        class="btn-sm bg-transparent hover:bg-red-100 border-none" />
+                    <x-button
+                        class="btn-sm border-none bg-transparent hover:bg-red-200"
+                        icon="bi.trash" spinner
+                        wire:click="deleteConfirm('{{ $preset->id }}')" />
                 </div>
-                <x-button icon="bi.pencil-square"
-                    link="{{ route('preset.edit', ['id' => $preset->id]) }}"
-                    class="btn-sm bg-transparent hover:bg-green-100 border-none" />
-                <x-button icon="s-document-duplicate" spinner wire:click="clone('{{ $preset->id }}')"
-                    class="btn-sm bg-transparent hover:bg-blue-100 border-none" />
+                <x-button
+                    class="btn-sm border-none bg-transparent hover:bg-green-200"
+                    icon="bi.pencil-square"
+                    link="{{ route('preset.edit', ['id' => $preset->id]) }}" />
+                <x-button
+                    class="btn-sm border-none bg-transparent hover:bg-blue-200"
+                    icon="s-document-duplicate" spinner
+                    wire:click="clone('{{ $preset->id }}')" />
             </div>
-        @endforeach
-    </div>
+        </div>
+    @endforeach
 
-    <x-modal wire:model="deleteModal" title="Are you sure?">
+    <x-modal title="Are you sure?" wire:model="deleteModal">
         Click "cancel" or press ESC to exit.
 
         <x-slot:actions>
             {{-- Note `onclick` is HTML --}}
-            <x-button label="Cancel" @click="$wire.deleteModal = false" />
-            <x-button label="Delete" class="btn-error" wire:click="delete('{{ $presetIdToDelete }}')" />
+            <x-button @click="$wire.deleteModal = false" label="Cancel" />
+            <x-button class="btn-error" label="Delete"
+                wire:click="delete('{{ $presetIdToDelete }}')" />
         </x-slot:actions>
     </x-modal>
 
     @if ($presets->isEmpty())
-        <div class="text-center py-2 rounded-b-md text-[#a0aec0] bg-[#edf2f7]">Click below to create your first Preset.
+        <div class="rounded-b-md bg-[#edf2f7] py-2 text-center text-[#a0aec0]">
+            Click below to create your first Preset.
         </div>
     @endif
 
-    <x-button label="New Preset" link="{{ route('preset.create') }}" icon="o-plus"
-        class="btn-primary text-base-100 mt-8 w-full" />
+    <x-button class="btn-primary mt-8 w-full text-base-100" icon="o-plus"
+        label="New Preset" link="{{ route('preset.create') }}" />
 
 </div>

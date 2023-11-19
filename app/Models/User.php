@@ -51,6 +51,11 @@ class User extends Authenticatable
         return $this->hasMany(AutoBlog::class);
     }
 
+    public function publications()
+    {
+        return $this->hasMany(Publication::class);
+    }
+
     public function integrations()
     {
         return $this->hasMany(Integration::class);

@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class AutoBlogs extends Component
 {
-    public $autoBlogs, $autoBlogIdToDelete = null, $deleteModal = false;
+    public $autoBlogs, $autoBlogIdToDelete = null, $deleteModal = false, $batches;
 
     public function deleteConfirm($id)
     {

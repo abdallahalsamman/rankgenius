@@ -23,4 +23,9 @@ class Article extends Model
     {
         return $this->belongsTo(Batch::class);
     }
+
+    public function publications()
+    {
+        return $this->hasMany(Publication::class);
+    }
 }

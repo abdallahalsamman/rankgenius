@@ -4,7 +4,7 @@
         title="AutoBlogs" />
 
     <div class="grid grid-cols-[_6fr_1fr_1fr_1fr] gap-3 border-b-[1px]">
-        <div class="py-2 text-xs font-bold tracking-wider text-gray-600">NAME
+        <div class="py-2 text-xs font-bold tracking-wider text-gray-600 ml-3">NAME
         </div>
         <div
             class="py-2 text-center text-xs font-bold tracking-wider text-gray-600">
@@ -19,26 +19,26 @@
             ACTIONS
         </div>
     </div>
-    <div class="mt-2 grid grid-cols-[_6fr_1fr_1fr_1fr] gap-3 text-center">
-        @foreach ($autoBlogs as $autoBlog)
-            <div class="text-left">{{ Str::limit($autoBlog->name, 80, ' ...') }}
+    @foreach ($autoBlogs as $autoBlog)
+        <div class="grid grid-cols-[_6fr_1fr_1fr_1fr] gap-3 py-2 text-center items-center hover:bg-base-200/50">
+            <div class="text-left ml-3">{{ Str::limit($autoBlog->name, 80, ' ...') }}</div>
+            <div class="w-full flex justify-center">
+                <div class="{{$autoBlog->status ? 'bg-green-200' : 'bg-gray-300'}} text-info-content whitespace-nowrap rounded text-sm w-fit font-medium py-1 px-2">{{$autoBlog->status ? 'Active' : 'Pause'}}</div>
             </div>
-            <div>ddsddsds</div>
-            <div>dsdsdsds</div>
+            <div>add next batch here</div>
             <div class="flex justify-around">
                 <x-button
-                    class="btn-sm border-none bg-transparent hover:bg-red-100"
-                    icon="bi.trash"
-                    wire:click="deleteConfirm('{{ $autoBlog->id }}')"
-                    spinner />
+                    class="btn-sm border-none bg-transparent hover:bg-red-200"
+                    icon="bi.trash" spinner
+                    wire:click="deleteConfirm('{{ $autoBlog->id }}')" />
                 <x-button
-                    class="btn-sm border-none bg-transparent hover:bg-green-100"
+                    class="btn-sm border-none bg-transparent hover:bg-green-200"
                     icon="bi.pencil-square"
                     link="{{ route('autoblog.edit', ['id' => $autoBlog->id]) }}"
                     wire:loading.attr="disabled" />
             </div>
-        @endforeach
-    </div>
+        </div>
+    @endforeach
 
 
     <x-modal title="Are you sure?" wire:model="deleteModal">

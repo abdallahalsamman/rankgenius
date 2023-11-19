@@ -27,6 +27,11 @@ protected $dates = ['deleted_at'];
         return $this->belongsTo(IntegrationType::class);
     }
 
+    public function publications()
+    {
+        return $this->hasMany(Publication::class);
+    }
+
     public function autoBlogs()
     {
         return $this->hasMany(AutoBlog::class);

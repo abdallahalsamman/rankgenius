@@ -4,28 +4,29 @@
         title="Integrations" />
 
     <div class="grid grid-cols-[_5fr_1fr] gap-3 border-b-[1px]">
-        <div class="py-2 text-xs font-bold tracking-wider text-gray-600 ml-3">NAME
+        <div class="ml-3 py-2 text-xs font-bold tracking-wider text-gray-600">
+            NAME
         </div>
         <div
             class="py-2 text-center text-xs font-bold tracking-wider text-gray-600">
             ACTIONS</div>
     </div>
     @foreach ($integrations as $integration)
-        <div class="grid grid-cols-[_5fr_1fr] gap-3 pt-2 hover:bg-base-200/50">
+        <div class="grid grid-cols-[_5fr_1fr] gap-3 py-2 hover:bg-base-200/50 items-center">
             <div class="flex items-center">
-                <x-icon name="bi.wordpress" class="mx-3" />
+                <x-icon class="mx-3" name="si.{{$integration->integrationType()->value('name')}}" />
                 <div>{{ Str::limit($integration->name, 80, ' ...') }}</div>
             </div>
 
-            <div class="flex justify-around items-center px-10">
+            <div class="it flex justify-around px-10">
                 <div>
                     <x-button
-                        class="btn-sm border-none bg-transparent hover:bg-red-100"
+                        class="btn-sm border-none bg-transparent hover:bg-red-200"
                         icon="bi.trash" spinner
                         wire:click="deleteConfirm('{{ $integration->id }}')" />
                 </div>
                 <x-button
-                    class="btn-sm border-none bg-transparent hover:bg-green-100"
+                    class="btn-sm border-none bg-transparent hover:bg-green-200"
                     icon="bi.pencil-square"
                     link="{{ route('integration.edit', ['id' => $integration->id]) }}" />
             </div>

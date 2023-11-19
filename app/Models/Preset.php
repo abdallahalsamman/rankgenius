@@ -10,7 +10,7 @@ class Preset extends Model
 {
     use HasFactory, SoftDeletes;
 
-protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at'];
 
     public $incrementing = false;
     protected $keyType = 'string';

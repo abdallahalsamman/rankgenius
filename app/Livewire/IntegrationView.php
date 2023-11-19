@@ -26,23 +26,23 @@ class IntegrationView extends Component
     ];
 
     public $wordpressIntegration = [
-        // "url" => "https://luggagenboxes.com",
-        // "username" => "abbood",
-        // "app_password" => "cXCw10FGY87fX0Uh9e9JjNZ8",
-        // "status" => "publish",
-        // "categories" => [],
-        // "tags" => [],
-        // "author" => 1,
-        // "time_gap" => 0,
-
-        "url" => "",
-        "username" => "",
-        "app_password" => "",
+        "url" => "https://luggagenboxes.com",
+        "username" => "abbood",
+        "app_password" => "cXCw10FGY87fX0Uh9e9JjNZ8",
         "status" => "publish",
         "categories" => [],
         "tags" => [],
         "author" => 1,
         "time_gap" => 0,
+
+        // "url" => "",
+        // "username" => "",
+        // "app_password" => "",
+        // "status" => "publish",
+        // "categories" => [],
+        // "tags" => [],
+        // "author" => 1,
+        // "time_gap" => 0,
     ];
 
     public function updateWordPressInfo()
