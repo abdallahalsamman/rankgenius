@@ -29,12 +29,12 @@ class Integrations extends Component
 
     public function mount()
     {
-        
+
         $this->setAndSortPresets();
     }
 
     public function render()
     {
-        return view('livewire.integrations')->layout('layouts.dashboard');
+        return view('livewire.integrations')->extends('layouts.dashboard')->section('dashboard-content');
     }
 }

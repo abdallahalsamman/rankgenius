@@ -13,6 +13,7 @@ use App\Livewire\GenerateArticles;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\PasswordlessAuthenticationController;
 use App\Livewire\Publications;
+use App\Livewire\WelcomePage;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +27,7 @@ use App\Livewire\Publications;
 */
 
 Route::domain(env('APP_DOMAIN'))->group(function () {
-    Route::view('/', 'welcome');
+    Route::get('/', WelcomePage::class)->name('welcome');
 });
 
 Route::domain('app.' . env('APP_DOMAIN'))->group(function () {

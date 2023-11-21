@@ -22,6 +22,6 @@ class Articles extends Component
 
     public function render()
     {
-        return view('livewire.articles')->layout('layouts.dashboard');
+        return view('livewire.articles')->extends('layouts.dashboard')->section('dashboard-content');
     }
 }

@@ -227,6 +227,6 @@ class IntegrationView extends Component
 
     public function render()
     {
-        return view('livewire.integration-view')->layout('layouts.dashboard');
+        return view('livewire.integration-view')->extends('layouts.dashboard')->section('dashboard-content');
     }
 }

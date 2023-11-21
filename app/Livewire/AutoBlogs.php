@@ -33,6 +33,6 @@ class AutoBlogs extends Component
 
     public function render()
     {
-        return view('livewire.auto-blogs')->layout('layouts.dashboard');
+        return view('livewire.auto-blogs')->extends('layouts.dashboard')->section('dashboard-content');
     }
 }

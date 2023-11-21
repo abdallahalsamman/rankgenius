@@ -47,7 +47,7 @@
         </x-menu>
     </div>
     <div class="w-full max-w-full bg-white p-10 overflow-y-scroll">
-        {{ $slot }}
+        @yield('dashboard-content')
     </div>
 </div>
 @endsection

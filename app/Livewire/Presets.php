@@ -51,6 +51,6 @@ class Presets extends Component
 
     public function render()
     {
-        return view('livewire.presets')->layout('layouts.dashboard');
+        return view('livewire.presets')->extends('layouts.dashboard')->section('dashboard-content');
     }
 }

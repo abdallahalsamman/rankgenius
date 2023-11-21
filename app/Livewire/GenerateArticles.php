@@ -21,7 +21,7 @@ class GenerateArticles extends Component
 
     public function render()
     {
-        return view('livewire.generate-articles')->layout('layouts.dashboard');
+        return view('livewire.generate-articles')->extends('layouts.dashboard')->section('dashboard-content');
     }
 
     public function simpleMode()

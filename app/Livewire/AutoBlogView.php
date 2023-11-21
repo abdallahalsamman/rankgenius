@@ -94,6 +94,6 @@ class AutoBlogView extends Component
 
     public function render()
     {
-        return view('livewire.auto-blog-view')->layout('layouts.dashboard');
+        return view('livewire.auto-blog-view')->extends('layouts.dashboard')->section('dashboard-content');
     }
 }

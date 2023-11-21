@@ -22,6 +22,6 @@ class Publications extends Component
 
     public function render()
     {
-        return view('livewire.publications')->layout('layouts.dashboard');
+        return view('livewire.publications')->extends('layouts.dashboard')->section('dashboard-content');
     }
 }

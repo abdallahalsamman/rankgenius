@@ -190,6 +190,6 @@ class PresetView extends Component
 
     public function render()
     {
-        return view('livewire.preset-view')->layout('layouts.dashboard');
+        return view('livewire.preset-view')->extends('layouts.dashboard')->section('dashboard-content');
     }
 }

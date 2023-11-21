@@ -61,6 +61,6 @@ class HistoryView extends Component
 
     public function render()
     {
-        return view('livewire.history-view')->layout('layouts.dashboard');
+        return view('livewire.history-view')->extends('layouts.dashboard')->section('dashboard-content');
     }
 }
