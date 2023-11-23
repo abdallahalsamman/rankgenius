@@ -15,10 +15,10 @@
                     </div>
                 </a>
                 <div class="flex h-fit justify-center gap-[2rem] font-semibold">
-                    <a href="/#autoblog">AutoBlog</a>
-                    <a href="/#pricing">Pricing</a>
-                    <a href="/#faq">FAQ</a>
-                    <a href="/learn">Learn</a>
+                    <a class="text-gray-600 hover:text-neutral-900" href="/#autoblog">AutoBlog</a>
+                    <a class="text-gray-600 hover:text-neutral-900" href="/#pricing">Pricing</a>
+                    <a class="text-gray-600 hover:text-neutral-900" href="/#faq">FAQ</a>
+                    <a class="text-gray-600 hover:text-neutral-900" href="/learn">Learn</a>
                 </div>
                 <div class="flex justify-between">
                     <x-button class="btn-primary btn-sm text-white" external
@@ -402,7 +402,7 @@
     </section>
     <div class="mx-auto max-w-[1024px] px-4 py-8">
         <div class="flex items-center justify-center">
-            <a class="rounded-lg border-2 border-black bg-[#171717] px-20 py-5 text-2xl font-semibold text-white shadow-lg hover:bg-white hover:text-[#171717]"
+            <a class="rounded-lg border-2 border-black bg-neutral-900 px-20 py-5 text-2xl font-semibold text-white shadow-lg hover:bg-white hover:text-neutral-900"
                 href="{{ route('dashboard') }}">Get 3 Free Articles Today</a>
         </div>
     </div>

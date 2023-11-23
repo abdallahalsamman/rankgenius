@@ -11,7 +11,7 @@
         <div class="flex flex-col gap-14">
             <div class="flex justify-center gap-2">
                 <p>Monthly</p>
-                <x-custom-toggle :enabled="$yearly" class="checked:bg-[#171717]"
+                <x-custom-toggle :enabled="$yearly" class="checked:bg-neutral-900"
                     wire:model.change="yearly" />
                 <div class="flex gap-2">
                     <p>Yearly</p>
@@ -74,7 +74,7 @@
 
                     <div class="mt-auto">
                         <x-button
-                            class="w-full border-2 border-black bg-[#171717] text-white shadow-lg hover:border-black hover:bg-white hover:text-[#171717]"
+                            class="w-full border-2 border-black bg-neutral-900 text-white shadow-lg hover:border-black hover:bg-white hover:text-neutral-900"
                             label="Get
                             Started" />
                     </div>
@@ -82,7 +82,7 @@
                 <div
                     class="relative flex flex-col rounded-lg border-2 border-black bg-white p-8 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
                     <span
-                        class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-[#171717] px-5 py-2 text-sm font-semibold text-white">Most
+                        class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 transform rounded-full bg-neutral-900 px-5 py-2 text-sm font-semibold text-white">Most
                         Popular</span>
 
                     <p class="text-lg font-bold">AutoBlog</p>
@@ -131,7 +131,7 @@
 
                     <div class="mt-auto">
                         <x-button
-                            class="w-full border-2 border-black bg-[#171717] text-white shadow-lg hover:border-black hover:bg-white hover:text-[#171717]"
+                            class="w-full border-2 border-black bg-neutral-900 text-white shadow-lg hover:border-black hover:bg-white hover:text-neutral-900"
                             label="Get
                                 Started" />
                     </div>
@@ -176,10 +176,10 @@
                                     $check = $customCredits != 0 && $customCredits != count($pricingTable['ultimate']['price']) - 1 && $customCredits == $key;
                                 @endphp
                                 <div
-                                    class="{{ $check ? 'font-semibold text-white bg-[#171717] px-1 rounded-md' : '' }} h-[1rem]">
+                                    class="{{ $check ? 'font-semibold text-white bg-neutral-900 px-1 rounded-md' : '' }} h-[1rem]">
                                     {{ $check ? $value['credits'] : '' }}</div>
                             @endforeach
-                        </div><input class="range range-xs checked:bg-[#171717]"
+                        </div><input class="range range-xs checked:bg-neutral-900"
                             max="8" min="0" type="range"
                             wire:model.live="customCredits" />
                         <div class="mb-3 flex justify-between text-xs">
@@ -191,7 +191,7 @@
 
                     <div class="mt-auto">
                         <x-button
-                            class="w-full border-2 border-[#171717] bg-[#171717] text-white shadow-lg hover:border-[#171717] hover:bg-white hover:text-[#171717]"
+                            class="w-full border-2 border-neutral-900 bg-neutral-900 text-white shadow-lg hover:border-neutral-900 hover:bg-white hover:text-neutral-900"
                             label="Get
                             Started" />
                     </div>
@@ -201,7 +201,7 @@
                     class="col-span-3 mx-auto w-full max-w-xl rounded-lg border-2 border-gray-200 bg-white p-8 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
                     <div>
                         <div
-                            class="w-full rounded-lg border-[1px] border-[#171717] bg-[#FAFAFA] py-3 text-center">
+                            class="w-full rounded-lg border-[1px] border-neutral-900 bg-[#FAFAFA] py-3 text-center">
                             <h3 class="text-xl font-semibold">Pay as you go</h3>
                         </div>
                         <div class="py-4">
@@ -222,7 +222,7 @@
                         </div>
                         <div class="mt-auto">
                             <x-button
-                                class="w-full border-2 border-[#171717] bg-[#171717] text-white shadow-lg hover:border-[#171717] hover:bg-white hover:text-[#171717]"
+                                class="w-full border-2 border-neutral-900 bg-neutral-900 text-white shadow-lg hover:border-neutral-900 hover:bg-white hover:text-neutral-900"
                                 label="Get
                                 Started" />
                         </div>
