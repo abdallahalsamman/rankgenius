@@ -2,27 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Geist";
+  font-weight: 100 900;
+  font-style: normal;
+  src:
+    url("http://app.contentaio.local/resources/fonts/GeistVariableVF.woff2") format("woff2"),
+    url("http://app.contentaio.local/resources/fonts/GeistVariableVF.ttf") format("truetype");
+}
+
+.font-geist {
+    font-family: 'Geist', sans-serif;
+}
+
 .scrollable-div {
-    background: linear-gradient(#f7fafc 33%,rgba(247,250,252,0)),linear-gradient(rgba(247,250,252,0),#f7fafc 66%) 0 100%,radial-gradient(farthest-side at 50% 0,rgba(34,34,34,.5),rgba(0,0,0,0)),radial-gradient(farthest-side at 50% 100%,rgba(34,34,34,.5),rgba(0,0,0,0)) 0 100%;
-    background-repeat: no-repeat;
-    background-attachment: local,local,scroll,scroll;
-    background-size: 100% 36px,100% 36px,100% 12px,100% 12px;
+  background:
+    linear-gradient(#f7fafc 33%, rgba(247, 250, 252, 0)),
+    linear-gradient(rgba(247, 250, 252, 0), #f7fafc 66%) 0 100%,
+    radial-gradient(
+      farthest-side at 50% 0,
+      rgba(34, 34, 34, 0.5),
+      rgba(0, 0, 0, 0)
+    ),
+    radial-gradient(
+        farthest-side at 50% 100%,
+        rgba(34, 34, 34, 0.5),
+        rgba(0, 0, 0, 0)
+      )
+      0 100%;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
+  background-size:
+    100% 36px,
+    100% 36px,
+    100% 12px,
+    100% 12px;
 }
 
 .popUpMessage .modal-box {
-    max-width: 42rem;
-    padding: 0;
-    border-radius:.4rem;
-    overflow: hidden;
-    height: 100%;
+  max-width: 42rem;
+  padding: 0;
+  border-radius: 0.4rem;
+  overflow: hidden;
+  height: 100%;
 }
 
 .toasts-container {
-    top: 0 !important;
-    right: 10px !important;
-    bottom: auto !important;
+  top: 0 !important;
+  right: 10px !important;
+  bottom: auto !important;
 }
 
 .toasts-container > div {
-    box-shadow: 1px 1px 10px 0px rgba(0,0,0,0.15);
+  box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.15);
 }

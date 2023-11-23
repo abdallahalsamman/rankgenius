@@ -52,8 +52,12 @@ export default {
     },
 
     extend: {
+      backgroundSize: {
+        "300%": "300%",
+      },
       animation: {
-        ["infinite-slider"]: "infiniteSlider 50s linear infinite",
+        ["infinite-slider"]: "infiniteSlider 60s linear infinite",
+        gradient: "animatedgradient 6s ease infinite alternate",
       },
       keyframes: {
         infiniteSlider: {
@@ -62,6 +66,11 @@ export default {
             transform: "translateX(calc(-250px * 5))",
           },
         },
+        animatedgradient: {
+            '0%': { backgroundPosition: '0% 50%' },
+            '50%': { backgroundPosition: '100% 50%' },
+            '100%': { backgroundPosition: '0% 50%' },
+          },
       },
     },
   },

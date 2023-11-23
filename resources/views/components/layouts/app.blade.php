@@ -10,7 +10,7 @@
     @livewireStyles
 </head>
 
-<body>
+<body class=" bg-[#FAFAFA]">
     <livewire:toasts />
 
     @yield('content')

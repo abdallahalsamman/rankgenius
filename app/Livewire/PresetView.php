@@ -17,7 +17,7 @@ class PresetView extends Component
         'generationMode' => null,
         'details' => null,
         'language' => "English",
-        'creativity' => 10,
+        'creativity' => 9,
         'toneOfVoice' => null,
         'customInstructions' => null,
         'pointOfView' => "automatic",

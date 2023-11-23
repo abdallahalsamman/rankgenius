@@ -106,9 +106,8 @@
                     </div>
 
                     <div class="mb-2 mr-3 pt-5 font-medium">Creativity</div>
-                    <input class="range range-primary range-xs" max="20"
-                        min="0" type="range" value="10"
-                        wire:model="preset.creativity" />
+                    <input class="range range-primary range-xs" max="19"
+                        min="0" type="range" wire:model="preset.creativity" />
                     <div class="flex justify-between text-xs">
                         <span>Correct/Factual</span><span>Creative/Original</span>
                     </div>

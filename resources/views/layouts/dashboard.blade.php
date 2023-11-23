@@ -2,13 +2,13 @@
 
 @section('content')
 <div class="flex w-full md:flex-col h-screen max-h-screen md:h-full md:max-h-full">
-    <div class="min-w-[260px] md:w-full bg-[#f7fafc] h-full">
+    <div class="min-w-[260px] md:w-full h-full">
         <x-menu activate-by-route active-bg-color="text-purple-500 font-semibold" class="border p-0 border-dashed h-full">
             <div class="h-full text-[17px] grid grid-rows-[60px_minmax(300px,_1fr)_160px] md:block">
                 <div class="h-[60px] md:mt-6 md:pb-5 border-b-[1px] w-full px-2 border-[#bebebe]">
                     <a href="{{ route('dashboard') }}">
                         <div class="w-full h-full flex items-center pl-[11px]">
-                            <x-icon name="iconsax.bul-ranking" class="w-[30px] h-[30px]" />
+                            <img src="{{ asset('resources/images/logo-b.png') }}" class="w-5" />
                             <span class="text-[25px] pl-2 font-bold">{{ env('APP_NAME') }}</span>
                         </div>
                     </a>
