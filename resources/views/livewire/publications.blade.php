@@ -1,5 +1,5 @@
 <div>
-    <x-header class="" size="text-xl font-[700] mb-10"
+    <x-header class="" size="text-xl font-[700]"
         subtitle="Everytime an article is published to one of your integrations, a Publication is created and displayed here. Data refreshed every 10 seconds."
         title="Publications" />
 
@@ -15,7 +15,7 @@
             INTEGRATION
         </div>
         <div
-            class="py-2 text-xs font-bold tracking-wider text-gray-600">
+            class="py-2 text-xs font-bold tracking-wider text-center text-gray-600">
             URL
         </div>
     </div>
@@ -24,7 +24,7 @@
             <div class="text-left hover:bg-base-200/50 ml-3">{{ date('d/m', strtotime($publication->created_at)) }}</div>
             <div>{{ $publication->article()->value('title') }}</div>
             <div>{{ $publication->integration()->value('name') }}</div>
-            <div><x-button class="btn-sm" label="View" :link="$publication->url"/></div>
+            <div class="text-center"><x-button class="btn-sm" label="View" :link="$publication->url"/></div>
         </div>
     @endforeach
 

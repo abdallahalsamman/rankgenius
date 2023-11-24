@@ -49,13 +49,13 @@ class PasswordlessAuthenticationController extends Controller
 
         Auth::login($user);
 
-        return redirect($request->next ?? '/dashboard');
+        return redirect($request->next ?? '/dashboard/generate-articles');
     }
 
     public function logout(Request $request)
     {
         Auth::logout();
 
-        return redirect('/');
+        return redirect()->route('welcome');
     }
 }

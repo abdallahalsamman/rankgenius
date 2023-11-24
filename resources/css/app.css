@@ -56,3 +56,10 @@
 .toasts-container > div {
   box-shadow: 1px 1px 10px 0px rgba(0, 0, 0, 0.15);
 }
+
+.input-primary, .textarea-primary, .select-primary, .border-primary {
+    border-color: rgb(209 213 219 / var(--tw-border-opacity));
+}
+.input-primary:focus, .textarea-primary:focus, .select-primary:focus {
+    outline-color: #6b7280;
+}

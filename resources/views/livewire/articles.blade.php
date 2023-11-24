@@ -1,10 +1,10 @@
 <div>
-    <x-header size="text-xl font-[700] mb-5"
+    <x-header size="text-xl font-[700]"
         subtitle="Browse through all articles that you've generated so far."
         title="Articles" />
 
-    <div class="grid grid-cols-[_1fr_6fr_1fr] gap-3 border-b-[1px]">
-        <div class="py-2 text-xs font-bold tracking-wider text-gray-600 ml-3">DATE
+    <div class="grid grid-cols-[_1fr_6fr_1fr] gap-3 border-b-[1px] px-3">
+        <div class="py-2 text-xs font-bold tracking-wider text-gray-600">DATE
         </div>
         <div
             class="py-2 text-center text-xs font-bold tracking-wider text-gray-600">
@@ -14,8 +14,8 @@
             ACTIONS</div>
     </div>
     @foreach ($articles as $article)
-        <div class="grid grid-cols-[_1fr_6fr_1fr] gap-3 py-2 items-center hover:bg-base-200/50">
-            <div class="ml-3">{{ date('d/m', strtotime($article->created_at)) }}</div>
+        <div class="grid grid-cols-[_1fr_6fr_1fr] gap-3 px-3 py-2 items-center hover:bg-base-200/50">
+            <div>{{ date('d/m', strtotime($article->created_at)) }}</div>
             <div>{{ Str::limit($article->title, 80, ' ...') }}</div>
             <div class="flex justify-end">
                 <x-button class="btn-sm" label="View"

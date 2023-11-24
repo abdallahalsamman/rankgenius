@@ -1,5 +1,5 @@
 <div>
-    <x-header class="" size="text-xl font-[700] mb-10"
+    <x-header class="" size="text-xl font-[700]"
         subtitle="Create a new Preset that instructs {{ env('APP_NAME') }} the type of articles you want to generate."
         title="Presets / {{ $action == 'create' ? 'Create' : $preset['name'] }}" />
 
@@ -106,8 +106,8 @@
                     </div>
 
                     <div class="mb-2 mr-3 pt-5 font-medium">Creativity</div>
-                    <input class="range range-primary range-xs" max="19"
-                        min="0" type="range" wire:model="preset.creativity" />
+                    <input class="range range-xs" max="19" min="0"
+                        type="range" wire:model="preset.creativity" />
                     <div class="flex justify-between text-xs">
                         <span>Correct/Factual</span><span>Creative/Original</span>
                     </div>
@@ -259,6 +259,7 @@
                                     :label="$preset['externalLinksEnabled']
                                         ? 'Enabled'
                                         : 'Disabled'"
+                                    class="checked:bg-neutral-900"
                                     wire:model.change="preset.externalLinksEnabled" />
                             </div>
                         </label>
@@ -298,7 +299,7 @@
                         wire:target="preset.incrementLinkCount">
                         <span class="loading loading-dots loading-lg"></span>
                     </div>
-                    <x-button class="btn-primary btn-outline btn-xs"
+                    <x-button class="border-black hover:bg-neutral-900 hover:text-white bg-white text-neutral-900 btn-xs"
                         icon="bi.plus" label="Add Link"
                         wire:click="incrementLinkCount" />
                     <div class="mt-2 text-sm">We'll randomly select up to 1
@@ -344,9 +345,11 @@
                         <label>
                             Featured Image
                             <div class="mt-3 w-fit">
-                                <x-custom-toggle :label="$preset['featureImageEnabled']
-                                    ? 'Enabled'
-                                    : 'Disabled'" :enabled="$preset['featureImageEnabled']"
+                                <x-custom-toggle :enabled="$preset['featureImageEnabled']"
+                                    :label="$preset['featureImageEnabled']
+                                        ? 'Enabled'
+                                        : 'Disabled'"
+                                    class="checked:bg-neutral-900"
                                     wire:model.change="preset.featureImageEnabled" />
                             </div>
                         </label>
@@ -356,9 +359,11 @@
                         <label>
                             In-Article Images
                             <div class="mt-3 w-fit">
-                                <x-custom-toggle :label="$preset['inArticleImageEnabled']
-                                    ? 'Enabled'
-                                    : 'Disabled'" :enabled="$preset['inArticleImageEnabled']"
+                                <x-custom-toggle :enabled="$preset['inArticleImageEnabled']"
+                                    :label="$preset['inArticleImageEnabled']
+                                        ? 'Enabled'
+                                        : 'Disabled'"
+                                    class="checked:bg-neutral-900"
                                     wire:model.change="preset.inArticleImageEnabled" />
                             </div>
                         </label>
@@ -389,6 +394,7 @@
                                     ]
                                         ? 'Enabled'
                                         : 'Disabled'"
+                                    class="checked:bg-neutral-900"
                                     wire:model.change="preset.automateYoutubeVideosEnabled" />
                             </div>
                         </label>
@@ -413,10 +419,10 @@
         </div>
         <div class="mt-5 grid w-full grid-cols-2 gap-5">
             <x-button
-                class="btn-primary btn-outline w-full text-base text-base-100"
+                class=" border-black hover:bg-neutral-900 hover:text-white bg-white text-neutral-900 w-full text-base"
                 label="Cancel" link="{{ route('presets') }}" />
             <x-button :label="$action === 'create' ? 'Create New Preset' : 'Save'"
-                class="btn-primary w-full text-base text-base-100"
+                class="bg-neutral-900 font-semibold  hover:bg-gray-700 text-white w-full text-base"
                 type="submit" wire:loading.attr="disabled" />
         </div>
     </x-form>

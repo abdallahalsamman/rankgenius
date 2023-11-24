@@ -1,5 +1,5 @@
 <div>
-    <x-header size="text-xl font-[700] mb-5" title="History" subtitle="Your latest batches." />
+    <x-header size="text-xl font-[700]" title="History" subtitle="Your latest batches." />
 
     @php
     $headers = [

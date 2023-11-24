@@ -1,6 +1,6 @@
 <div>
 
-    <x-header class="" size="text-xl font-[700] mb-10"
+    <x-header class="" size="text-xl font-[700]"
         subtitle="Create a new AutoBlog to automatically generate & publish articles to your website."
         title="AutoBlogs / {{ $action == 'create' ? 'Create' : $autoBlog['name'] }}" />
 
@@ -14,7 +14,7 @@
                 <div>You must upgrade to <strong>AutoBlog</strong> to use
                     AutoBlogs.</div>
             </div>
-            <x-button class="btn-primary btn-sm text-white"
+            <x-button class="bg-neutral-900 font-semibold  hover:bg-gray-700 btn-sm text-white"
                 icon-right="o-arrow-small-right" label="Subscription" />
         </div>
         <div class="mb-4">
@@ -28,7 +28,7 @@
         <div class="mb-4">
             <div class="mb-2 flex items-center justify-between">
                 <div class="mr-3 font-medium">Preset</div>
-                <x-button class="btn-primary btn-outline btn-xs" icon="bi.plus"
+                <x-button class=" border-black hover:bg-neutral-900 hover:text-white bg-white text-neutral-900 btn-xs" icon="bi.plus"
                     label="Create Preset" link="{{ route('preset.create') }}" />
             </div>
             <x-select :options="$presetOptions" class="text-base"
@@ -85,7 +85,7 @@
         <div class="mb-4">
             <div class="mb-2 flex items-center justify-between">
                 <div class="mr-3 font-medium">Integration</div>
-                <x-button class="btn-primary btn-outline btn-xs" icon="bi.plus"
+                <x-button class=" border-black hover:bg-neutral-900 hover:text-white bg-white text-neutral-900 btn-xs" icon="bi.plus"
                     label="Create Preset"
                     link="{{ route('integration.create') }}" />
             </div>
@@ -96,7 +96,7 @@
         <div class="mb-4 w-fit">
             <div class="mb-2 mr-3 font-medium">Status</div>
             <x-custom-toggle :enabled="$autoBlog['status']" :label="$autoBlog['status'] ? 'Active' : 'Paused'"
-                class="text-base" wire:model.change="autoBlog.status" />
+                class="text-base checked:bg-neutral-900" wire:model.change="autoBlog.status" />
             @if ($autoBlog['status'])
                 <div class="mt-2 text-sm">
                     Next articles will be generated @
@@ -108,10 +108,10 @@
 
         <div class="grid w-full grid-cols-2 gap-5">
             <x-button
-                class="btn-primary btn-outline w-full text-base text-base-100"
+                class=" border-black hover:bg-neutral-900 hover:text-white bg-white text-neutral-900 w-full text-base"
                 label="Cancel" link="{{ route('autoblogs') }}" />
             <x-button :label="$action === 'create' ? 'Create New AutoBlog' : 'Save'"
-                class="btn-primary w-full text-base text-base-100"
+                class="bg-neutral-900 font-semibold  hover:bg-gray-700 text-white w-full text-base"
                 type="submit" wire:loading.attr="disabled" />
         </div>
     </x-form>

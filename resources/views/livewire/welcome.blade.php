@@ -1,118 +1,147 @@
 <div>
 
     {{-- nav --}}
-    <section>
-        <div class="border-b-[1px]">
-            <div
-                class="mx-auto grid max-w-[1024px] grid-cols-[_1fr_4fr_1.5fr] items-center p-4">
+    <section class="fixed left-0 right-0 top-0 z-50 bg-white">
+        <nav class="border-b-[1px]">
+            <div class="my-4 flex items-center px-6">
                 <a href="/">
-                    <div class="flex items-center justify-between">
-                        <div class="mr-5">
-                            <x-icon class="h-[30px] w-[30px]"
-                                name="iconsax.bul-ranking" />
+                    <div class="flex items-center">
+                        <div class="mr-2">
+                            <img class="w-4"
+                                src="{{ asset('resources/images/logo-b.png') }}" />
                         </div>
-                        <p class="text-[1.25rem] font-bold">ContentAIO</p>
+                        <p class="text-[1.25rem] font-bold">{{ env('APP_NAME') }}
+                        </p>
                     </div>
                 </a>
-                <div class="flex h-fit justify-center gap-[2rem] font-semibold">
-                    <a class="text-gray-600 hover:text-neutral-900" href="/#autoblog">AutoBlog</a>
-                    <a class="text-gray-600 hover:text-neutral-900" href="/#pricing">Pricing</a>
-                    <a class="text-gray-600 hover:text-neutral-900" href="/#faq">FAQ</a>
-                    <a class="text-gray-600 hover:text-neutral-900" href="/learn">Learn</a>
+                <div class="ml-8 flex h-fit gap-[2rem]">
+                    <a class="text-gray-600 hover:text-neutral-900"
+                        href="/#features">Features</a>
+                    <a class="text-gray-600 hover:text-neutral-900"
+                        href="/#autoblog">AutoBlog</a>
+                    <a class="text-gray-600 hover:text-neutral-900"
+                        href="/#pricing">Pricing</a>
+                    <a class="text-gray-600 hover:text-neutral-900"
+                        href="/#faq">FAQ</a>
+                    <a class="text-gray-600 hover:text-neutral-900"
+                        href="/learn">Learn</a>
                 </div>
-                <div class="flex justify-between">
-                    <x-button class="btn-primary btn-sm text-white" external
-                        label="Get 3 Free Articles"
-                        link="{{ route('dashboard') }}" />
-                    <x-button
-                        class="btn-sm border-transparent bg-transparent text-primary"
-                        external label="Login" link="{{ route('login') }}" />
+                <div class="ml-auto flex justify-between gap-2">
+                    @if (Auth::check())
+                        <x-button
+                            class="btn-sm border-2 bg-white text-neutral-900"
+                            external label="Dashboard"
+                            link="{{ route('dashboard') }}" />
+                    @else
+                        <x-button
+                            class="btn-sm bg-neutral-900 font-semibold text-white hover:bg-gray-700"
+                            external label="Get 5 Free Articles"
+                            link="{{ route('dashboard') }}" />
+                        <x-button
+                            class="btn-sm border-2 bg-white text-neutral-900"
+                            external label="Log In"
+                            link="{{ route('login') }}" />
+                    @endif
                 </div>
             </div>
-        </div>
+        </nav>
     </section>
 
     {{-- hero section --}}
     <section>
-        <div class="w-full">
-            <div class="mx-auto max-w-[768px] px-4 pb-8 pt-14">
-                <div class="flex flex-col gap-4">
-                    <h1
-                        class="break-words px-4 text-center text-5xl font-bold leading-normal">
-                        Generate <mark
-                            class="bg-transparent text-[#4f00ff]">high-quality
-                            articles</mark> that
-                        <mark
-                            class="bg-transparent text-[#4f00ff]">auto-publish</mark>
-                        to your blog
-                    </h1>
-                    <p class="text-center text-2xl">Instantly get hundreds of
-                        relevant articles that are unique
-                        and optimized for your niche.</p>
-                </div>
-                <div class="mt-10 w-full">
-                    <form>
-                        <div
-                            class="mx-8 flex flex-row gap-2 rounded-lg border-[0.8px] bg-[#F7FAFC] p-5 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
-                            <div class="flex-grow" role="group">
-                                <x-input class="text-xl"
-                                    placeholder="your@email.com"
-                                    type="email" />
+        <header class="w-full">
+            <div class="mx-auto flex max-w-6xl items-center gap-16 pt-32">
+                <div class="flex w-2/3 flex-col gap-10">
+                    <div>
+                        <h1
+                            class="break-words text-5xl font-bold leading-normal">
+                            {{-- <p
+                                class="animate-gradient bg-gradient-to-r from-blue-500 to-green-500 bg-300% bg-clip-text text-transparent">
+                                Rank higher, save time.</p> --}}
+                            Auto-publish
+                            <mark
+                                class="animate-gradient bg-gradient-to-r from-blue-500 to-green-500 bg-300% bg-clip-text text-gray-400 text-transparent">SEO-optimized
+                                articles</mark>
+                            with our
+                            <mark
+                                class="relative border-2 border-dashed border-[#1E64E6] rounded-2xl px-3 animate-gradient bg-gradient-to-r from-blue-500 to-green-500 bg-300% bg-clip-text text-gray-400 text-transparent">AI
+                                Bots.
+                                <div class="absolute w-60 rotate-[25deg] left-40 -top-2">
+                                    <div class="relative">
+                                        <div class="absolute w-[30rem] -rotate-[20deg] -top-28 left-[7rem] text-lg text-[#1E64E6]">
+                                            <img src="{{ asset('resources/images/label-automatic-check.svg') }}" alt="">
+                                        </div>
+                                    </div>
+                                    <img src="{{asset('resources/images/arrow-right.svg')}}" alt="">
+                                </div>
+                            </mark>
+                        </h1>
+
+                        <div>
+                            <p class="text-2xl">AI-Powered Articles
+                                that Rank on Google and Engage Readers For Your
+                                Blog on AutoPilot.</p>
+                        </div>
+                    </div>
+
+                    {{-- login form --}}
+                    <div>
+                        <form>
+                            {{-- <div
+                                class="bg-zinc-50 flex flex-col gap-2 rounded-lg border-[0.8px] p-5 shadow-md"> --}}
+                            <div class="flex flex-row gap-2">
+                                <div class="flex-grow" role="group">
+                                    <x-input
+                                        class="border-gray-300 text-xl focus:outline-gray-500"
+                                        placeholder="Your email address"
+                                        type="email" />
+                                </div>
+                                <div>
+                                    <x-button
+                                        class="bg-neutral-900 text-lg text-white hover:bg-gray-700"
+                                        icon-right="fas.arrow-right"
+                                        label="Try for free" type="submit" />
+                                </div>
                             </div>
-                            <div>
-                                <x-button class="btn-primary text-lg text-white"
-                                    icon-right="fas.arrow-right"
-                                    label="Get 3 Free Articles"
-                                    type="submit" />
+                            {{-- </div> --}}
+                        </form>
+                        <div>
+                            <div class="flex items-center gap-3 pl-2">
+                                <div>
+                                    <p>Five Free Articles</p>
+                                </div>
+                                <x-icon class="h-7 w-7 text-gray-500"
+                                    name="bi.dot" />
+                                <div>
+                                    <p>No credit card required</p>
+                                </div>
+                                <x-icon class="h-7 w-7 text-gray-500"
+                                    name="bi.dot" />
+                                <div>
+                                    <p>Expert Level</p>
+                                </div>
                             </div>
                         </div>
-                    </form>
-                </div>
-            </div>
-            <div class="mx-auto max-w-[1024px] px-4">
-                <div class="mb-10 flex justify-center gap-10">
-                    <div
-                        class="flex items-center gap-2 rounded-lg px-3 py-1 font-medium">
-                        <x-icon class="h-7 w-7 text-green-600"
-                            name="bi.check-all" />
-                        <p>SEO optimized</p>
-                    </div>
-                    <div
-                        class="flex items-center gap-2 rounded-lg px-3 py-1 font-medium">
-                        <x-icon class="h-7 w-7 text-green-600"
-                            name="bi.check-all" />
-                        <p><span>Plagiarism Free</span></p>
-                    </div>
-                    <div
-                        class="flex items-center gap-2 rounded-lg px-3 py-1 font-medium">
-                        <x-icon class="h-7 w-7 text-green-600"
-                            name="bi.check-all" />
-                        <p>No credit card required</p>
-                    </div>
-                    <div
-                        class="flex items-center gap-2 rounded-lg px-3 py-1 font-medium">
-                        <x-icon class="h-7 w-7 text-green-600"
-                            name="bi.check-all" />
-                        <p>Articles in 30 seconds</p>
                     </div>
                 </div>
             </div>
-        </div>
+
+        </header>
     </section>
 
     {{-- slider --}}
     <section>
-        <div class="bg-gradient-to-t from-white to-[#F7FAFC] p-10">
+        <div class="px-4 pb-10 pt-14">
             <div>
                 <div class="mb-10 text-center text-lg">
-                    <p>Our AI is trained on content from leading publishers</p>
+                    <p>Our AI is trained on data from renowned publisher</p>
                 </div>
             </div>
             <div
-                class="relative m-auto w-full overflow-hidden bg-white before:absolute before:left-0 before:top-0 before:z-[2] before:h-full before:w-[100px] before:bg-[linear-gradient(to_right,white_0%,rgba(255,255,255,0)_100%)] before:content-[''] after:absolute after:right-0 after:top-0 after:z-[2] after:h-full after:w-[100px] after:-scale-x-100 after:bg-[linear-gradient(to_right,white_0%,rgba(255,255,255,0)_100%)] after:content-['']">
+                class="relative m-auto w-full overflow-hidden before:absolute before:left-0 before:top-0 before:z-[2] before:h-full before:w-[100px] before:bg-[linear-gradient(to_right,white_0%,rgba(255,255,255,0)_100%)] before:content-[''] after:absolute after:right-0 after:top-0 after:z-[2] after:h-full after:w-[100px] after:-scale-x-100 after:bg-[linear-gradient(to_right,white_0%,rgba(255,255,255,0)_100%)] after:content-['']">
                 <div class="flex animate-infinite-slider">
                     <div
-                        class="slide flex w-full items-center justify-center gap-20">
+                        class="slide flex w-full items-center justify-center gap-20 grayscale">
                         @foreach (array_merge(...array_fill(0, 5, ['abc', 'bbc', 'cbc', 'cnn', 'globe-mail', 'national-post', 'quora', 'wikipedia'])) as $logo)
                             <img alt="ABC News Logo" class="h-8"
                                 src="{{ asset('resources/images/' . $logo . '.png') }}" />
@@ -128,15 +157,14 @@
         <div class="mx-auto max-w-[1024px] px-4 py-20">
             <div id="features">
                 <div class="text-center">
-                    <h2 class="text-4xl font-bold">Feature-Rich Articles that
-                        Bring
-                        Traffic</h2>
-                    <p class="mt-4 text-xl">Journalist AI crafts content that is
-                        well-structured, appropriate
-                        for your business and that ranks on Google.</p>
+                    <h2 class="text-4xl font-bold">Useful Articles to Achieve
+                        Authority</h2>
+                    <p class="mt-4 text-xl">{{ env('APP_NAME') }} creates
+                        content that fits your business perfectly and helps you
+                        rank higher on Google.</p>
                 </div>
                 <div class="mt-16">
-                    <div class="flex flex-col gap-8">
+                    <div class="grid grid-cols-2 gap-8">
                         <div
                             class="rounded-lg border-[0.8px] p-4 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
                             <div class="flex items-center gap-4">
@@ -144,7 +172,38 @@
                                 <h3 class="text-xl font-bold">Human expert-level
                                     content</h3>
                             </div>
-                            <p class="mt-4">Journalist AI is equivalent to an
+                            <p class="mt-4">{{ env('APP_NAME') }} is
+                                equivalent to an
+                                expert writer,
+                                writing
+                                informed articles that make sense for your
+                                business.
+                            </p>
+                        </div>
+                        <div
+                            class="rounded-lg border-[0.8px] p-4 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
+                            <div class="flex items-center gap-4">
+                                <x-icon class="h-6 w-6" name="bi.star-fill" />
+                                <h3 class="text-xl font-bold">Human expert-level
+                                    content</h3>
+                            </div>
+                            <p class="mt-4">{{ env('APP_NAME') }} is
+                                equivalent to an
+                                expert writer,
+                                writing
+                                informed articles that make sense for your
+                                business.
+                            </p>
+                        </div>
+                        <div
+                            class="rounded-lg border-[0.8px] p-4 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
+                            <div class="flex items-center gap-4">
+                                <x-icon class="h-6 w-6" name="bi.star-fill" />
+                                <h3 class="text-xl font-bold">Human expert-level
+                                    content</h3>
+                            </div>
+                            <p class="mt-4">{{ env('APP_NAME') }} is
+                                equivalent to an
                                 expert writer,
                                 writing
                                 informed articles that make sense for your
@@ -186,7 +245,8 @@
                         <div
                             class="rounded-lg border-[0.8px] p-4 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
                             <div class="flex items-center gap-4">
-                                <x-icon class="h-6 w-6" name="bi.list-nested" />
+                                <x-icon class="h-6 w-6"
+                                    name="bi.list-nested" />
                                 <h3 class="text-xl font-bold">Table of Contents
                                 </h3>
                             </div>
@@ -208,8 +268,8 @@
     <section>
         <div class="mx-auto max-w-[1024px] px-4 py-8">
             <div class="flex items-center justify-center">
-                <a class="btn-primary rounded-lg px-20 py-5 text-2xl font-semibold text-white"
-                    href="{{ route('dashboard') }}">Get 3 Free Articles
+                <a class="rounded-lg bg-neutral-900 px-20 py-5 text-2xl font-semibold text-white hover:bg-gray-700"
+                    href="{{ route('dashboard') }}">Get 5 Free Articles
                     Today</a>
             </div>
         </div>
@@ -228,14 +288,15 @@
                         headings and more.</p>
                 </div>
                 <div
-                    class="mt-16 grid auto-rows-min grid-cols-[_1.6fr_1fr] gap-x-1 gap-y-14">
+                    class="mt-16 grid auto-rows-min grid-cols-[_1.6fr_1fr] justify-center gap-x-1 gap-y-14">
                     <div
-                        class="rounded-lg border-[0.8px] p-4 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
+                        class="ml-10 h-64 w-full rounded-lg border-[0.8px] border-gray-300 py-10 pl-8 pr-24 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
                         <h3 class="text-xl font-bold">Tell us Keywords, Titles
                             or
                             your Business.</h3>
                         <p class="mt-4">Generate articles based on your own
-                            keywords, or just tell Journalist AI about your
+                            keywords, or just tell {{ env('APP_NAME') }} about
+                            your
                             business
                             &amp; niche.</p>
                         <p class="mt-4">Alternatively, you can input specific
@@ -243,13 +304,15 @@
                             totally
                             unique.</p>
                     </div>
-                    <div
-                        class="h-52 overflow-hidden rounded-lg border-2 border-dashed border-[#ceb8ff] p-2 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
-                        <img alt="modes" loading="lazy"
-                            src="https://tryjournalist.com/_next/image?url=%2Fmodes.png&w=1920&q=75">
+                    <div class="relative h-full w-full">
+                        <div
+                            class="absolute -left-10 right-10 top-6 h-52 overflow-hidden rounded-lg border-[0.8px] border-gray-300 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
+                            <img alt="modes" loading="lazy"
+                                src="https://tryjournalist.com/_next/image?url=%2Fmodes.png&w=1920&q=75">
+                        </div>
                     </div>
                     <div
-                        class="rounded-lg border-[0.8px] p-4 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
+                        class="ml-10 h-64 w-full rounded-lg border-[0.8px] border-gray-300 py-10 pl-8 pr-24 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
                         <h3 class="text-xl font-bold">Customize Outline &amp;
                             Structure</h3>
                         <p class="mt-4">Take full control of the headings of
@@ -262,13 +325,15 @@
                             a
                             CTA at the end of each article.</p>
                     </div>
-                    <div
-                        class="h-52 overflow-hidden rounded-lg border-2 border-dashed border-[#ceb8ff] p-2 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
-                        <img alt="modes" loading="lazy"
-                            src="https://tryjournalist.com/_next/image?url=%2Fmodes.png&w=1920&q=75">
+                    <div class="relative h-full w-full">
+                        <div
+                            class="absolute -left-10 right-10 top-6 h-52 overflow-hidden rounded-lg border-[0.8px] border-gray-300 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
+                            <img alt="modes" loading="lazy"
+                                src="https://tryjournalist.com/_next/image?url=%2Fmodes.png&w=1920&q=75">
+                        </div>
                     </div>
                     <div
-                        class="rounded-lg border-[0.8px] p-4 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
+                        class="ml-10 h-64 w-full rounded-lg border-[0.8px] border-gray-300 py-10 pl-8 pr-24 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
                         <h3 class="text-xl font-bold">Language &amp;
                             Personality
                         </h3>
@@ -280,13 +345,15 @@
                             such as<i> informal</i> or <i>persuasive</i>.
                         </p>
                     </div>
-                    <div
-                        class="h-52 overflow-hidden rounded-lg border-2 border-dashed border-[#ceb8ff] p-2 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
-                        <img alt="modes" loading="lazy"
-                            src="https://tryjournalist.com/_next/image?url=%2Fmodes.png&w=1920&q=75">
+                    <div class="relative h-full w-full">
+                        <div
+                            class="absolute -left-10 right-10 top-6 h-52 overflow-hidden rounded-lg border-[0.8px] border-gray-300 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
+                            <img alt="modes" loading="lazy"
+                                src="https://tryjournalist.com/_next/image?url=%2Fmodes.png&w=1920&q=75">
+                        </div>
                     </div>
                     <div
-                        class="rounded-lg border-[0.8px] p-4 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
+                        class="ml-10 h-64 w-full rounded-lg border-[0.8px] border-gray-300 py-10 pl-8 pr-24 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
                         <h3 class="text-xl font-bold">Generate &amp; Publish In
                             Mass</h3>
                         <p class="mt-4">Choose how many articles should be
@@ -294,16 +361,19 @@
                             either
                             download them as a <i>zip</i> file or publish in
                             one-click to your website.</p>
-                        <p class="mt-4">You can also let Journalist AI
+                        <p class="mt-4">You can also let
+                            {{ env('APP_NAME') }}
                             schedule,
                             generate and publish for you automatically with an
                             <i>AutoBlog</i>.
                         </p>
                     </div>
-                    <div
-                        class="h-52 overflow-hidden rounded-lg border-2 border-dashed border-[#ceb8ff] p-2 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
-                        <img alt="modes" loading="lazy"
-                            src="https://tryjournalist.com/_next/image?url=%2Fmodes.png&w=1920&q=75">
+                    <div class="relative h-full w-full">
+                        <div
+                            class="absolute -left-10 right-10 top-6 h-52 overflow-hidden rounded-lg border-[0.8px] border-gray-300 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
+                            <img alt="modes" loading="lazy"
+                                src="https://tryjournalist.com/_next/image?url=%2Fmodes.png&w=1920&q=75">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -316,7 +386,7 @@
             <div id="autoblog">
                 <div class="text-center">
                     <h2 class="text-4xl font-bold">Automate with <mark
-                            class="bg-transparent text-[#4f00ff]">AutoBlog</mark>
+                            class="bg-transparent text-gray-500">AutoBlog</mark>
                     </h2>
                     <p class="mt-4 text-xl">All the features you need to drive
                         traffic to your blog and run
@@ -324,7 +394,7 @@
                 </div>
                 <div class="mt-16 grid grid-cols-2 gap-12">
                     <div
-                        class="rounded-lg border-[0.8px] shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
+                        class="rounded-lg border-[0.8px] shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)] hover:border-gray-500">
                         <div class="px-5">
                             <img alt="autoblog" loading="lazy"
                                 src="https://tryjournalist.com/_next/image?url=%2Fautoblog.png&w=1920&q=75" />
@@ -336,12 +406,13 @@
                                 schedule to generate
                                 &amp; publish articles. Run your blog on
                                 auto-pilot,
-                                making Journalist AI your full-time employee.
+                                making {{ env('APP_NAME') }} your full-time
+                                employee.
                             </p>
                         </div>
                     </div>
                     <div
-                        class="rounded-lg border-[0.8px] shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
+                        class="rounded-lg border-[0.8px] shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)] hover:border-gray-500">
                         <div class="px-5">
                             <img alt="integrations" loading="lazy"
                                 src="https://tryjournalist.com/_next/image?url=%2Fautoblog.png&w=1920&q=75" />
@@ -356,14 +427,15 @@
                         </div>
                     </div>
                     <div
-                        class="rounded-lg border-[0.8px] shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
+                        class="rounded-lg border-[0.8px] shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)] hover:border-gray-500">
                         <div class="px-5">
                             <img alt="interlinking" loading="lazy"
                                 src="https://tryjournalist.com/_next/image?url=%2Fautoblog.png&w=1920&q=75" />
                         </div>
                         <div class="border-t-[0.8px] p-4">
                             <h3 class="text-xl font-bold">Internal Linking</h3>
-                            <p class="mt-4">Journalist AI analyzes your
+                            <p class="mt-4">{{ env('APP_NAME') }} analyzes
+                                your
                                 website structure and
                                 intelligently places links in your articles.
                                 Articles will be semantically analyzed and
@@ -373,7 +445,7 @@
                         </div>
                     </div>
                     <div
-                        class="rounded-lg border-[0.8px] shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)]">
+                        class="rounded-lg border-[0.8px] shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)] hover:border-gray-500">
                         <div class="px-5">
                             <img alt="external linking" loading="lazy"
                                 src="https://tryjournalist.com/_next/image?url=%2Fautoblog.png&w=1920&q=75" />
@@ -398,14 +470,14 @@
 
     {{-- CTA --}}
     <section>
-
-    </section>
-    <div class="mx-auto max-w-[1024px] px-4 py-8">
-        <div class="flex items-center justify-center">
-            <a class="rounded-lg border-2 border-black bg-neutral-900 px-20 py-5 text-2xl font-semibold text-white shadow-lg hover:bg-white hover:text-neutral-900"
-                href="{{ route('dashboard') }}">Get 3 Free Articles Today</a>
+        <div class="mx-auto max-w-[1024px] px-4 py-8">
+            <div class="flex items-center justify-center">
+                <a class="rounded-lg border-2 border-black bg-neutral-900 px-20 py-5 text-2xl font-semibold text-white shadow-lg hover:bg-white hover:text-neutral-900"
+                    href="{{ route('dashboard') }}">Get 5 Free Articles
+                    Today</a>
+            </div>
         </div>
-    </div>
+    </section>
 
     {{-- PRICING TABLE --}}
     <livewire:pricing />
@@ -415,19 +487,19 @@
         $faqs = [
             [
                 'question' => 'How does it work?',
-                'answer' => "Journalist AI is an AI platform that's built with powerful models that will generate articles that are most relevant to your business and niche. The tool follows the best SEO practices to ensure quality and traffic.",
+                'answer' => '' . env('APP_NAME') . ' is an AI platform that\'s built with powerful models that will generate articles that are most relevant to your business and niche. The tool follows the best SEO practices to ensure quality and traffic.',
             ],
             [
                 'question' => 'How is this different from ChatGPT and other AI writers?',
-                'answer' => 'ChatGPT and other tools write generic and boring content that is not relevant to your business. Besides, they take too much work to craft high-quality articles. Journalist AI takes a different approach by making this effortless. With just one click, you can have hundreds of articles at your disposal.',
+                'answer' => 'ChatGPT and other tools write generic and boring content that is not relevant to your business. Besides, they take too much work to craft high-quality articles. ' . env('APP_NAME') . ' takes a different approach by making this effortless. With just one click, you can have hundreds of articles at your disposal.',
             ],
             [
-                'question' => 'Does Google penalize Journalist AI content?',
-                'answer' => 'No. Google never penalizes high-quality content that keeps the readers engaged, which was what Journalist AI was built for.',
+                'question' => 'Does Google penalize ' . env('APP_NAME') . ' content?',
+                'answer' => 'No. Google never penalizes high-quality content that keeps the readers engaged, which was what ' . env('APP_NAME') . ' was built for.',
             ],
             [
                 'question' => 'How does the AutoBlog integration work?',
-                'answer' => 'Journalist AI seamlessly connects to any platform, making you able to push the articles straight to your website.',
+                'answer' => '' . env('APP_NAME') . ' seamlessly connects to any platform, making you able to push the articles straight to your website.',
             ],
             [
                 'question' => 'Can I integrate with other platforms?',
@@ -435,19 +507,19 @@
             ],
             [
                 'question' => 'How does the AutoBlog work?',
-                'answer' => 'You can turn any website into an automated AutoBlog. Journalist AI will allow you to configure the schedule, niche, your business, categories, initial prompt, etc.',
+                'answer' => 'You can turn any website into an automated AutoBlog. ' . env('APP_NAME') . ' will allow you to configure the schedule, niche, your business, categories, initial prompt, etc.',
             ],
             [
                 'question' => 'Do you support internal & external linking?',
-                'answer' => 'Yes. For internal linking, you point Journalist AI to your website sitemap, and it will carefully place those links in your articles. For external linking, you can either input the exact links or let Journalist AI find the most relevant. Journalist AI will scrape relevant keywords and insert them in the articles.',
+                'answer' => 'Yes. For internal linking, you point ' . env('APP_NAME') . ' to your website sitemap, and it will carefully place those links in your articles. For external linking, you can either input the exact links or let ' . env('APP_NAME') . ' find the most relevant. ' . env('APP_NAME') . ' will scrape relevant keywords and insert them in the articles.',
             ],
             [
                 'question' => 'Can I give it specific titles?',
-                'answer' => 'Yes. This is available for subscribers. You can give Journalist AI specific titles, and it will generate an article for each one of them.',
+                'answer' => 'Yes. This is available for subscribers. You can give ' . env('APP_NAME') . ' specific titles, and it will generate an article for each one of them.',
             ],
             [
                 'question' => 'Can I give it SEO keywords?',
-                'answer' => 'Yes. Keyword-based generation is available for subscribers. You can give Journalist AI specific keywords, and it will generate an article for each one of them.',
+                'answer' => 'Yes. Keyword-based generation is available for subscribers. You can give ' . env('APP_NAME') . ' specific keywords, and it will generate an article for each one of them.',
             ],
             [
                 'question' => 'Can I customize the structure of the articles?',
@@ -455,7 +527,7 @@
             ],
             [
                 'question' => 'Are the articles original?',
-                'answer' => "Yes. We guarantee 100% unique articles. They aren't plagiarized since they are auto-generated.",
+                'answer' => 'Yes. We guarantee 100% unique articles. They aren\'t plagiarized since they are auto-generated.',
             ],
             [
                 'question' => 'Can I get images on my articles?',
@@ -466,8 +538,8 @@
                 'answer' => 'Yes. The content is 100% self-generated. The images are either AI-generated or license-free stock photos.',
             ],
             [
-                'question' => 'Does Journalist AI pass AI detectors?',
-                'answer' => "Some of them. The reality is that search engines don't necessarily care who or what writes the content as long as it's valuable for their users. Journalist AI's content is top-tier and valuable to readers, so search engines give it the value it deserves. AI content detectors don't serve much use in an AI-infused world.",
+                'question' => 'Does ' . env('APP_NAME') . ' pass AI detectors?',
+                'answer' => 'Some of them. The reality is that search engines don\'t necessarily care who or what writes the content as long as it\'s valuable for their users. ' . env('APP_NAME') . '\'s content is top-tier and valuable to readers, so search engines give it the value it deserves. AI content detectors don\'t serve much use in an AI-infused world.',
             ],
             [
                 'question' => 'Can I change my plan later?',
@@ -479,12 +551,12 @@
             ],
         ];
     @endphp
-    <div class="mx-auto max-w-[768px] px-4 pt-8 pb-40" id="faq">
+    <div class="mx-auto max-w-[768px] px-4 pb-40 pt-8" id="faq">
         <div class="mb-10 text-center">
             <h2 class="text-5xl font-bold">FAQs</h2>
         </div>
         @foreach ($faqs as $key => $faq)
-            <div class="collapse-arrow {{ $key == 0 ? '' : 'border-t-0' }} collapse rounded-none border border-x-0 border-base-300"
+            <div class="{{ $key == 0 ? '' : 'border-t-0' }} collapse collapse-arrow rounded-none border border-x-0 border-base-300"
                 tabindex="0">
                 <input class="peer min-h-[10px]" type="checkbox" />
                 <div class="collapse-title min-h-[10px] py-5 font-medium">
@@ -500,16 +572,56 @@
     {{-- Automate your Blog today --}}
     <div class="border-y-2 bg-white">
         <div class="mx-auto max-w-[1024px] px-4 py-20">
-            <div class="flex justify-between items-center">
+            <div class="flex items-center justify-between">
                 <div>
-                    <span class="text-4xl font-bold bg-gradient-to-r from-orange-700 via-blue-500 to-green-400 bg-300% text-transparent bg-clip-text animate-gradient" id="pricing">Automate your Blog today</span>
-                    <p class="text-xl mt-4">Get your samples and start generating articles for your business.</p>
+                    <span
+                        class="animate-gradient bg-gradient-to-r from-orange-700 via-blue-500 to-green-400 bg-300% bg-clip-text text-4xl font-bold text-transparent"
+                        id="pricing">Automate your Blog today</span>
+                    <p class="mt-4 text-xl">Get your samples and start
+                        generating articles for your business.</p>
                 </div>
-                <div class="min-w-[180px] text-center flex flex-col gap-4">
-                    <x-button link="/login" label="Get 3 Free Articles" class="font-bold bg-white border-2 shadow-[2px_2px_20px_10px_rgba(0,0,0,0.05)] border-black hover:bg-gradient-to-r hover:from-orange-700 hover:via-blue-500 hover:to-green-400 bg-300% hover:text-white animate-gradient" id="pricing"/>
+                <div class="flex min-w-[180px] flex-col gap-4 text-center">
+                    <x-button
+                        class="bg-neutral-900 font-semibold text-white shadow-md hover:bg-gray-700"
+                        id="pricing" label="Get 5 Free Articles"
+                        link="/login" />
                 </div>
             </div>
         </div>
     </div>
 
+    {{-- footer --}}
+    <section>
+        <footer>
+            <div class="flex items-center gap-40 bg-neutral-900 px-12 py-12">
+                <div class="flex items-center">
+                    <div class="mr-3 w-6">
+                        <img
+                            src="{{ asset('resources/images/logo-w.png') }}" />
+                    </div>
+                    <div>
+                        <h1 class="text-3xl text-white">{{ env('APP_NAME') }}
+                        </h1>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4">
+                    {{-- <div class="flex flex-row gap-4">
+                        <x-icon class="h-6 w-6 text-gray-500"
+                            name="bi.facebook" />
+                        <x-icon class="h-6 w-6 text-gray-500"
+                            name="bi.twitter" />
+                        <x-icon class="h-6 w-6 text-gray-500"
+                            name="bi.linkedin" />
+                        <x-icon class="h-6 w-6 text-gray-500"
+                            name="bi.instagram" />
+                    </div> --}}
+                    <div class="flex flex-col gap-4">
+                        <a class="text-white hover:text-white"
+                            href="{{ route('terms') }}">Terms</a>
+                        <a class="text-white hover:text-white"
+                            href="{{ route('privacy') }}">Privacy</a>
+                    </div>
+                </div>
+        </footer>
+    </section>
 </div>

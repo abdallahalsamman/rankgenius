@@ -44,10 +44,10 @@
                     {{ $batch->articles->count() }} / {{ $batch->quantity }}
                 </div>
                 <div>
-                    <x-button class="btn-primary btn-sm text-base-100"
+                    <x-button class="bg-neutral-900 font-semibold text-white hover:bg-gray-700 btn-sm"
                         icon="s-eye" label="View"
                         wire:click="viewBatch('{{ $batch->id }}')" />
-                    <x-button class="btn-primary btn-outline btn-sm ml-1"
+                    <x-button class="bg-neutral-900 font-semibold text-white hover:bg-gray-700 btn-outline btn-sm ml-1"
                         icon="phosphor.download-simple-bold" label=".zip" />
                 </div>
             </div>
@@ -60,11 +60,11 @@
                 <x-select :options="$integrationOptions" class="select-sm"
                     wire:model="integration_id" />
                 <x-button :disabled="empty($integrationOptions)"
-                    class="btn-primary btn-sm text-base-100 disabled:text-white"
+                    class="bg-neutral-900 font-semibold text-white hover:bg-gray-700 btn-sm disabled:text-white"
                     label="Publish all to Integration" wire:click="publishBatchToIntegration" />
             </div>
         <div>
-            <x-button class="btn-primary btn-sm text-base-100"
+            <x-button class="bg-neutral-900 font-semibold text-white hover:bg-gray-700 btn-sm"
                 icon="o-plus-small" label="Generate More"
                 link="{{ route('dashboard') }}" />
         </div>
@@ -75,7 +75,7 @@
                 <div class="flex items-center gap-5 px-6 py-4"
                     wire:loading.class="opacity-50">
                     <x-button :disabled="$selectedArticleIdx === 0"
-                        class="btn-primary btn-outline btn-sm"
+                        class="hover:border-black hover:bg-neutral-900 hover:text-white bg-white text-neutral-900 btn-sm"
                         icon="o-arrow-small-left" label="Previous" spinner
                         wire:click="previous" />
 
@@ -87,7 +87,7 @@
 
                     <x-button :disabled="$selectedArticleIdx ==
                         $batch->articles->count() - 1"
-                        class="btn-primary btn-outline btn-sm"
+                        class="hover:border-black hover:bg-neutral-900 hover:text-white bg-white text-neutral-900 btn-sm"
                         icon-right="o-arrow-small-right" label="Next" spinner
                         wire:click="next" />
                     <x-button @click="$wire.batchModal = false"

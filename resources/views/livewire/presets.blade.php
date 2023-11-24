@@ -1,18 +1,28 @@
 <div>
-    <x-header class="" size="text-xl font-[700] mb-10"
-        subtitle="Presets tell {{ env('APP_NAME') }} how articles should be generated. You can modify a Preset and reuse it multiple times."
-        title="Presets" />
+    <div class="flex justify-between items-center mb-10">
+        <x-header class="!mb-0" size="text-xl font-[700]"
+            subtitle="Presets tell {{ env('APP_NAME') }} how articles should be generated. You can modify a Preset and reuse it multiple times."
+            title="Presets" />
+
+        <x-button
+            class="bg-neutral-900 font-semibold btn-sm px-5 text-white hover:bg-gray-700"
+            icon-right="o-plus" label="New Preset"
+            link="{{ route('preset.create') }}" />
+    </div>
 
     <div class="grid grid-cols-[_3fr_1fr] gap-3 border-b-[1px]">
-        <div class="py-2 text-xs font-bold tracking-wider text-gray-600 ml-3">NAME
+        <div class="ml-3 py-2 text-xs font-bold tracking-wider text-gray-600">
+            NAME
         </div>
         <div
             class="py-2 text-center text-xs font-bold tracking-wider text-gray-600">
             ACTIONS</div>
     </div>
     @foreach ($presets as $preset)
-        <div class="grid grid-cols-[_3fr_1fr] gap-3 py-2 items-center hover:bg-base-200/50">
-            <div class="ml-3">{{ Str::limit($preset->name, 80, ' ...') }}</div>
+        <div
+            class="grid grid-cols-[_3fr_1fr] items-center gap-3 py-2 hover:bg-base-200/50">
+            <div class="ml-3">{{ Str::limit($preset->name, 80, ' ...') }}
+            </div>
 
             <div class="flex justify-around px-10">
                 <div>
@@ -49,8 +59,5 @@
             Click below to create your first Preset.
         </div>
     @endif
-
-    <x-button class="btn-primary mt-8 w-full text-base-100" icon="o-plus"
-        label="New Preset" link="{{ route('preset.create') }}" />
 
 </div>

@@ -1,5 +1,5 @@
 <div>
-    <x-header size="text-xl font-[700] mb-10" class="" title="Generate Articles"
+    <x-header size="text-xl font-[700]" class="" title="Generate Articles"
         subtitle="Fill the information below to start generating articles for your business." />
     <x-tabs selected="simple-mode-tab">
         <x-tab name="simple-mode-tab" label="Simple mode">
@@ -30,7 +30,7 @@
                     @endphp
                     <x-select class="text-base" option_value="name" :options="$languages" wire:model="language" />
 
-                    <x-button label="Generate" type="submit" class="btn-primary text-white text-base"
+                    <x-button label="Generate" type="submit" class="bg-neutral-900 font-semibold hover:bg-gray-700 text-white text-base"
                         spinner="save2" />
                 </div>
 
@@ -50,7 +50,7 @@ What are the different types of bread?"
                         instruction="Generate Articles" />
                     <div class="grid grid-cols-[1fr_100px] gap-5">
                         <x-select class="text-base" option_value="name" :options="$languages" wire:model="language" />
-                        <x-button label="Generate" type="submit" class="btn-primary text-white text-base"
+                        <x-button label="Generate" type="submit" class="bg-neutral-900 font-semibold text-white hover:bg-gray-700 text-base"
                             spinner="save2" />
                     </div>
                 </x-form>
@@ -71,7 +71,7 @@ What are the different types of bread?"
                         instruction="Generate Articles" />
                     <div class="grid grid-cols-[1fr_100px] gap-5">
                         <x-select class="text-base" option_value="name" :options="$languages" wire:model="language" />
-                        <x-button label="Generate" type="submit" class="btn-primary text-white text-base"
+                        <x-button label="Generate" type="submit" class="bg-neutral-900 font-semibold  hover:bg-gray-700 text-white text-base"
                             spinner="save2" />
                     </div>
                 </x-form>
@@ -85,7 +85,7 @@ What are the different types of bread?"
                         <x-instruction-step number-class="px-[10px] py-[4px]" number="1" class="font-bold mt-5"
                             instruction="Choose your preset" />
                         <x-button icon="bi.plus" label="Create Preset" link="{{ route('preset.create') }}"
-                            class="btn-outline btn-xs btn-primary" />
+                            class="btn-xs border-black hover:bg-neutral-900 hover:text-white bg-white text-neutral-900" />
                     </div>
                     @php
                         $presets = array_merge([
@@ -103,7 +103,7 @@ What are the different types of bread?"
                             }
                         @endphp
                         <x-select class="text-base" :options="$article_counts" wire:model="quantity" />
-                        <x-button label="Generate" type="submit" class="btn-primary text-white text-base"
+                        <x-button label="Generate" type="submit" class="bg-neutral-900 font-semibold hover:bg-gray-700 text-white text-base"
                             spinner="save2" />
                     </div>
                 </x-form>

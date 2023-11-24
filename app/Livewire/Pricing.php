@@ -50,4 +50,9 @@ class Pricing extends Component
             ]
         ],
     ];
+
+    public function render()
+    {
+        return view('livewire.pricing')->extends('layouts.dashboard')->section('dashboard-content');
+    }
 }

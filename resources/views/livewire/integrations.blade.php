@@ -1,7 +1,14 @@
 <div>
-    <x-header class="" size="text-xl font-[700] mb-10"
-        subtitle="Integrations allow you to publish your articles straight to your website."
-        title="Integrations" />
+    <div class="flex justify-between items-center mb-10">
+        <x-header class="!mb-0" size="text-xl font-[700]"
+            subtitle="Integrations allow you to publish your articles straight to your website."
+            title="Integrations" />
+
+        <x-button
+            class="bg-neutral-900 font-semibold btn-sm px-5 text-white hover:bg-gray-700"
+            icon="o-plus" label="New Integration"
+            link="{{ route('integration.create') }}" />
+    </div>
 
     <div class="grid grid-cols-[_5fr_1fr] gap-3 border-b-[1px]">
         <div class="ml-3 py-2 text-xs font-bold tracking-wider text-gray-600">
@@ -12,9 +19,11 @@
             ACTIONS</div>
     </div>
     @foreach ($integrations as $integration)
-        <div class="grid grid-cols-[_5fr_1fr] gap-3 py-2 hover:bg-base-200/50 items-center">
+        <div
+            class="grid grid-cols-[_5fr_1fr] items-center gap-3 py-2 hover:bg-base-200/50">
             <div class="flex items-center">
-                <x-icon class="mx-3" name="si.{{$integration->integrationType()->value('name')}}" />
+                <x-icon class="mx-3"
+                    name="si.{{ $integration->integrationType()->value('name') }}" />
                 <div>{{ Str::limit($integration->name, 80, ' ...') }}</div>
             </div>
 
@@ -49,8 +58,5 @@
             Click below to create your first integration.
         </div>
     @endif
-
-    <x-button class="btn-primary mt-8 w-full text-base-100" icon="o-plus"
-        label="New Integration" link="{{ route('integration.create') }}" />
 
 </div>
