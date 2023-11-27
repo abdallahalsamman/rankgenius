@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 class PresetView extends Component
 {
 
-    public $action, $presetId;
+    public $action, $presetId, $stepNumber = 1, $totalSteps = 7;
     public $preset = [
         'name' => null,
         'generationMode' => null,
@@ -62,6 +62,24 @@ class PresetView extends Component
         }
     }
 
+    public function nextStep()
+    {
+        $this->validatePreset();
+
+        if ($this->stepNumber < $this->totalSteps) {
+            $this->stepNumber++;
+        }
+    }
+
+    public function previousStep()
+    {
+        $this->validatePreset();
+
+        if ($this->stepNumber > 1) {
+            $this->stepNumber--;
+        }
+    }
+
     public function incrementLinkCount()
     {
         $this->preset['extraLinks'][(string) Str::uuid()] = [
@@ -77,7 +95,7 @@ class PresetView extends Component
 
     private function validatePreset()
     {
-        $this->validate([
+        return $this->validate([
             'preset.name' => 'required|max:100',
             'preset.details' => 'required|min:50|max:1024',
             'preset.toneOfVoice' => 'nullable|max:80',
@@ -177,7 +195,6 @@ class PresetView extends Component
                 'id' => Str::uuid(),
                 'user_id' => auth()->user()->id,
             ], $details));
-
         } else if ($this->action == 'edit') {
             Preset::updateOrCreate(['id' => $this->presetId], $details);
 
@@ -185,7 +202,6 @@ class PresetView extends Component
         }
 
         return redirect()->route('presets');
-
     }
 
     public function render()

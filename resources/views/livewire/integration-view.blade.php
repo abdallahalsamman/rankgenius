@@ -4,9 +4,9 @@
         title="AutoBlogs / {{ $action == 'create' ? 'Create' : $integration['name'] }}" />
 
     <div
-        class="mb-10 flex items-center justify-between rounded-md bg-[#feebc8] px-4 py-3">
+        class="mb-10 flex items-center justify-between rounded-md bg-[#c8eafe] px-4 py-3">
         <div class="flex items-center justify-center">
-            <x-icon class="mr-3 w-6 text-[#dd6b20]"
+            <x-icon class="mr-3 w-6 text-[#727272]"
                 name="phosphor.warning-circle-fill" />
             <div>You must upgrade to <strong>AutoBlog</strong> to use
                 Integrations.</div>

@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Enums\BatchModeEnum;
 use App\Enums\BatchStatusEnum;
+use App\Jobs\RunBatch;
 use App\Models\Batch;
 use App\Models\Preset;
 use Livewire\Component;
@@ -11,7 +12,7 @@ use Illuminate\Support\Str;
 
 class GenerateArticles extends Component
 {
-    public $businessUrl, $businessDescription;
+    public $businessUrl, $businessDescription = "are german shepherds good pets for apartment owners?";
     public $quantity = 1, $language = "English";
     public $preset = 0, $presetOptions = [];
     public $titles, $keywords;
@@ -82,7 +83,7 @@ class GenerateArticles extends Component
 
     public function generateArticles($mode, $details, $quantity)
     {
-        Batch::create([
+        $batch = Batch::create([
             'id' => Str::uuid(),
             'mode' => $mode,
             'details' => $details,
@@ -92,6 +93,9 @@ class GenerateArticles extends Component
             'user_id' => auth()->user()->id,
         ]);
 
-        return redirect()->route('history');
+        // RunBatch::dispatch($batch)->delay(now()->addSeconds(1));
+        RunBatch::dispatch($batch); 
+
+        return redirect()->route('history.view', ['id' => $batch->id]);
     }
 }

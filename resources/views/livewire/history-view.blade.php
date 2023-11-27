@@ -12,7 +12,7 @@
                         \App\Enums\BatchStatusEnum::CANCELLED->value => 'bg-red-200 text-error-content',
                     ];
                 @endphp
-                <div
+                <div wire:poll.5s
                     class="{{ $statusColor[$batch->status] }} w-fit rounded px-2 py-1 text-sm font-medium">
                     {{ Str::title($batch->status) }}</div>
             </div>
@@ -40,15 +40,15 @@
             class="flex w-full items-center border-b-[1px] border-base-200 px-6 py-3">
             <div class="w-1/2 text-sm font-bold text-gray-600">ARTICLES</div>
             <div class="flex w-1/2 items-center justify-between">
-                <div>
+                <div wire:poll.5s>
                     {{ $batch->articles->count() }} / {{ $batch->quantity }}
                 </div>
                 <div>
                     <x-button class="bg-neutral-900 font-semibold text-white hover:bg-gray-700 btn-sm"
-                        icon="s-eye" label="View"
+                        icon="s-eye" label="View" :disabled="$batch->articles->count() === 0"
                         wire:click="viewBatch('{{ $batch->id }}')" />
                     <x-button class="bg-neutral-900 font-semibold text-white hover:bg-gray-700 btn-outline btn-sm ml-1"
-                        icon="phosphor.download-simple-bold" label=".zip" />
+                        icon="phosphor.download-simple-bold" label=".zip" :disabled="$batch->articles->count() === 0" />
                 </div>
             </div>
         </div>

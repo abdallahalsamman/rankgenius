@@ -12,9 +12,9 @@ use App\Livewire\IntegrationView;
 use App\Livewire\GenerateArticles;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\PasswordlessAuthenticationController;
+use App\Livewire\Home;
 use App\Livewire\Pricing;
 use App\Livewire\Publications;
-use App\Livewire\WelcomePage;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +28,7 @@ use App\Livewire\WelcomePage;
 */
 
 Route::domain(env('APP_DOMAIN'))->group(function () {
-    Route::get('/', WelcomePage::class)->name('welcome');
+    Route::get('/', Home::class)->name('home');
     Route::view('/terms', 'legal.terms')->name('terms');
     Route::view('/privacy', 'legal.privacy')->name('privacy');
 });

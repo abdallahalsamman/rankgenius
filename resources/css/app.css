@@ -63,3 +63,7 @@
 .input-primary:focus, .textarea-primary:focus, .select-primary:focus {
     outline-color: #6b7280;
 }
+
+div.markdown li p {
+    display: inline;
+}

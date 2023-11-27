@@ -12,7 +12,7 @@ class History extends Component
 
     public function mount()
     {
-        $this->batches = auth()->user()->batches->take(50)->sortByDesc('created_at');
+        $this->batches = auth()->user()->batches->sortByDesc('created_at');
     }
 
     public function render()

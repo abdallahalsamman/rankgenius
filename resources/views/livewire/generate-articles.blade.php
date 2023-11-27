@@ -4,13 +4,13 @@
     <x-tabs selected="simple-mode-tab">
         <x-tab name="simple-mode-tab" label="Simple mode">
             <x-form wire:submit="simpleMode">
-                <x-instruction-step number-class="px-[10px] py-[4px]" number="1" class="font-bold mt-5"
+                <x-instruction-step number-class="py-[4px]" number="1" class="mt-5"
                     instruction="Tell us your business" />
                 <x-input wire:model="businessUrl" placeholder="Your business URL" suffix="Optional" />
                 <x-textarea wire:model="businessDescription" placeholder="Description of your business" rows="3"
                     class="resize-none text-[16px]" maxlength="1024" />
 
-                <x-instruction-step number-class="px-[10px] py-[4px]" number="2" class="font-bold mt-5"
+                <x-instruction-step number-class="py-[4px]" number="2" class="mt-5"
                     instruction="Generate Articles" />
 
                 <div class="grid grid-cols-[1fr_1fr_100px] gap-5">
@@ -39,14 +39,14 @@
         <x-tab name="titles-mode-tab" label="Titles mode">
             <div>
                 <x-form wire:submit="titleMode">
-                    <x-instruction-step number-class="px-[10px] py-[4px]" number="1" class="font-bold mt-5"
+                    <x-instruction-step number-class="py-[4px]" number="1" class="mt-5"
                         instruction="Write your titles (1 per line)" />
                     <x-textarea wire:model="titles"
                         placeholder="How to make bread at home?
 Best recipes for making bread
 What are the different types of bread?"
                         rows="7" class="resize-none text-[16px] leading-6" />
-                    <x-instruction-step number-class="px-[10px] py-[4px]" number="2" class="font-bold mt-5"
+                    <x-instruction-step number-class="py-[4px]" number="2" class="mt-5"
                         instruction="Generate Articles" />
                     <div class="grid grid-cols-[1fr_100px] gap-5">
                         <x-select class="text-base" option_value="name" :options="$languages" wire:model="language" />
@@ -60,14 +60,14 @@ What are the different types of bread?"
         <x-tab name="keywords-mode-tab" label="Keywords mode">
             <div>
                 <x-form wire:submit="keywordMode">
-                    <x-instruction-step number-class="px-[10px] py-[4px]" number="1" class="font-bold mt-5"
+                    <x-instruction-step number-class="py-[4px]" number="1" class="mt-5"
                         instruction="Write your keywords (1 per line)" />
                     <x-textarea wire:model="keywords"
                         placeholder="How to make bread at home?
 Best recipes for making bread
 What are the different types of bread?"
                         rows="7" class="resize-none text-[16px] leading-6" />
-                    <x-instruction-step number-class="px-[10px] py-[4px]" number="2" class="font-bold mt-5"
+                    <x-instruction-step number-class="py-[4px]" number="2" class="mt-5"
                         instruction="Generate Articles" />
                     <div class="grid grid-cols-[1fr_100px] gap-5">
                         <x-select class="text-base" option_value="name" :options="$languages" wire:model="language" />
@@ -82,7 +82,7 @@ What are the different types of bread?"
             <div>
                 <x-form wire:submit="presetMode">
                     <div class="flex justify-between items-end">
-                        <x-instruction-step number-class="px-[10px] py-[4px]" number="1" class="font-bold mt-5"
+                        <x-instruction-step number-class="py-[4px]" number="1" class="mt-5"
                             instruction="Choose your preset" />
                         <x-button icon="bi.plus" label="Create Preset" link="{{ route('preset.create') }}"
                             class="btn-xs border-black hover:bg-neutral-900 hover:text-white bg-white text-neutral-900" />
@@ -93,7 +93,7 @@ What are the different types of bread?"
                         ], $presetOptions);
                     @endphp
                     <x-select class="text-base" :options="$presets" wire:model="preset" />
-                    <x-instruction-step number-class="px-[10px] py-[4px]" number="2" class="font-bold mt-5"
+                    <x-instruction-step number-class="py-[4px]" number="2" class="mt-5"
                         instruction="Generate Articles" />
                     <div class="grid grid-cols-[1fr_100px] gap-5">
                         @php
