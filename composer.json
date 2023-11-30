@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "adhocore/json-fixer": "^1.0",
         "codeat3/blade-phosphor-icons": "^2.0",
         "codeat3/blade-simple-icons": "^1.94",
         "davidhsianturi/blade-bootstrap-icons": "^1.4",

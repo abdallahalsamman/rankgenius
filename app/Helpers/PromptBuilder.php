@@ -19,7 +19,10 @@ class PromptBuilder
 
     public function build()
     {
-        $this->prompt .= "Make sure the response is in JSON format";
+        if (substr($this->prompt, -strlen("Make sure the response is in JSON format")) !== "Make sure the response is in JSON format") {
+            $this->prompt .= "Make sure the response is in JSON format";
+        }
+
         return trim($this->prompt);
     }
 
@@ -57,6 +60,14 @@ PROMPT;
         return $this;
     }
 
+    public function setLanguage($language)
+    {
+        $this->prompt .= "Write the output in this language: ";
+        $this->prompt .= $language;
+        $this->prompt .= "\n\n";
+        return $this;
+    }
+
     public function addWebsiteContent($websiteText)
     {
         $this->prompt .= "Here is the content of my website: ";
@@ -65,48 +76,49 @@ PROMPT;
         return $this;
     }
 
-    public $flavorMap = ["tables" => 0, "ordered_list" => 0, "unordered_list" => 0];
-    public function flavorParagraph()
-    {
-        $flavor = "paragraph";
+    // public $flavorMap = ["tables" => 0, "ordered_list" => 0, "unordered_list" => 0];
+    // public function flavorParagraph()
+    // {
+    //     $index = ($i % 3) + 1;
+    //     $flavor = "paragraph" . $index;
 
-        if (rand(0, 100) > 90 && $this->flavorMap["tables"] < 2) {
-            $flavor = "table";
-            $this->flavorMap["tables"]++;
-        }
+    //     if (rand(0, 100) > 90 && $this->flavorMap["tables"] < 1) {
+    //         $flavor = "markdownTable";
+    //         $this->flavorMap["tables"]++;
+    //     }
 
-        if (rand(0, 100) > 90 && $this->flavorMap["ordered_list"] < 2) {
-            $flavor = "ordered_list";
-            $this->flavorMap["ordered_list"]++;
-        }
+    //     if (rand(0, 100) > 90 && $this->flavorMap["ordered_list"] < 2) {
+    //         $flavor = "ordered_list" . $index;
+    //         $this->flavorMap["ordered_list"]++;
+    //     }
 
-        if (rand(0, 100) > 90 && $this->flavorMap["unordered_list"] < 2) {
-            $flavor = "unordered_list";
-            $this->flavorMap["unordered_list"]++;
-        }
+    //     if (rand(0, 100) > 90 && $this->flavorMap["unordered_list"] < 2) {
+    //         $flavor = "unordered_list" . $index;
+    //         $this->flavorMap["unordered_list"]++;
+    //     }
 
-        return $flavor;
-    }
+    //     return $flavor;
+    // }
 
     // #region addOutline
     public function addOutline()
     {
-        $flavoredParagraphs = [];
-        for ($i = 0; $i < 30; $i++) {
-            $flavoredParagraphs[] = $this->flavorParagraph();
-        }
+    //     $flavoredParagraphs = [];
+    //     for ($i = 0; $i < 30; $i++) {
+    //         $flavoredParagraphs[] = $this->flavorParagraph($i);
+        // }
 
         $this->prompt .= <<<OUTLINE
 You are an expert content writer that specialises in SEO.
 
-Generate articles that use this outline, fill all empty fields with strings using markdown format.
+Generate articles that use ALL of this outline, fill ALL empty fields without leaving any field empty with strings using markdown format.
 
-Bold important keywords.
+Bold important seo keywords.
 
 {
-    "title":"",
+    "title": "",
     "articleBody": {
-        "section1": {
+        "introductionSection": {
             "heading": "Overview",
             "content": {
                 "subsection1": {
@@ -120,100 +132,83 @@ Bold important keywords.
                 "subsection2": {
                     "subHeading": "",
                     "paragraphs": {
-                        "$flavoredParagraphs[0]1": "",
-                        "$flavoredParagraphs[1]2": "",
-                        "$flavoredParagraphs[2]3": "",
+                        "paragraph1": "",
+                        "paragraph2": "",
+                        "paragraph3": ""
                     }
                 },
                 "subsection3": {
                     "subHeading": "",
                     "paragraphs": {
-                        "$flavoredParagraphs[3]1": "",
-                        "$flavoredParagraphs[4]2": "",
-                        "$flavoredParagraphs[5]3": ""
+                        "paragraph1": "",
+                        "paragraph2": "",
+                        "paragraph3": ""
                     }
                 }
             }
         },
-        "section2": {
+        "bodySection1": {
             "heading": "",
             "content": {
                 "subsection1": {
                     "subHeading": "",
                     "paragraphs": {
-                            "$flavoredParagraphs[6]1": "",
-                            "$flavoredParagraphs[7]2": "",
-                            "$flavoredParagraphs[8]3": ""
+                        "paragraph1": "",
+                        "paragraph2": "",
+                        "paragraph3": ""
                     }
                 },
                 "subsection2": {
                     "subHeading": "",
                     "paragraphs": {
-                        "$flavoredParagraphs[9]1": "",
-                        "$flavoredParagraphs[10]2": "",
-                        "$flavoredParagraphs[11]3": ""
+                        "paragraph1": "",
+                        "paragraph2": "",
+                        "paragraph3": ""
                     }
                 },
                 "subsection3": {
                     "subHeading": "",
                     "paragraphs": {
-                        "$flavoredParagraphs[12]1": "",
-                        "$flavoredParagraphs[13]2": "",
-                        "$flavoredParagraphs[14]3": ""
+                        "paragraph1": "",
+                        "paragraph2": "",
+                        "paragraph3": ""
                     }
                 }
             }
         },
-        "section3": {
+        "bodySection2": {
             "heading": "",
             "content": {
                 "subsection1": {
                     "subHeading": "",
                     "paragraphs": {
-                            "$flavoredParagraphs[15]1": "",
-                            "$flavoredParagraphs[16]2": "",
-                            "$flavoredParagraphs[17]3": ""
+                        "paragraph1": "",
+                        "paragraph2": "",
+                        "paragraph3": ""
                     }
                 },
                 "subsection2": {
                     "subHeading": "",
                     "paragraphs": {
-                        "$flavoredParagraphs[18]1": "",
-                        "$flavoredParagraphs[19]2": "",
-                        "$flavoredParagraphs[20]3": ""
+                        "paragraph1": "",
+                        "paragraph2": "",
+                        "paragraph3": ""
                     }
                 },
                 "subsection3": {
                     "subHeading": "",
                     "paragraphs": {
-                        "$flavoredParagraphs[21]1": "",
-                        "$flavoredParagraphs[22]2": "",
-                        "$flavoredParagraphs[23]3": ""
+                        "paragraph1": "",
+                        "paragraph2": "",
+                        "paragraph3": ""
                     }
                 }
             }
         },
-        "section4": {
+        "conclusionSection": {
             "heading": "Conclusion",
             "content": {
                 "subsection1": {
-                    "subHeading": "",
-                    "paragraphs": {
-                        "paragraph1": "",
-                        "paragraph2": "",
-                        "paragraph3": ""
-                    }
-                },
-                "subsection2": {
-                    "subHeading": "",
-                    "paragraphs": {
-                        "paragraph1": "",
-                        "paragraph2": "",
-                        "paragraph3": ""
-                    }
-                },
-                "subsection3": {
-                    "subHeading": "",
                     "paragraphs": {
                         "paragraph1": "",
                         "paragraph2": "",
@@ -222,31 +217,25 @@ Bold important keywords.
                 }
             }
         },
-        "section5": {
+        "FAQSection": {
             "heading": "FAQ",
             "content": {
                 "subsection1": {
-                    "subHeading": "",
+                    "question": "",
                     "paragraphs": {
-                            "paragraph1": "",
-                            "paragraph2": "",
-                            "paragraph3": ""
+                        "answer": ""
                     }
                 },
                 "subsection2": {
-                    "subHeading": "",
+                    "question": "",
                     "paragraphs": {
-                        "paragraph1": "",
-                        "paragraph2": "",
-                        "paragraph3": ""
-                }
+                        "answer": ""
+                    }
                 },
                 "subsection3": {
-                    "subHeading": "",
+                    "question": "",
                     "paragraphs": {
-                        "paragraph1": "",
-                        "paragraph2": "",
-                        "paragraph3": ""
+                        "answer": ""
                     }
                 }
             }

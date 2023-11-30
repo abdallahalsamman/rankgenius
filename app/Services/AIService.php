@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\Log;
 class AIService {
     public static function sendPrompt($systemMessage, $userMessage, $maxtoken = 64, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
     {
-        $client = OpenAI::client(env('OPENAI_API_KEY'));
+        $client = OpenAI::client(config('services.openai.key'));
 
-        Log::info('Sending Prompt: ' . json_encode(func_get_args()));
+        Log::info('SYSTEM PROMPT: ' . $systemMessage . "\n\nUSER MESSAGE: " . $userMessage);
         $result = $client->chat()->create([
             "model" => "gpt-3.5-turbo-1106",
             // "model" => "babbage-002",
@@ -18,7 +18,7 @@ class AIService {
             "top_p" => 1,
             "frequency_penalty" => 0,
             "presence_penalty" => 0,
-            'max_tokens' => 3500,
+            'max_tokens' => 4000,
             'response_format' => ["type" => "json_object" ],
             'messages' => [
                 [
@@ -31,7 +31,13 @@ class AIService {
                 ]
             ],
         ]);
-        Log::info('Received Prompt: ' . json_encode($result));
+        Log::info('Received Prompt: ' . $result['choices'][0]['message']['content']);
+        Log::info('Article Cost: (Prompt Tokens: ' . $result['usage']['prompt_tokens'] . ', Completion Tokens: ' . $result['usage']['completion_tokens'] . ') $' . (($result['usage']['prompt_tokens'] / 1000) * 0.001) + (($result['usage']['completion_tokens'] / 1000) * 0.002));
+
+        if (isset($result['choices'][0]['finish_reason']) && $result['choices'][0]['finish_reason'] == "stop") {
+            Log::info('Received Stop Reason: ' . $result['choices'][0]['finish_reason']);
+            return $result;
+        }
 
         $content = json_decode($result['choices'][0]['message']['content'], true);
         return $content;
