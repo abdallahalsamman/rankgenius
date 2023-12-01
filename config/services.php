@@ -1,5 +1,7 @@
 <?php
 
+use Ahc\Json\Fixer;
+
 return [
 
     /*
@@ -33,5 +35,6 @@ return [
 
     'openai' => [
         'key' => env('OPENAI_API_KEY'),
+        'fixer' => new Fixer(),
     ],
 ];

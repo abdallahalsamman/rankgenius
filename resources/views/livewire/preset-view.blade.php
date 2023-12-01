@@ -5,82 +5,91 @@
 
     <x-form wire:submit="save">
         <ul class="steps">
-            <li data-content="{{ $stepNumber > 1 ? '✓' : '1' }}" class="step {{ $stepNumber >= 1 ? 'step-neutral' : '' }}">Step 1</li>
-            <li data-content="{{ $stepNumber > 2 ? '✓' : '2' }}" class="step {{ $stepNumber >= 2 ? 'step-neutral' : '' }}">Step 2</li>
-            <li data-content="{{ $stepNumber > 3 ? '✓' : '3' }}" class="step {{ $stepNumber >= 3 ? 'step-neutral' : '' }}">Step 3</li>
-            <li data-content="{{ $stepNumber > 4 ? '✓' : '4' }}" class="step {{ $stepNumber >= 4 ? 'step-neutral' : '' }}">Step 4</li>
-            <li data-content="{{ $stepNumber > 5 ? '✓' : '5' }}" class="step {{ $stepNumber >= 5 ? 'step-neutral' : '' }}">Step 5</li>
-            <li data-content="{{ $stepNumber > 6 ? '✓' : '6' }}" class="step {{ $stepNumber >= 6 ? 'step-neutral' : '' }}">Step 6</li>
-            <li data-content="{{ $stepNumber > 7 ? '✓' : '7' }}" class="step {{ $stepNumber >= 7 ? 'step-neutral' : '' }}">Step 7</li>
+            <li class="{{ $stepNumber >= 1 ? 'step-neutral' : '' }} step"
+                data-content="{{ $stepNumber > 1 ? '✓' : '1' }}">Step 1</li>
+            <li class="{{ $stepNumber >= 2 ? 'step-neutral' : '' }} step"
+                data-content="{{ $stepNumber > 2 ? '✓' : '2' }}">Step 2</li>
+            <li class="{{ $stepNumber >= 3 ? 'step-neutral' : '' }} step"
+                data-content="{{ $stepNumber > 3 ? '✓' : '3' }}">Step 3</li>
+            <li class="{{ $stepNumber >= 4 ? 'step-neutral' : '' }} step"
+                data-content="{{ $stepNumber > 4 ? '✓' : '4' }}">Step 4</li>
+            <li class="{{ $stepNumber >= 5 ? 'step-neutral' : '' }} step"
+                data-content="{{ $stepNumber > 5 ? '✓' : '5' }}">Step 5</li>
+            <li class="{{ $stepNumber >= 6 ? 'step-neutral' : '' }} step"
+                data-content="{{ $stepNumber > 6 ? '✓' : '6' }}">Step 6</li>
+            <li class="{{ $stepNumber >= 7 ? 'step-neutral' : '' }} step"
+                data-content="{{ $stepNumber > 7 ? '✓' : '7' }}">Step 7</li>
         </ul>
 
         <div>
-            @if($stepNumber === 1)
-            <div>
-                <x-input label="Name" maxlength="100"
-                    placeholder="My Special Preset" wire:model="preset.name" />
-            </div>
-
-            {{-- Number 1 --}}
-            <div>
-                @php
-                    $generationModes = [
-                        [
-                            'id' => \App\Enums\BatchModeEnum::KEYWORD->value,
-                            'name' => 'Keyword-based',
-                        ],
-                        [
-                            'id' => \App\Enums\BatchModeEnum::TITLE->value,
-                            'name' => 'Specific Titles',
-                        ],
-                        [
-                            'id' => \App\Enums\BatchModeEnum::CONTEXT->value,
-                            'name' => 'Business Description',
-                        ],
-                    ];
-                @endphp
-                <div class="mb-2 mr-3 pt-5 font-medium">Generation Mode
-                </div>
-                <x-select :options="$generationModes" class="text-base"
-                    hint="Each option provides a different way to generate content."
-                    wire:model.change="preset.generationMode" />
-                <div class="w-full py-2 text-center" wire:loading
-                    wire:target="preset.generationMode">
-                    <span class="loading loading-dots loading-lg"></span>
+            @if ($stepNumber === 1)
+                <div>
+                    <x-input label="Name" maxlength="100"
+                        placeholder="My Special Preset"
+                        wire:model="preset.name" />
                 </div>
 
-                @php
-                    $generationOptions = [
-                        \App\Enums\BatchModeEnum::CONTEXT->value => [
-                            'label' => 'Context Description',
-                            'placeholder' => 'SpaceX is a company that produces rockets.',
-                        ],
-                        \App\Enums\BatchModeEnum::TITLE->value => [
-                            'label' => 'Titles (1 per line)',
-                            'placeholder' => 'How to bake bread?',
-                        ],
-                        \App\Enums\BatchModeEnum::KEYWORD->value => [
-                            'label' => 'Keywords (1 per line)',
-                            'placeholder' => 'How to bake bread?',
-                        ],
-                    ];
-                @endphp
-
-                <div class="pt-5" wire:loading.remove
-                    wire:target="preset.generationMode">
-                    <div class="mb-2 mr-3 font-medium">
-                        {{ $generationOptions[$preset['generationMode']]['label'] }}
+                {{-- Number 1 --}}
+                <div>
+                    @php
+                        $generationModes = [
+                            [
+                                'id' => \App\Enums\BatchModeEnum::KEYWORD->value,
+                                'name' => 'Keyword-based',
+                            ],
+                            [
+                                'id' => \App\Enums\BatchModeEnum::TITLE->value,
+                                'name' => 'Specific Titles',
+                            ],
+                            [
+                                'id' => \App\Enums\BatchModeEnum::CONTEXT->value,
+                                'name' => 'Business Description',
+                            ],
+                        ];
+                    @endphp
+                    <div class="mb-2 mr-3 pt-5 font-medium">Generation Mode
                     </div>
-                    <x-textarea class="max-h-[400px] min-h-[80px] text-[16px]"
-                        maxlength="1024"
-                        placeholder="{{ $generationOptions[$preset['generationMode']]['placeholder'] }}"
-                        wire:model="preset.details" />
+                    <x-select :options="$generationModes" class="text-base"
+                        hint="Each option provides a different way to generate content."
+                        wire:model.change="preset.generationMode" />
+                    <div class="w-full py-2 text-center" wire:loading
+                        wire:target="preset.generationMode">
+                        <span class="loading loading-dots loading-lg"></span>
+                    </div>
+
+                    @php
+                        $generationOptions = [
+                            \App\Enums\BatchModeEnum::CONTEXT->value => [
+                                'label' => 'Context Description',
+                                'placeholder' => 'SpaceX is a company that produces rockets.',
+                            ],
+                            \App\Enums\BatchModeEnum::TITLE->value => [
+                                'label' => 'Titles (1 per line)',
+                                'placeholder' => 'How to bake bread?',
+                            ],
+                            \App\Enums\BatchModeEnum::KEYWORD->value => [
+                                'label' => 'Keywords (1 per line)',
+                                'placeholder' => 'How to bake bread?',
+                            ],
+                        ];
+                    @endphp
+
+                    <div class="pt-5" wire:loading.remove
+                        wire:target="preset.generationMode">
+                        <div class="mb-2 mr-3 font-medium">
+                            {{ $generationOptions[$preset['generationMode']]['label'] }}
+                        </div>
+                        <x-textarea
+                            class="max-h-[400px] min-h-[80px] text-[16px]"
+                            maxlength="1024"
+                            placeholder="{{ $generationOptions[$preset['generationMode']]['placeholder'] }}"
+                            wire:model="preset.details" />
+                    </div>
                 </div>
-            </div>
             @endif
 
             {{-- Number 2 --}}
-            @if($stepNumber === 2)
+            @if ($stepNumber === 2)
             <div>
                 <div>
                     @php
@@ -104,14 +113,14 @@
 
                 <div class="mb-2 mr-3 pt-5 font-medium">Tone of Voice
                 </div>
-                <div class="max-w-sm">
+                <div>
                     <x-input maxlength="80" placeholder="Neutral"
                         wire:model="preset.toneOfVoice" />
                 </div>
                 <div class="mt-2 text-sm">Examples: <span
-                        class="bg-[#e2e8f0] text-xs">funny</span> <span
-                        class="bg-[#e2e8f0] text-xs">informal</span>
-                    <span class="bg-[#e2e8f0] text-xs">academic</span>
+                        class="bg-[#fecac8] px-1 text-xs">funny</span> / <span
+                        class="bg-[#c8eafe] text-xs">informal</span> / <span
+                        class="bg-[#cafec8] text-xs">academic</span>
                 </div>
                 <div class="mb-2 mr-3 pt-5 font-medium">Point of View
                 </div>
@@ -141,11 +150,10 @@
                 @endphp
                 <x-select :options="$pointOfViewOptions" class="text-base"
                     wire:model="preset.pointOfView" />
-                <div class="mt-4 max-w-md font-medium">
+                <div class="mt-4 font-medium">
                     <div class="mb-2 flex items-center justify-between">
                         <div>Custom Instructions</div>
-                        <div
-                            class="rounded-md bg-[#feebc8] px-2 py-1 text-sm text-[#7b341e]">
+                        <div class="rounded-md bg-[#c8eafe] px-2 py-1 text-sm">
                             Advanced</div>
                     </div>
                     <x-textarea class="max-h-[400px] min-h-[80px] text-[16px]"
@@ -162,124 +170,141 @@
             @endif
 
             {{-- Number 3 --}}
-            @if($stepNumber === 3)
-            <div>
-                <div class="mb-2 mr-3 mt-5 font-medium">Call-To-Action
-                </div>
-                <x-input class="mb-2" maxlength="255"
-                    placeholder="https://mywebsite.com" type="text"
-                    wire:model="preset.callToAction" />
-                <div class="text-sm">
-                    We'll add an extra <span
-                        class="bg-[#e2e8f0] px-0.5 text-xs">h3</span> to
-                    your articles with a
-                    call-to-action to this URL.
-                    <br>
-                    Leave blank to opt-out.
-                </div>
-                {{-- <div class="mb-2 mr-3 font-medium mt-5">Automate Headings</div>
+            @if ($stepNumber === 3)
+                <div>
+                    <div class="mb-2 mr-3 mt-5 font-medium">Call-To-Action
+                    </div>
+                    <x-input class="mb-2" maxlength="255"
+                        placeholder="https://mywebsite.com" type="text"
+                        wire:model="preset.callToAction" />
+                    <div class="text-sm">
+                        We'll add an extra <span
+                            class="bg-[#e2e8f0] px-0.5 text-xs">h3</span> to
+                        your articles with a
+                        call-to-action to this URL.
+                        <br>
+                        Leave blank to opt-out.
+                    </div>
+                    {{-- <div class="mb-2 mr-3 font-medium mt-5">Automate Headings</div>
                             <div class="w-fit">
                                 <x-custom-toggle :enabled="0" label="Auto-generated" wire:model.change="item1" />
                             </div> --}}
-            </div>
+                </div>
             @endif
 
             {{-- Number 4 --}}
-            @if($stepNumber === 4)
-            <div>
-                <div class="mb-2 mr-3 mt-5 font-medium">Sitemap URL
-                </div>
-                <x-input class="mb-2" maxlength="255"
-                    placeholder="https://mywebsite.com/sitemap.xml"
-                    type="text" wire:model="preset.sitemapUrl" />
-                <div class="text-sm">A website can have multiple
-                    sitemaps.
-                    Provide the sitemap of your blog posts.
-                    <br>
-                    Example: <a class="text-blue-500 hover:underline"
-                        href="https://www.wpbeginner.com/post-sitemap.xml">https://www.wpbeginner.com/post-sitemap.xml</a>.
-                </div>
+            @if ($stepNumber === 4)
+                <div>
+                    <div class="mb-2 mr-3 mt-5 font-medium">Sitemap URL
+                    </div>
+                    <x-input class="mb-2" maxlength="255"
+                        placeholder="https://mywebsite.com/sitemap.xml"
+                        type="text" wire:model="preset.sitemapUrl" />
+                    <div class="text-sm">A website can have multiple
+                        sitemaps.
+                        Provide the sitemap of your blog posts.
+                        <br>
+                        Example: <a class="text-blue-500 hover:underline"
+                            href="https://www.wpbeginner.com/post-sitemap.xml">https://www.wpbeginner.com/post-sitemap.xml</a>.
+                    </div>
 
-                <div class="mb-2 mr-3 mt-5 font-medium">Filter Sitemap
+                    <div class="mb-2 mr-3 mt-5 font-medium">Filter Sitemap
+                    </div>
+                    <x-input class="mb-2" maxlength="255"
+                        placeholder="/example/" type="text"
+                        wire:model="preset.sitemapFilter" />
+                    <div class="text-sm">
+                        We will <strong>only</strong> use URLs from the
+                        sitemap
+                        that contain this pattern.
+                        <br>
+                        Examples: <span
+                            class="bg-[#e2e8f0] px-0.5 text-xs">/my-category/</span>,
+                        <span class="bg-[#e2e8f0] px-0.5 text-xs">/blog/</span>.
+                    </div>
                 </div>
-                <x-input class="mb-2" maxlength="255" placeholder="/example/"
-                    type="text" wire:model="preset.sitemapFilter" />
-                <div class="text-sm">
-                    We will <strong>only</strong> use URLs from the
-                    sitemap
-                    that contain this pattern.
-                    <br>
-                    Examples: <span
-                        class="bg-[#e2e8f0] px-0.5 text-xs">/my-category/</span>,
-                    <span class="bg-[#e2e8f0] px-0.5 text-xs">/blog/</span>.
-                </div>
-            </div>
             @endif
 
             {{-- Number 5 --}}
-            @if($stepNumber === 5)
-            <div>
-                <div class="mb-2 mr-3 mt-5 w-fit font-medium">
-                    <label>
-                        Automatic External Links
-                        <div class="mt-3 w-fit">
-                            <x-custom-toggle :enabled="$preset['externalLinksEnabled']" :label="$preset['externalLinksEnabled']
-                                ? 'Enabled'
-                                : 'Disabled'"
-                                class="checked:bg-neutral-900"
-                                wire:model.change="preset.externalLinksEnabled" />
-                        </div>
-                    </label>
-                </div>
-                <div class="mt-2 text-sm">We'll scrape the internet for
-                    relevant articles in your niche & language.
-                </div>
-
-                <div class="mb-2 mr-3 mt-5 font-medium">Extra Links
-                </div>
-                <div
-                    class="my-3 grid w-full grid-cols-[1fr,1fr,1fr] text-center">
-                    <span class="text-sm font-semibold">URL</span>
-                    <span class="text-sm font-semibold">Anchor</span>
-                </div>
-                @foreach ($preset['extraLinks'] as $id => $extraLink)
-                    <div class="my-3 grid w-full grid-cols-[1fr,1fr,1fr] items-center gap-5 text-center"
-                        wire:key="{{ $id }}">
-                        <x-input class="btn-sm text-sm" maxlength="255"
-                            placeholder="{{ url('/') }}"
-                            wire:model="preset.extraLinks.{{ $id }}.url">URL</x-input>
-                        <x-input class="btn-sm text-sm" maxlength="255"
-                            placeholder="Leave blank to auto generate"
-                            wire:model="preset.extraLinks.{{ $id }}.anchor">Anchor</x-input>
-                        <div class="flex items-center gap-3">
-                            <x-button
-                                class="btn-xs w-fit border-transparent bg-transparent p-0 px-0.5"
-                                icon="m-minus-small"
-                                wire:click="removeLink('{{ $id }}')" />
-                            <span class="loading loading-spinner loading-xs"
-                                wire:loading
-                                wire:target="preset.removeLink('{{ $id }}')"></span>
-                        </div>
+            @if ($stepNumber === 5)
+                <div>
+                    <div class="mb-2 mr-3 mt-5 w-fit font-medium">
+                        <label>
+                            Automatic External Links
+                            <div class="mt-3 w-fit">
+                                <x-custom-toggle :enabled="$preset['externalLinksEnabled']"
+                                    :label="$preset['externalLinksEnabled']
+                                        ? 'Enabled'
+                                        : 'Disabled'"
+                                    class="checked:bg-neutral-900"
+                                    wire:model.change="preset.externalLinksEnabled" />
+                            </div>
+                        </label>
                     </div>
-                @endforeach
-                <div class="w-full py-2 text-center" wire:loading
-                    wire:target="preset.incrementLinkCount">
-                    <span class="loading loading-dots loading-lg"></span>
-                </div>
-                <x-button
-                    class="btn-xs border-black bg-white text-neutral-900 hover:bg-neutral-900 hover:text-white"
-                    icon="bi.plus" label="Add Link"
-                    wire:click="incrementLinkCount" />
-                <div class="mt-2 text-sm">We'll randomly select up to 1
-                    link per paragraph.</div>
+                    <div class="mt-2 text-sm">We'll scrape the internet for
+                        relevant articles in your niche & language.
+                    </div>
+                    <div class="mt-3 border-t-[1px]">
+                        <div
+                            class="mb-2 mr-3 mt-5 flex items-center justify-between">
+                            <div class="font-medium">Extra
+                                Links
+                            </div>
+                            <x-button
+                                class="btn-xs border-black bg-white text-neutral-900 hover:bg-neutral-900 hover:text-white"
+                                icon="bi.plus" label="Add Link"
+                                wire:click="incrementLinkCount" />
+                        </div>
+                        <div
+                            class="my-3 flex w-full justify-between text-center">
+                            <span
+                                class="w-full text-sm font-semibold">URL</span>
+                            <span
+                                class="w-full text-sm font-semibold">Anchor</span>
+                        </div>
+                        @foreach ($preset['extraLinks'] as $id => $extraLink)
+                            <div class="flex w-full items-center gap-5 px-3 py-3 text-center hover:rounded-md hover:bg-gray-100"
+                                wire:key="{{ $id }}">
+                                <div class="w-full">
+                                    <x-input class="btn-sm rounded-md text-sm"
+                                        maxlength="255"
+                                        placeholder="{{ url('/') }}"
+                                        wire:model="preset.extraLinks.{{ $id }}.url">URL</x-input>
+                                </div>
+                                <div class="w-full">
+                                    <x-input class="btn-sm rounded-md text-sm"
+                                        maxlength="255"
+                                        placeholder="Leave blank to auto generate"
+                                        wire:model="preset.extraLinks.{{ $id }}.anchor">Anchor</x-input>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <x-button
+                                        class="btn-xs w-fit border-transparent bg-transparent p-0 px-0.5 hover:text-red-500"
+                                        icon="m-minus-small"
+                                        wire:click="removeLink('{{ $id }}')" />
+                                    <span
+                                        class="loading loading-spinner loading-xs"
+                                        wire:loading
+                                        wire:target="preset.removeLink('{{ $id }}')"></span>
+                                </div>
+                            </div>
+                        @endforeach
+                        <div class="w-full py-2 text-center" wire:loading
+                            wire:target="preset.incrementLinkCount">
+                            <span
+                                class="loading loading-dots loading-lg"></span>
+                        </div>
+                        <div class="mt-2 text-sm">We'll randomly select up to 1
+                            link per paragraph.</div>
+                    </div>
 
-            </div>
+                </div>
             @endif
 
             {{-- Number 6 --}}
-            @if($stepNumber === 6)
-            <div>
-                {{-- <div class="mb-2 mr-3 font-medium mt-5">Image Provider</div>
+            @if ($stepNumber === 6)
+                <div>
+                    {{-- <div class="mb-2 mr-3 font-medium mt-5">Image Provider</div>
                             @php
                             $users = [
                                 [
@@ -302,91 +327,97 @@
                             ];
                         @endphp
                         <x-select :options="$users" wire:model="preset.selectedUser3" class="text-base" /> --}}
-                <div class="mb-2 mr-3 mt-5 w-fit font-medium">
-                    <label>
-                        Featured Image
-                        <div class="mt-3 w-fit">
-                            <x-custom-toggle :enabled="$preset['featureImageEnabled']" :label="$preset['featureImageEnabled']
-                                ? 'Enabled'
-                                : 'Disabled'"
-                                class="checked:bg-neutral-900"
-                                wire:model.change="preset.featureImageEnabled" />
-                        </div>
-                    </label>
-                </div>
+                    <div class="mb-2 mr-3 mt-5 w-fit font-medium">
+                        <label>
+                            Featured Image
+                            <div class="mt-3 w-fit">
+                                <x-custom-toggle :enabled="$preset['featureImageEnabled']"
+                                    :label="$preset['featureImageEnabled']
+                                        ? 'Enabled'
+                                        : 'Disabled'"
+                                    class="checked:bg-neutral-900"
+                                    wire:model.change="preset.featureImageEnabled" />
+                            </div>
+                        </label>
+                    </div>
 
-                <div class="mb-2 mr-3 mt-5 w-fit font-medium">
-                    <label>
-                        In-Article Images
-                        <div class="mt-3 w-fit">
-                            <x-custom-toggle :enabled="$preset['inArticleImageEnabled']" :label="$preset['inArticleImageEnabled']
-                                ? 'Enabled'
-                                : 'Disabled'"
-                                class="checked:bg-neutral-900"
-                                wire:model.change="preset.inArticleImageEnabled" />
-                        </div>
-                    </label>
-                </div>
+                    <div class="mb-2 mr-3 mt-5 w-fit font-medium">
+                        <label>
+                            In-Article Images
+                            <div class="mt-3 w-fit">
+                                <x-custom-toggle :enabled="$preset['inArticleImageEnabled']"
+                                    :label="$preset['inArticleImageEnabled']
+                                        ? 'Enabled'
+                                        : 'Disabled'"
+                                    class="checked:bg-neutral-900"
+                                    wire:model.change="preset.inArticleImageEnabled" />
+                            </div>
+                        </label>
+                    </div>
 
-            </div>
+                </div>
             @endif
 
             {{-- Number 7 --}}
-            @if($stepNumber === 7)
-            <div>
-                <div class="mb-2 mr-3 mt-5 w-fit font-medium">
-                    <label>
-                        Automate Youtube Videos
-                        <div class="mt-3 w-fit">
-                            <x-custom-toggle :enabled="$preset['automateYoutubeVideosEnabled']"
-                                :label="$preset[
+            @if ($stepNumber === 7)
+                <div>
+                    <div class="mb-2 mr-3 mt-5 w-fit font-medium">
+                        <label>
+                            Automate Youtube Videos
+                            <div class="mt-3 w-fit">
+                                <x-custom-toggle :enabled="$preset[
                                     'automateYoutubeVideosEnabled'
-                                ]
-                                    ? 'Enabled'
-                                    : 'Disabled'"
-                                class="checked:bg-neutral-900"
-                                wire:model.change="preset.automateYoutubeVideosEnabled" />
+                                ]"
+                                    :label="$preset[
+                                        'automateYoutubeVideosEnabled'
+                                    ]
+                                        ? 'Enabled'
+                                        : 'Disabled'"
+                                    class="checked:bg-neutral-900"
+                                    wire:model.change="preset.automateYoutubeVideosEnabled" />
+                            </div>
+                        </label>
+                    </div>
+                    @if (!$preset['automateYoutubeVideosEnabled'])
+                        <div class="mt-4 font-medium">
+                            <div class="mb-2 mr-3 pt-5 font-medium">Youtube
+                                Videos (1 link per line)</div>
+                            <x-textarea
+                                class="max-h-[400px] min-h-[80px] text-[16px]"
+                                maxlength="1000" maxlength="1024"
+                                placeholder="https://www.youtube.com/watch?v=P56_I4s9L9Q"
+                                wire:model="preset.youtubeVideos" />
                         </div>
-                    </label>
+                        <div class="text-sm text-gray-600">We'll insert at
+                            least one youtube video and place it in your
+                            article.
+                        </div>
+                    @endif
                 </div>
-                @if (!$preset['automateYoutubeVideosEnabled'])
-                    <div class="mt-4 font-medium">
-                        <div class="mb-2 mr-3 pt-5 font-medium">Youtube
-                            Videos (1 link per line)</div>
-                        <x-textarea
-                            class="max-h-[400px] min-h-[80px] text-[16px]"
-                            maxlength="1000" maxlength="1024"
-                            placeholder="https://www.youtube.com/watch?v=P56_I4s9L9Q"
-                            wire:model="preset.youtubeVideos" />
-                    </div>
-                    <div class="text-sm text-gray-600">We'll insert at
-                        least one youtube video and place it in your
-                        article.
-                    </div>
-                @endif
-            </div>
             @endif
         </div>
         <div class="mt-5 grid w-full grid-cols-2 gap-5">
-            @if($stepNumber === 1)
-            <x-button
-                class="w-full border-black bg-white text-base text-neutral-900 hover:bg-neutral-900 hover:text-white"
-                label="Cancel" link="{{ route('presets') }}" />
+            @if ($stepNumber === 1)
+                <x-button
+                    class="w-full border-black bg-white text-base text-neutral-900 hover:bg-neutral-900 hover:text-white"
+                    label="Cancel" link="{{ route('presets') }}" />
             @endif
-            @if($stepNumber > 1)
-            <x-button
-                class="w-full border-black bg-white text-base text-neutral-900 hover:bg-neutral-900 hover:text-white"
-                label="Previous" wire:loading.attr="disabled" wire:click="previousStep" />
+            @if ($stepNumber > 1)
+                <x-button
+                    class="w-full border-black bg-white text-base text-neutral-900 hover:bg-neutral-900 hover:text-white"
+                    label="Previous" wire:click="previousStep"
+                    wire:loading.attr="disabled" />
             @endif
-            @if($stepNumber < $totalSteps)
-            <x-button label="Next"
-                class="w-full bg-neutral-900 text-base font-semibold text-white hover:bg-gray-700"
-                wire:loading.attr="disabled" wire:click="nextStep" />
+            @if ($stepNumber < $totalSteps)
+                <x-button
+                    class="w-full bg-neutral-900 text-base font-semibold text-white hover:bg-gray-700"
+                    label="Next" wire:click="nextStep"
+                    wire:loading.attr="disabled" />
             @endif
-            @if($stepNumber === $totalSteps)
-            <x-button :label="$action === 'create' ? 'Create New Preset' : 'Save'"
-                class="w-full bg-neutral-900 text-base font-semibold text-white hover:bg-gray-700"
-                type="submit" wire:loading.attr="disabled" />
+            @if ($stepNumber === $totalSteps)
+                <x-button :label="$action === 'create' ? 'Create New Preset' : 'Save'"
+                    class="w-full bg-neutral-900 text-base font-semibold text-white hover:bg-gray-700"
+                    type="submit" wire:loading.attr="disabled" />
             @endif
         </div>
     </x-form>

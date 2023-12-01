@@ -12,9 +12,15 @@
                         \App\Enums\BatchStatusEnum::CANCELLED->value => 'bg-red-200 text-error-content',
                     ];
                 @endphp
-                <div wire:poll.5s
-                    class="{{ $statusColor[$batch->status] }} w-fit rounded px-2 py-1 text-sm font-medium">
-                    {{ Str::title($batch->status) }}</div>
+                <div class="flex items-center">
+                    <div class="{{ $statusColor[$batch->status] }} w-fit rounded px-2 py-1 text-sm font-medium"
+                        wire:poll.5s>
+                        {{ Str::title($batch->status) }}
+                    </div>
+                    @if ($batch->status === \App\Enums\BatchStatusEnum::IN_PROGRESS->value)
+                    <span class="loading ml-3 loading-spinner loading-xs"></span>
+                    @endif
+                </div>
             </div>
         </div>
 
@@ -44,11 +50,13 @@
                     {{ $batch->articles->count() }} / {{ $batch->quantity }}
                 </div>
                 <div>
-                    <x-button class="bg-neutral-900 font-semibold text-white hover:bg-gray-700 btn-sm"
-                        icon="s-eye" label="View" :disabled="$batch->articles->count() === 0"
+                    <x-button :disabled="$batch->articles->count() === 0"
+                        class="btn-sm bg-neutral-900 font-semibold text-white hover:bg-gray-700"
+                        icon="s-eye" label="View"
                         wire:click="viewBatch('{{ $batch->id }}')" />
-                    <x-button class="bg-neutral-900 font-semibold text-white hover:bg-gray-700 btn-outline btn-sm ml-1"
-                        icon="phosphor.download-simple-bold" label=".zip" :disabled="$batch->articles->count() === 0" />
+                    <x-button :disabled="$batch->articles->count() === 0"
+                        class="btn-outline btn-sm ml-1 bg-neutral-900 font-semibold text-white hover:bg-gray-700"
+                        icon="phosphor.download-simple-bold" label=".zip" />
                 </div>
             </div>
         </div>
@@ -56,15 +64,17 @@
     </div>
 
     <div class="mt-10 flex justify-between">
-            <div class="flex gap-2">
-                <x-select :options="$integrationOptions" class="select-sm"
-                    wire:model="integration_id" />
-                <x-button :disabled="empty($integrationOptions)"
-                    class="bg-neutral-900 font-semibold text-white hover:bg-gray-700 btn-sm disabled:text-white"
-                    label="Publish all to Integration" wire:click="publishBatchToIntegration" />
-            </div>
+        <div class="flex gap-2">
+            <x-select :options="$integrationOptions" class="select-sm"
+                wire:model="integration_id" />
+            <x-button :disabled="empty($integrationOptions)"
+                class="btn-sm bg-neutral-900 font-semibold text-white hover:bg-gray-700 disabled:text-white"
+                label="Publish all to Integration"
+                wire:click="publishBatchToIntegration" />
+        </div>
         <div>
-            <x-button class="bg-neutral-900 font-semibold text-white hover:bg-gray-700 btn-sm"
+            <x-button
+                class="btn-sm bg-neutral-900 font-semibold text-white hover:bg-gray-700"
                 icon="o-plus-small" label="Generate More"
                 link="{{ route('dashboard') }}" />
         </div>
@@ -75,7 +85,7 @@
                 <div class="flex items-center gap-5 px-6 py-4"
                     wire:loading.class="opacity-50">
                     <x-button :disabled="$selectedArticleIdx === 0"
-                        class="hover:border-black hover:bg-neutral-900 hover:text-white bg-white text-neutral-900 btn-sm"
+                        class="btn-sm bg-white text-neutral-900 hover:border-black hover:bg-neutral-900 hover:text-white"
                         icon="o-arrow-small-left" label="Previous" spinner
                         wire:click="previous" />
 
@@ -87,7 +97,7 @@
 
                     <x-button :disabled="$selectedArticleIdx ==
                         $batch->articles->count() - 1"
-                        class="hover:border-black hover:bg-neutral-900 hover:text-white bg-white text-neutral-900 btn-sm"
+                        class="btn-sm bg-white text-neutral-900 hover:border-black hover:bg-neutral-900 hover:text-white"
                         icon-right="o-arrow-small-right" label="Next" spinner
                         wire:click="next" />
                     <x-button @click="$wire.batchModal = false"

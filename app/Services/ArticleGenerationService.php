@@ -24,6 +24,14 @@ class ArticleGenerationService
         }
     }
 
+    public static function detectModelByTitle($title)
+    {
+        if (preg_match('/[^\x20-\x7f]/', $title)) {
+            return "gpt-3.5-turbo-16k";
+        } else {
+            return "gpt-3.5-turbo-1106";
+        }
+    }
     public static function contextMode($batch)
     {
         $userPromptBuilder = new PromptBuilder();
@@ -53,25 +61,48 @@ class ArticleGenerationService
         $systemPromptBuilder = new PromptBuilder();
         $systemPromptBuilder->addOutline();
 
+        $attempts = 0;
+        $cache = [];
         for ($i = 0; $i < count($titles); $i++) {
             $title = $titles[$i];
             $userPromptBuilder->clear();
             $userPromptBuilder->setBusinessDescription($businessSummary)->setArticleTitle($title)->setLanguage($batch->language);
 
             // dd($systemPromptBuilder->build(), $userPromptBuilder->build());
+            // dd(self::detectModelByTitle($title), $title);
+
             $generatedArticle = AIService::sendPrompt(
                 $systemPromptBuilder->build(),
-                $userPromptBuilder->build()
+                $userPromptBuilder->build(),
+                self::detectModelByTitle($title)
             );
 
-            
+
 
             $markdown = self::convertToMarkdown($generatedArticle);
 
             if (strlen($markdown) < intval(env('MIN_ARTICLE_LENGTH'))) {
-                Log::info("Article too short, skipping");
-                $i--;
-                continue;
+                $cache[] = $markdown;
+                if (count($cache) < 3) {
+                    Log::info("Article too short, retrying");
+                    $i--;
+                    $attempts++;
+                    continue;
+                } else {
+                    $longestArticle = "";
+                    foreach ($cache as $article) {
+                        if (strlen($article) > strlen($longestArticle)) {
+                            $longestArticle = $article;
+                        }
+                    }
+                    $markdown = $longestArticle;
+
+                    $attempts = 0;
+                    $cache = [];
+                }
+            } else {
+                $attempts = 0;
+                $cache = [];
             }
 
             $article = new Article();

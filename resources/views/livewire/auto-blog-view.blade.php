@@ -14,8 +14,8 @@
                 <div>You must upgrade to <strong>AutoBlog</strong> to use
                     AutoBlogs.</div>
             </div>
-            <x-button class="bg-neutral-900 font-semibold  hover:bg-gray-700 btn-sm text-white"
-                icon-right="o-arrow-small-right" label="Subscription" />
+            <x-button class="bg-neutral-900 font-semibold hover:bg-gray-700 btn-sm text-white"
+                icon-right="o-arrow-small-right" link="{{ route('pricing') }}" label="Subscription" />
         </div>
         <div class="mb-4">
             <x-input label="Name" maxlength="100"

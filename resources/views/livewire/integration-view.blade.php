@@ -12,7 +12,7 @@
                 Integrations.</div>
         </div>
         <x-button class="bg-neutral-900 font-semibold  hover:bg-gray-700 btn-sm text-white"
-            icon-right="o-arrow-small-right" label="Subscription" />
+            icon-right="o-arrow-small-right" link="{{ route('pricing') }}" label="Subscription" />
     </div>
 
     <x-tabs selected="wordPress">
