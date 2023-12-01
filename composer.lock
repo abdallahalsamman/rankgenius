@@ -4,73 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4f305d5adba753d270b857bb6b9c7fde",
+    "content-hash": "3d134951cec56b7b9be2ce1f4bc1be93",
     "packages": [
-        {
-            "name": "adhocore/json-fixer",
-            "version": "v1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/adhocore/php-json-fixer.git",
-                "reference": "6c5b255e4e5abb35e6894faace97b24421afaebb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/adhocore/php-json-fixer/zipball/6c5b255e4e5abb35e6894faace97b24421afaebb",
-                "reference": "6c5b255e4e5abb35e6894faace97b24421afaebb",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8 || ^5.7 || ^6.5 || ^7.0 || ^8.0 || ^9.0"
-            },
-            "type": "library",
-            "autoload": {
-                "files": [],
-                "psr-4": {
-                    "Ahc\\Json\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jitendra Adhikari",
-                    "email": "jiten.adhikary@gmail.com"
-                }
-            ],
-            "description": "Fix/repair truncated JSON data",
-            "keywords": [
-                "fix-json",
-                "json",
-                "json-fixer",
-                "php",
-                "php-json-fixer",
-                "rectify-json",
-                "truncated-json",
-                "truncation-fixer"
-            ],
-            "support": {
-                "issues": "https://github.com/adhocore/php-json-fixer/issues",
-                "source": "https://github.com/adhocore/php-json-fixer/tree/v1.0.1"
-            },
-            "funding": [
-                {
-                    "url": "https://paypal.me/ji10",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/adhocore",
-                    "type": "github"
-                }
-            ],
-            "time": "2023-09-29T01:06:21+00:00"
-        },
         {
             "name": "blade-ui-kit/blade-heroicons",
             "version": "2.1.0",
