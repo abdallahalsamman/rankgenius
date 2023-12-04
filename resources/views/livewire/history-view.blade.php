@@ -14,7 +14,8 @@
                 @endphp
                 <div class="flex items-center">
                     <div class="{{ $statusColor[$batch->status] }} w-fit rounded px-2 py-1 text-sm font-medium"
-                        wire:poll.5s>
+                        @if ($batch->status === \App\Enums\BatchStatusEnum::IN_PROGRESS->value) wire:poll.5s @endif
+                        >
                         {{ Str::title($batch->status) }}
                     </div>
                     @if ($batch->status === \App\Enums\BatchStatusEnum::IN_PROGRESS->value)
@@ -46,7 +47,9 @@
             class="flex w-full items-center border-b-[1px] border-base-200 px-6 py-3">
             <div class="w-1/2 text-sm font-bold text-gray-600">ARTICLES</div>
             <div class="flex w-1/2 items-center justify-between">
-                <div wire:poll.5s>
+                <div
+                @if ($batch->status === \App\Enums\BatchStatusEnum::IN_PROGRESS->value) wire:poll.5s @endif
+                >
                     {{ $batch->articles->count() }} / {{ $batch->quantity }}
                 </div>
                 <div>
@@ -67,7 +70,7 @@
         <div class="flex gap-2">
             <x-select :options="$integrationOptions" class="select-sm"
                 wire:model="integration_id" />
-            <x-button :disabled="empty($integrationOptions)"
+            <x-button :disabled="empty($integrationOptions)" :disabled="$batch->articles->count() === 0"
                 class="btn-sm bg-neutral-900 font-semibold text-white hover:bg-gray-700 disabled:text-white"
                 label="Publish all to Integration"
                 wire:click="publishBatchToIntegration" />

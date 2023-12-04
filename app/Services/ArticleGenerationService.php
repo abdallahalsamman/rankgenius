@@ -16,7 +16,7 @@ class ArticleGenerationService
         if ($batch->mode == BatchModeEnum::CONTEXT->value) {
             $articles = self::contextMode($batch);
         } else if ($batch->mode == BatchModeEnum::TITLE->value) {
-            $articles = self::titleMode($batch->details, $batch->quantity);
+            $articles = self::titleMode($batch);
         } else if ($batch->mode == BatchModeEnum::KEYWORD->value) {
             $articles = self::keywordMode($batch->details, $batch->quantity);
         } else if ($batch->mode == "PRESET") {
@@ -24,14 +24,6 @@ class ArticleGenerationService
         }
     }
 
-    public static function detectModelByTitle($title)
-    {
-        if (preg_match('/[^\x20-\x7f]/', $title)) {
-            return "gpt-3.5-turbo-16k";
-        } else {
-            return "gpt-3.5-turbo-1106";
-        }
-    }
     public static function contextMode($batch)
     {
         $userPromptBuilder = new PromptBuilder();
@@ -69,15 +61,72 @@ class ArticleGenerationService
             $userPromptBuilder->setBusinessDescription($businessSummary)->setArticleTitle($title)->setLanguage($batch->language);
 
             // dd($systemPromptBuilder->build(), $userPromptBuilder->build());
-            // dd(self::detectModelByTitle($title), $title);
 
             $generatedArticle = AIService::sendPrompt(
                 $systemPromptBuilder->build(),
                 $userPromptBuilder->build(),
-                self::detectModelByTitle($title)
             );
 
 
+
+            $markdown = self::convertToMarkdown($generatedArticle);
+
+            if (strlen($markdown) < intval(env('MIN_ARTICLE_LENGTH'))) {
+                $cache[] = $markdown;
+                if (count($cache) < 3) {
+                    Log::info("Article too short, retrying");
+                    $i--;
+                    $attempts++;
+                    continue;
+                } else {
+                    $longestArticle = "";
+                    foreach ($cache as $article) {
+                        if (strlen($article) > strlen($longestArticle)) {
+                            $longestArticle = $article;
+                        }
+                    }
+                    $markdown = $longestArticle;
+
+                    $attempts = 0;
+                    $cache = [];
+                }
+            } else {
+                $attempts = 0;
+                $cache = [];
+            }
+
+            $article = new Article();
+            $article->id = Str::uuid();
+            $article->title = $title;
+            $article->content = $markdown;
+            $article->image_url = "https://source.unsplash.com/random/800x600";
+            $article->batch_id = $batch->id;
+            $article->user_id = $batch->user_id;
+            $article->save();
+        }
+    }
+
+    public static function titleMode($batch)
+    {
+        $userPromptBuilder = new PromptBuilder();
+        $userPromptBuilder->setLanguage($batch->language);
+
+        $titles = explode("\n", $batch->details);
+
+        $systemPromptBuilder = new PromptBuilder();
+        $systemPromptBuilder->addOutline();
+
+        $attempts = 0;
+        $cache = [];
+        for ($i = 0; $i < count($titles); $i++) {
+            $title = $titles[$i];
+            $userPromptBuilder->clear();
+            $userPromptBuilder->setLanguage($batch->language)->setArticleTitle($title);
+
+            $generatedArticle = AIService::sendPrompt(
+                $systemPromptBuilder->build(),
+                $userPromptBuilder->build(),
+            );
 
             $markdown = self::convertToMarkdown($generatedArticle);
 

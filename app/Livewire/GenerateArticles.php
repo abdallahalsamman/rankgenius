@@ -15,7 +15,7 @@ class GenerateArticles extends Component
     public $businessUrl, $businessDescription = "are german shepherds good pets for apartment owners?";
     public $quantity = 1, $language = "English";
     public $preset = 0, $presetOptions = [];
-    public $titles, $keywords;
+    public $titles = "How to make bread at home?\nBest recipes for making bread\nWhat are the different types of bread";
 
     public $simple_mode_allowed_article_quantity = [1, 3, 5, 10, 20];
     public $preset_mode_allowed_article_quantity = [1, 3, 5, 10, 20, 40, 60, 80, 100, 150, 300];
@@ -94,7 +94,7 @@ class GenerateArticles extends Component
         ]);
 
         // RunBatch::dispatch($batch)->delay(now()->addSeconds(1));
-        RunBatch::dispatch($batch); 
+        RunBatch::dispatch($batch);
 
         return redirect()->route('history.view', ['id' => $batch->id]);
     }

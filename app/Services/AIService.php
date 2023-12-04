@@ -6,16 +6,16 @@ use OpenAI;
 use Illuminate\Support\Facades\Log;
 
 class AIService {
-    public static function sendPrompt($systemMessage, $userMessage, $model = "gpt-3.5-turbo-1106", $maxtoken = 64, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
+    public static function sendPrompt($systemMessage, $userMessage, $model = "gpt-3.5-turbo-16k", $maxtoken = 64, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
     {
         $client = OpenAI::client(config('services.openai.key'));
 
         Log::info('SYSTEM PROMPT: ' . $systemMessage . "\n\nUSER MESSAGE: " . $userMessage);
 
         $additionalOptions = [];
-        if ($model == "gpt-3.5-turbo-1106") {
-            $additionalOptions = ['response_format' => ["type" => "json_object" ]];
-        }
+        // if ($model == "gpt-3.5-turbo-1106") {
+        //     $additionalOptions = ['response_format' => ["type" => "json_object" ]];
+        // }
 
         $result = $client->chat()->create(array_merge([
             "model" => $model,
@@ -23,7 +23,7 @@ class AIService {
             "top_p" => 1,
             "frequency_penalty" => 0,
             "presence_penalty" => 0,
-            'max_tokens' => $model == "gpt-3.5-turbo-1106" ? 4000 : 10000,
+            'max_tokens' => 10000,
             'messages' => [
                 [
                     "role" => "system",
@@ -43,20 +43,20 @@ class AIService {
             Log::info('Received Stop Reason: ' . $result['choices'][0]['finish_reason']);
         }
 
-        $content = json_decode($result['choices'][0]['message']['content'], true);
+        $content = json_decode(trim($result['choices'][0]['message']['content']), true);
         return $content;
     }
 
-    public static function sendPromptStream($systemMessage, $userMessage, $model = "gpt-3.5-turbo-1106", $maxtoken = 64, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
+    public static function sendPromptStream($systemMessage, $userMessage, $model = "gpt-3.5-turbo-16k", $maxtoken = 64, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
     {
         $client = OpenAI::client(config('services.openai.key'));
 
         Log::info('SYSTEM PROMPT: ' . $systemMessage . "\n\nUSER MESSAGE: " . $userMessage);
 
         $additionalOptions = [];
-        if ($model == "gpt-3.5-turbo-1106") {
-            $additionalOptions = ['response_format' => ["type" => "json_object" ]];
-        }
+        // if ($model == "gpt-3.5-turbo-1106") {
+        //     $additionalOptions = ['response_format' => ["type" => "json_object" ]];
+        // }
 
         $stream = $client->chat()->createStreamed(array_merge([
             "model" => $model,
@@ -64,7 +64,7 @@ class AIService {
             "top_p" => 1,
             "frequency_penalty" => 0,
             "presence_penalty" => 0,
-            'max_tokens' => $model == "gpt-3.5-turbo-1106" ? 4000 : 10000,
+            'max_tokens' => 10000,
             'messages' => [
                 [
                     "role" => "system",
@@ -85,7 +85,7 @@ class AIService {
             $responseText .= $text;
         }
 
-        $content = json_decode($responseText, true);
+        $content = json_decode(trim($responseText), true);
         return $content;
     }
 }
