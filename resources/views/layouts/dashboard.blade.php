@@ -4,14 +4,14 @@
     <div class="bg-white">
         {{-- logo --}}
         <div class="flex items-center justify-between px-6 py-5">
-            <div class="flex items-center">
+            <div class="flex items-end">
                 <a href="{{ route('dashboard') }}">
-                    <div class="flex items-center">
-                        <img class="w-4"
+                    <div class="flex items-end gap-3">
+                        <img class="w-6"
                             src="{{ asset('resources/images/logo-b.png') }}" />
+                        <!-- <p class="text-[1.25rem] font-bold">{{ env('APP_NAME') }}</p> -->
                         <div>
-                            <span class="mx-3">/</span><span
-                                class="text-[#757575]">{{ auth()->user()->email }}</span>
+                            <span class="text-[#757575]">{{ auth()->user()->email }}</span>
                         </div>
                     </div>
                 </a>

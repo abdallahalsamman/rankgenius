@@ -33,5 +33,6 @@ return [
 
     'openai' => [
         'key' => env('OPENAI_API_KEY'),
+        'timeout' => 60 * 10 // 10 minutes
     ],
 ];

@@ -9,10 +9,10 @@
                     class="mb-5 mt-10 border-b-[1px] border-black pb-2 text-2xl font-semibold">
                     1. User's Acknowledgment and
                     Acceptance of Terms</h2>
-                <p>By using any of BlogKite services
+                <p>By using any of {{ env('APP_NAME') }} services
                     ("Services") you agree to be bound by the following Terms of
                     Service
-                    ("Terms"). The company that operates BlogKite is Vettted Lda.
+                    ("Terms"). The company that operates {{ env('APP_NAME') }} is Vettted Lda.
                     Vettted reserves the right to change or amend these Terms at any
                     time without notice. We encourage you to review these Terms
                     regularly, as your continued use of the Services will confirm
@@ -61,7 +61,7 @@
                     only
                     way to login. You are also responsible for all activities that
                     occur
-                    under your account. BlogKite will not be held responsibility
+                    under your account. {{ env('APP_NAME') }} will not be held responsibility
                     for an unauthorized access to your account. If you become aware
                     of
                     any unauthorized access to your account, you must notify us as
@@ -86,7 +86,7 @@
                     to
                     lifetime licenses.</p>
                 <br /><br />
-                <p>BlogKite reserves the right, to the
+                <p>{{ env('APP_NAME') }} reserves the right, to the
                     extent of its knowledge and ability, to determine the rightful
                     account owner in case of disputes. If we are not able to
                     determine
@@ -101,16 +101,16 @@
                     class="mb-5 mt-10 border-b-[1px] border-black pb-2 text-2xl font-semibold">
                     4. Fees payment</h2>
                 <p>Payments. The system will charge you
-                    automatically every billing cycle. All BlogKite services are
+                    automatically every billing cycle. All {{ env('APP_NAME') }} services are
                     prepaid and will not begin until full payment is received. No
-                    credits for unperformed services are possible. BlogKite does
+                    credits for unperformed services are possible. {{ env('APP_NAME') }} does
                     not issue either partial or full refunds, including the cases
                     when
                     your services are suspended or terminated before the end of the
                     Services.</p>
                 <br /><br />
                 <p>Modification to the pricing and terms.
-                    BlogKite retains the right to modify subscription plans'
+                    {{ env('APP_NAME') }} retains the right to modify subscription plans'
                     pricing and terms at any time without additional notice. All
                     changes
                     will be posted in the corresponding sections of the website.</p>
@@ -330,8 +330,8 @@
                 <p>All notices to a party shall be in writing
                     and shall be made either via email or conventional mail. Notices
                     to
-                    us must be sent to the attention of Customer Service at <a
-                        href="mailto:support@blogkite.com">support@blogkite.com</a>.
+                    us must be sent to the attention of Customer Service at 
+                    <a href="{{ 'mailto:support@' . env('APP_NAME') . '.com'}}">{{ strtolower('support@' . env('APP_NAME') . '.com') }}</a>.
                     Notices to you may be sent to the address supplied by you as
                     part of
                     your Registration Data. In addition, we may broadcast notices or
@@ -409,7 +409,7 @@
                     15. Contact Information</h2>
                 <p>If you notice that any user is violating
                     these Terms of Use, please contact us at
-                    <a href="mailto:support@blogkite.com">support@blogkite.com</a>.
+                    <a href="{{ 'mailto:support@' . env('APP_NAME') . '.com'}}">{{ strtolower('support@' . env('APP_NAME') . '.com') }}</a>.
                 </p>
             </div>
         </div>

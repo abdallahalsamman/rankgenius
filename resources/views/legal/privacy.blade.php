@@ -8,7 +8,7 @@
                 <div class="p-10">
                     <h2 class="mb-5 border-b-[1px] pb-2 text-3xl border-black font-semibold">
                         Commitment To Privacy</h2>
-                    <p>At BlogKite, we respect your privacy and are committed to
+                    <p>At {{ env('APP_NAME') }}, we respect your privacy and are committed to
                         protecting your
                         personal information. This Privacy Policy explains how we
                         collect, use, and
@@ -37,7 +37,7 @@
 
                     <p>The content that you generate through the dashboard can be
                         reviewed
-                        by BlogKite,
+                        by {{ env('APP_NAME') }},
                         in order to increase the quality of the product. We'll never
                         share
                         your articles
@@ -57,8 +57,9 @@
                         practices, our Privacy Officer (or Data Protection Officer)
                         can be
                         reached by
-                        email at <a class="underline text-[#1E64E6]"
-                            href="mailto:support@blogkite.com">support@blogkite.com</a>
+                        email at 
+                    <a class="underline text-[#1E64E6]" href="{{ 'mailto:support@' . env('APP_NAME') . '.com'}}">{{ strtolower('support@' . env('APP_NAME') . '.com') }}</a>.
+                            
                     </p>
                 </div>
             </div>

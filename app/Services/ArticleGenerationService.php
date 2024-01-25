@@ -67,8 +67,6 @@ class ArticleGenerationService
                 $userPromptBuilder->build(),
             );
 
-
-
             $markdown = self::convertToMarkdown($generatedArticle);
 
             if (strlen($markdown) < intval(env('MIN_ARTICLE_LENGTH'))) {

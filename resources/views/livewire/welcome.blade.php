@@ -9,8 +9,8 @@
             <div class="my-4 flex items-center px-6">
                 <a href="/">
                     <div class="flex items-center">
-                        <div class="mr-2">
-                            <img class="w-4"
+                        <div class="mr-1">
+                            <img class="w-5"
                                 src="{{ asset('resources/images/logo-b.png') }}" />
                         </div>
                         <p class="text-[1.25rem] font-bold">{{ env('APP_NAME') }}
@@ -37,7 +37,7 @@
                             link="{{ route('dashboard') }}" />
                     @else
                         <x-button
-                            class="btn-sm bg-neutral-900 font-semibold text-white hover:bg-gray-700"
+                            class="btn-sm bg-gradient-to-r from-blue-500 to-teal-500 bg-300% animate-gradient font-semibold text-white"
                             external label="Get 5 Free Articles"
                             link="{{ route('dashboard') }}" />
                         <x-button

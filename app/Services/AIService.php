@@ -8,14 +8,18 @@ use Illuminate\Support\Facades\Log;
 class AIService {
     public static function sendPrompt($systemMessage, $userMessage, $model = "gpt-3.5-turbo-16k", $maxtoken = 64, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
     {
-        $client = OpenAI::client(config('services.openai.key'));
+        $client = OpenAI::factory()
+        ->withApiKey(config('services.openai.key'))
+        ->withHttpClient(new \GuzzleHttp\Client(['timeout' => config('services.openai.timeout')]))
+        ->make();
 
+        Log::info('MODEL: ' . $model);
         Log::info('SYSTEM PROMPT: ' . $systemMessage . "\n\nUSER MESSAGE: " . $userMessage);
 
         $additionalOptions = [];
-        // if ($model == "gpt-3.5-turbo-1106") {
-        //     $additionalOptions = ['response_format' => ["type" => "json_object" ]];
-        // }
+        if ($model == "gpt-3.5-turbo-1106" || $model == "gpt-4-1106-preview") {
+            $additionalOptions = ['response_format' => ["type" => "json_object"]];
+        }
 
         $result = $client->chat()->create(array_merge([
             "model" => $model,

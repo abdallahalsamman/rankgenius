@@ -3,29 +3,21 @@
         <section>
             <header class="w-full">
                 <div class="mx-auto flex max-w-6xl items-center gap-16 pt-32">
-                    <div class="flex w-2/3 flex-col gap-10">
+                    <div class="flex w-2/3 flex-col gap-10 mx-auto text-center">
                         <div>
                             <h1
                                 class="break-words text-5xl font-bold leading-normal">
                                 {{-- <p
-                                    class="animate-gradient bg-gradient-to-r from-blue-500 to-green-500 bg-300% bg-clip-text text-transparent">
+                                    class="animate-gradient bg-gradient-to-r from-blue-500 to-teal-500 bg-300% bg-clip-text text-transparent">
                                     Rank higher, save time.</p> --}}
                                 Auto-publish
                                 <mark
-                                    class="animate-gradient bg-gradient-to-r from-blue-500 to-green-500 bg-300% bg-clip-text text-gray-400 text-transparent">SEO-optimized
+                                    class="animate-gradient bg-gradient-to-r from-blue-500 to-teal-500 bg-300% bg-clip-text text-gray-400 text-transparent">SEO-optimized
                                     articles</mark>
                                 with our
                                 <mark
-                                    class="relative border-2 border-dashed border-[#1E64E6] rounded-2xl px-3 animate-gradient bg-gradient-to-r from-blue-500 to-green-500 bg-300% bg-clip-text text-gray-400 text-transparent">AI
+                                    class="animate-gradient bg-gradient-to-r from-blue-500 to-teal-500 bg-300% bg-clip-text text-gray-400 text-transparent">AI
                                     Bots.
-                                    <div class="absolute w-60 rotate-[25deg] left-40 -top-2">
-                                        <div class="relative">
-                                            <div class="absolute w-[30rem] -rotate-[20deg] -top-28 left-[7rem] text-lg text-[#1E64E6]">
-                                                <img src="{{ asset('resources/images/label-automatic-check.svg') }}" alt="">
-                                            </div>
-                                        </div>
-                                        <img src="{{asset('resources/images/arrow-right.svg')}}" alt="">
-                                    </div>
                                 </mark>
                             </h1>
 
@@ -50,7 +42,7 @@
                                     </div>
                                     <div>
                                         <x-button
-                                            class="bg-neutral-900 text-lg text-white hover:bg-gray-700"
+                                            class="text-lg text-white bg-gradient-to-r from-blue-500 to-teal-500 bg-300% animate-gradient"
                                             icon-right="fas.arrow-right"
                                             label="Try for free" type="submit" />
                                     </div>
@@ -58,7 +50,7 @@
                                 {{-- </div> --}}
                             </form>
                             <div>
-                                <div class="flex items-center gap-3 pl-2">
+                                <div class="flex items-center justify-center gap-3 pl-2">
                                     <div>
                                         <p>Five Free Articles</p>
                                     </div>
@@ -70,7 +62,7 @@
                                     <x-icon class="h-7 w-7 text-gray-500"
                                         name="bi.dot" />
                                     <div>
-                                        <p>Expert Level</p>
+                                        <p>Professional Quality</p>
                                     </div>
                                 </div>
                             </div>
@@ -95,7 +87,7 @@
                         <div
                             class="slide flex w-full items-center justify-center gap-20 grayscale">
                             @foreach (array_merge(...array_fill(0, 5, ['abc', 'bbc', 'cbc', 'cnn', 'globe-mail', 'national-post', 'quora', 'wikipedia'])) as $logo)
-                                <img alt="ABC News Logo" class="h-8"
+                                <img alt="ABC News Logo" class="h-9"
                                     src="{{ asset('resources/images/' . $logo . '.png') }}" />
                             @endforeach
                         </div>
@@ -220,7 +212,7 @@
         <section>
             <div class="mx-auto max-w-[1024px] px-4 py-8">
                 <div class="flex items-center justify-center">
-                    <a class="rounded-lg bg-neutral-900 px-20 py-5 text-2xl font-semibold text-white hover:bg-gray-700"
+                    <a class="rounded-lg px-20 py-5 text-2xl font-semibold text-white animate-gradient bg-gradient-to-r from-blue-500 to-teal-500 bg-300%"
                         href="{{ route('dashboard') }}">Get 5 Free Articles
                         Today</a>
                 </div>
@@ -424,7 +416,7 @@
         <section>
             <div class="mx-auto max-w-[1024px] px-4 py-8">
                 <div class="flex items-center justify-center">
-                    <a class="rounded-lg border-2 border-black bg-neutral-900 px-20 py-5 text-2xl font-semibold text-white shadow-lg hover:bg-white hover:text-neutral-900"
+                    <a class="rounded-lg px-20 py-5 text-2xl font-semibold text-white shadow-lg animate-gradient bg-gradient-to-r from-blue-500 to-teal-500 bg-300%"
                         href="{{ route('dashboard') }}">Get 5 Free Articles
                         Today</a>
                 </div>
@@ -522,21 +514,21 @@
         </div>
 
         {{-- Automate your Blog today --}}
-        <div class="border-y-2 bg-white">
+        <div class="border-y-2">
             <div class="mx-auto max-w-[1024px] px-4 py-20">
                 <div class="flex items-center justify-between">
                     <div>
                         <span
-                            class="animate-gradient bg-gradient-to-r from-orange-700 via-blue-500 to-green-400 bg-300% bg-clip-text text-4xl font-bold text-transparent"
+                            class="animate-gradient bg-gradient-to-r from-blue-500 to-teal-500 bg-300% bg-clip-text text-4xl font-bold text-transparent"
                             id="pricing">Automate your Blog today</span>
                         <p class="mt-4 text-xl">Get your samples and start
                             generating articles for your business.</p>
                     </div>
                     <div class="flex min-w-[180px] flex-col gap-4 text-center">
                         <x-button
-                            class="bg-neutral-900 font-semibold text-white shadow-md hover:bg-gray-700"
+                            class="font-semibold text-white shadow-md animate-gradient bg-gradient-to-r from-blue-500 to-teal-500 bg-300%"
                             id="pricing" label="Get 5 Free Articles"
-                            link="/login" />
+                            link="{{ route('login') }}" />
                     </div>
                 </div>
             </div>
