@@ -57,7 +57,7 @@ What are the different types of bread?"
             </div>
         </x-tab>
 
-        <x-tab name="keywords-mode-tab" label="Keywords mode">
+        {{-- <x-tab name="keywords-mode-tab" label="Keywords mode">
             <div>
                 <x-form wire:submit="keywordMode">
                     <x-instruction-step number-class="py-[4px]" number="1" class="mt-5"
@@ -77,7 +77,7 @@ What are the different types of bread?"
                 </x-form>
             </div>
         </x-tab>
-        {{-- presets --}}
+
         <x-tab name="advanced-mode-tab" label="Advanced mode">
             <div>
                 <x-form wire:submit="presetMode">
@@ -108,6 +108,6 @@ What are the different types of bread?"
                     </div>
                 </x-form>
             </div>
-        </x-tab>
+        </x-tab> --}}
     </x-tabs>
 </div>

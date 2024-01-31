@@ -93,7 +93,6 @@ class GenerateArticles extends Component
             'user_id' => auth()->user()->id,
         ]);
 
-        // RunBatch::dispatch($batch)->delay(now()->addSeconds(1));
         RunBatch::dispatch($batch);
 
         return redirect()->route('history.view', ['id' => $batch->id]);

@@ -19,10 +19,10 @@
                     value="3 Credits Left" />
             </div>
             <div class="flex items-center gap-5 text-sm">
-                <a class="text-gray-600 hover:text-neutral-900"
+                {{-- <a class="text-gray-600 hover:text-neutral-900"
                     href="">Feedback</a>
                 <a class="text-gray-600 hover:text-neutral-900"
-                    href="">Request a Feature</a>
+                    href="">Request a Feature</a> --}}
                 <x-button
                     class="btn-sm border-2 bg-transparent text-gray-600 hover:text-neutral-900"
                     label="Logout" link="{{ route('logout') }}" />
@@ -60,7 +60,7 @@
                 </div>
             </a>
 
-            <a href="{{ route('presets') }}">
+            {{-- <a href="{{ route('presets') }}">
                 <div
                     class="{{ request()->routeIs('presets') || request()->routeIs('preset.create') || request()->routeIs('preset.edit') ? 'border-b-[1px] border-neutral-900' : '' }}">
                     <div
@@ -108,7 +108,7 @@
                         Subscriptions
                     </div>
                 </div>
-            </a>
+            </a> --}}
         </div>
         <div class="w-full max-w-[1024px] mx-auto my-10">
             @yield('dashboard-content')

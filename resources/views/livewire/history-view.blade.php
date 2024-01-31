@@ -57,9 +57,9 @@
                         class="btn-sm bg-neutral-900 font-semibold text-white hover:bg-gray-700"
                         icon="s-eye" label="View"
                         wire:click="viewBatch('{{ $batch->id }}')" />
-                    <x-button :disabled="$batch->articles->count() === 0"
+                    {{-- <x-button :disabled="$batch->articles->count() === 0"
                         class="btn-outline btn-sm ml-1 bg-neutral-900 font-semibold text-white hover:bg-gray-700"
-                        icon="phosphor.download-simple-bold" label=".zip" />
+                        icon="phosphor.download-simple-bold" label=".zip" /> --}}
                 </div>
             </div>
         </div>
@@ -68,12 +68,12 @@
 
     <div class="mt-10 flex justify-between">
         <div class="flex gap-2">
-            <x-select :options="$integrationOptions" class="select-sm"
+            {{-- <x-select :options="$integrationOptions" class="select-sm"
                 wire:model="integration_id" />
             <x-button :disabled="empty($integrationOptions)" :disabled="$batch->articles->count() === 0"
                 class="btn-sm bg-neutral-900 font-semibold text-white hover:bg-gray-700 disabled:text-white"
                 label="Publish all to Integration"
-                wire:click="publishBatchToIntegration" />
+                wire:click="publishBatchToIntegration" /> --}}
         </div>
         <div>
             <x-button

@@ -18,6 +18,20 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 class RunBatch implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    
+    /**
+     * The number of seconds the job can run before timing out.
+     *
+     * @var int
+     */
+    public $timeout = 9999999;
+
+    /**
+     * Indicate if the job should be marked as failed on timeout.
+     *
+     * @var bool
+     */
+    public $failOnTimeout = false;
 
     /**
      * Create a new job instance.
