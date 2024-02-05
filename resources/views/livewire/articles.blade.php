@@ -17,10 +17,13 @@
         <div class="grid grid-cols-[_1fr_6fr_1fr] gap-3 px-3 py-2 items-center hover:bg-base-200/50">
             <div>{{ date('d/m', strtotime($article->created_at)) }}</div>
             <div>{{ Str::limit($article->title, 80, ' ...') }}</div>
-            <div class="flex justify-end">
+            <div class="flex justify-end gap-3">
                 <x-button class="btn-sm" label="View"
                     wire:click="viewArticle('{{ $article->id }}')"
                     wire:loading.attr="disabled" />
+                <x-button class="btn-sm" label="Edit"
+                    link="{{ route('article.edit', ['id' => $article->id]) }}"
+                    wire:loading.attr="disabled" />      
             </div>
         </div>
     @endforeach

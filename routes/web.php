@@ -49,6 +49,7 @@ Route::domain('app.' . env('APP_DOMAIN'))->group(function () {
         Route::get('/dashboard/history', History::class)->name('history');
         Route::get('/dashboard/history/{id}', HistoryView::class)->name('history.view');
         Route::get('/dashboard/articles', Articles::class)->name('articles');
+        Route::get('/dashboard/articles/edit/{id}', ArticleEdit::class)->name('article.edit');
         Route::get('/dashboard/presets', Presets::class)->name('presets');
         Route::get('/dashboard/presets/create', PresetView::class)->name('preset.create');
         Route::get('/dashboard/presets/{id}', PresetView::class)->name('preset.edit');

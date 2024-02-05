@@ -21,25 +21,39 @@ class AIService {
             $additionalOptions = ['response_format' => ["type" => "json_object"]];
         }
 
-        $result = $client->chat()->create(array_merge([
-            "model" => $model,
-            "temperature" => 0.7,
-            "top_p" => 1,
-            "frequency_penalty" => 0,
-            "presence_penalty" => 0,
-            'max_tokens' => 10000,
-            'messages' => [
-                [
-                    "role" => "system",
-                    "content" => $systemMessage,
-                ],
-                [
-                    "role" => "user",
-                    "content" => $userMessage,
-                ]
-            ],
-        ], $additionalOptions));
+        $attempt = 0;
+        $maxAttempts = 3;
+        $result = null;
+        while ($attempt < $maxAttempts && is_null($result)) {
+            try {
+                $result = $client->chat()->create(array_merge([
+                    "model" => $model,
+                    "temperature" => 0.7,
+                    "top_p" => 1,
+                    "frequency_penalty" => 0,
+                    "presence_penalty" => 0,
+                    'max_tokens' => 10000,
+                    'messages' => [
+                        [
+                            "role" => "system",
+                            "content" => $systemMessage,
+                        ],
+                        [
+                            "role" => "user",
+                            "content" => $userMessage,
+                        ]
+                    ],
+                ], $additionalOptions));
+            } catch (\OpenAI\Exceptions\UnserializableResponse $e) {
+                Log::error('UnserializableResponse Exception caught: ' . $e->getMessage());
+                $attempt++;
+                sleep(1); // Wait a bit before retrying
+            }
+        }
 
+        if (is_null($result)) {
+            throw new \Exception("Failed to get a response after {$maxAttempts} attempts.");
+        }
         Log::info('Received Prompt: ' . $result['choices'][0]['message']['content']);
         Log::info('Article Cost: (Prompt Tokens: ' . $result['usage']['prompt_tokens'] . ', Completion Tokens: ' . $result['usage']['completion_tokens'] . ') $' . (($result['usage']['prompt_tokens'] / 1000) * 0.001) + (($result['usage']['completion_tokens'] / 1000) * 0.002));
 
