@@ -17,10 +17,11 @@ class PromptBuilder
         return $this;
     }
 
-    public function build()
+    public function build($format = "json")
     {
-        if (substr($this->prompt, -strlen("Make sure the response is in JSON format")) !== "Make sure the response is in JSON format") {
-            $this->prompt .= "Make sure the response is in JSON format";
+        $enforcer = "Make sure the response is in $format.";
+        if (substr($this->prompt, -strlen($enforcer)) !== $enforcer) {
+            $this->prompt .= $enforcer;
         }
 
         return trim($this->prompt);
@@ -111,7 +112,7 @@ PROMPT;
         $this->prompt .= <<<OUTLINE
 You are an expert content writer that specialises in SEO.
 
-Generate articles that use ALL of this outline, fill ALL empty fields without leaving any field empty with strings using markdown format.
+Generate articles that use this outline.
 
 Bold important seo keywords.
 

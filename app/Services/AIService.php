@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Log;
 class AIService {
     public static function sendPrompt($systemMessage, $userMessage, $model = "gpt-3.5-turbo-16k", $maxtoken = 64, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
     {
+        
         $client = OpenAI::factory()
         ->withApiKey(config('services.openai.key'))
         ->withHttpClient(new \GuzzleHttp\Client(['timeout' => config('services.openai.timeout')]))
@@ -44,8 +45,8 @@ class AIService {
                         ]
                     ],
                 ], $additionalOptions));
-            } catch (\OpenAI\Exceptions\UnserializableResponse $e) {
-                Log::error('UnserializableResponse Exception caught: ' . $e->getMessage());
+            } catch(\Exception $e) {
+                Log::error('Exception caught on openai Request: ' . $e->getMessage());
                 $attempt++;
                 sleep(1); // Wait a bit before retrying
             }
@@ -61,7 +62,12 @@ class AIService {
             Log::info('Received Stop Reason: ' . $result['choices'][0]['finish_reason']);
         }
 
-        $content = json_decode(trim($result['choices'][0]['message']['content']), true);
+        $rawContent = trim($result['choices'][0]['message']['content']);
+        $content = json_decode($rawContent, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $content = $rawContent; // Fallback to raw content if not JSON
+        }
+        
         return $content;
     }
 

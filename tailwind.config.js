@@ -80,6 +80,9 @@ export default {
   plugins: [
     require("@geoffcodesthings/tailwind-md-base")(),
     require("daisyui"),
+    require('@tailwindcss/typography')({
+      className: 'editorjs',
+    }),
   ],
   daisyui: {
     themes: ["light", "dark"],
