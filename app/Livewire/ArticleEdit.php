@@ -9,13 +9,12 @@ use Illuminate\Http\Request;
 
 class ArticleEdit extends Component
 {
-   public $data = [], $id;
+   public $article;
 
    public function mount()
    {
-      $this->id = Route::current()->parameter('id');
-      $article = Article::where('id', $this->id)->first();
-      $this->data = $article->content;
+      $article_id = Route::current()->parameter('id');
+      $this->article = auth()->user()->articles()->where('id', $article_id)->first();
    }
 
    public function save(Request $request)

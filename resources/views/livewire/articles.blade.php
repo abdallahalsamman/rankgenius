@@ -51,3 +51,5 @@
         </div>
     @endif
 </div>
+
+@vite('resources/js/editor.js')

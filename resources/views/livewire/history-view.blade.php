@@ -114,3 +114,5 @@
         </div>
     </x-modal>
 </div>
+
+@vite(['resources/js/editor.js'])

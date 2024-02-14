@@ -16,6 +16,7 @@ class Articles extends Component
 
     public function viewArticle($id)
     {
+        $this->articles = auth()->user()->articles->take(50)->sortByDesc('created_at');
         $this->selectedArticle = $this->articles->find($id);
         $this->articleModal = true;
     }
