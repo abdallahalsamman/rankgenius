@@ -8,6 +8,11 @@
     data-post-url="{{ route('article.save', $selectedArticle->id) }}"></div>
 </div>
 
+@section('other-scripts')
+<script>
+    console.log('test')
+</script>
+@endsection
 {{-- <div class="">
     @if($selectedArticle->image_url)
     <div class="flex justify-center items-center">

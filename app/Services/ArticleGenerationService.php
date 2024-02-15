@@ -65,13 +65,14 @@ class ArticleGenerationService
             $generatedArticle = AIService::sendPrompt(
                 $systemPromptBuilder->build("HTML"),
                 $userPromptBuilder->build("HTML"),
+                $attempts > 2 ? "gpt-4-1106-preview" : "gpt-3.5-turbo-16k"
             );
         
             // $markdown = self::convertToMarkdown($generatedArticle);
             $markdown = $generatedArticle;
         
             if (strlen($markdown) < intval(env('MIN_ARTICLE_LENGTH'))) {
-                if ($attempts < 3) {
+                if ($attempts < 4) {
                     if(strlen($markdown) > $longestShortArticle["length"]) {
                         $longestShortArticle = ["length" => strlen($markdown), "content" => $markdown];
                     }
@@ -92,8 +93,9 @@ class ArticleGenerationService
             $article = new Article();
             $article->id = Str::uuid();
             $article->title = $title;
-            Log::info("Markdown: " . $markdown);
-            $article->content = self::convertHTMLToEditorJsBlocks($markdown);
+            $htmlString = Str::replaceFirst('```html', '', $markdown);
+            $htmlString = Str::replaceLast('```', '', $htmlString);
+            $article->content = self::convertHTMLToEditorJsBlocks($htmlString);
             $article->image_url = "https://source.unsplash.com/random/800x600";
             $article->batch_id = $batch->id;
             $article->user_id = $batch->user_id;
@@ -149,8 +151,9 @@ class ArticleGenerationService
             $article = new Article();
             $article->id = Str::uuid();
             $article->title = $title;
-            Log::info("Markdown: " . $markdown);
-            $article->content = self::convertHTMLToEditorJsBlocks($markdown);
+            $htmlString = Str::replaceFirst('```html', '', $markdown);
+            $htmlString = Str::replaceLast('```', '', $htmlString);
+            $article->content = self::convertHTMLToEditorJsBlocks($htmlString);
             $article->image_url = "https://source.unsplash.com/random/800x600";
             $article->batch_id = $batch->id;
             $article->user_id = $batch->user_id;
@@ -283,6 +286,27 @@ class ArticleGenerationService
                     ]
                 ];
                 break;
+            // case 'article':
+            // case 'section':
+            // case 'body':
+            // case 'div':
+            default:
+                $nestedBlocks = [];
+                foreach ($element->childNodes as $childNode) {
+                    if ($childNode->nodeType == XML_ELEMENT_NODE) {
+                        $childBlock = self::handleElement($childNode);
+                        if (!empty($childBlock)) {
+                            if (is_array(current($childBlock))) {
+                                $nestedBlocks = array_merge($nestedBlocks, $childBlock);
+                            } else {
+                                $nestedBlocks[] = $childBlock;
+                            }
+                        }
+                    }
+                }
+                // Instead of returning a single block, return an array of blocks
+                return $nestedBlocks;
+                break;
         }
         return $block;
     }
@@ -290,31 +314,28 @@ class ArticleGenerationService
     public static function convertHTMLToEditorJsBlocks($htmlContent)
     {
         $doc = new DOMDocument();
-        // Suppress warnings with '@' and load the HTML content into the DOMDocument object.
-        // 'LIBXML_HTML_NOIMPLIED' prevents the addition of implied html/body elements,
-        // and 'LIBXML_HTML_NODEFDTD' prevents the addition of a default doctype if none exists.
         @$doc->loadHTML($htmlContent, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         
-        // Prepare the Editor.js blocks array
         $blocks = [];
 
-        // Iterate through body child nodes to convert to Editor.js blocks
-        foreach ($doc->getElementsByTagName('body')->item(0)->childNodes as $node) {
+        foreach ($doc->childNodes as $node) {
             if ($node->nodeType == XML_ELEMENT_NODE) {
                 $block = self::handleElement($node);
                 if (!empty($block)) {
-                    $blocks[] = $block;
+                    if (is_array(current($block))) {
+                        $blocks = array_merge($blocks, $block);
+                    } else {
+                        $blocks[] = $block;
+                    }
                 }
             }
         }
 
-        // Construct the final Editor.js data structure
         $editorJsData = [
             'time' => time(),
-            'blocks' => $blocks
+            'blocks' => array_values(array_filter($blocks))
         ];
 
-        // Output the JSON representation of the Editor.js data
         return json_encode($editorJsData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 

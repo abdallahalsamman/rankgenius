@@ -6,7 +6,7 @@ use OpenAI;
 use Illuminate\Support\Facades\Log;
 
 class AIService {
-    public static function sendPrompt($systemMessage, $userMessage, $model = "gpt-3.5-turbo-16k", $maxtoken = 64, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
+    public static function sendPrompt($systemMessage, $userMessage, $model = "gpt-3.5-turbo-16k", $maxtokens = 4000, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
     {
         
         $client = OpenAI::factory()
@@ -18,9 +18,9 @@ class AIService {
         Log::info('SYSTEM PROMPT: ' . $systemMessage . "\n\nUSER MESSAGE: " . $userMessage);
 
         $additionalOptions = [];
-        if ($model == "gpt-3.5-turbo-1106" || $model == "gpt-4-1106-preview") {
-            $additionalOptions = ['response_format' => ["type" => "json_object"]];
-        }
+        // if ($model == "gpt-3.5-turbo-1106" || $model == "gpt-4-1106-preview") {
+        //     $additionalOptions = ['response_format' => ["type" => "json_object"]];
+        // }
 
         $attempt = 0;
         $maxAttempts = 3;
@@ -33,7 +33,7 @@ class AIService {
                     "top_p" => 1,
                     "frequency_penalty" => 0,
                     "presence_penalty" => 0,
-                    'max_tokens' => 10000,
+                    'max_tokens' => $maxtokens,
                     'messages' => [
                         [
                             "role" => "system",
@@ -71,7 +71,7 @@ class AIService {
         return $content;
     }
 
-    public static function sendPromptStream($systemMessage, $userMessage, $model = "gpt-3.5-turbo-16k", $maxtoken = 64, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
+    public static function sendPromptStream($systemMessage, $userMessage, $model = "gpt-3.5-turbo-16k", $maxtokens = 4000, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
     {
         $client = OpenAI::client(config('services.openai.key'));
 
@@ -88,7 +88,7 @@ class AIService {
             "top_p" => 1,
             "frequency_penalty" => 0,
             "presence_penalty" => 0,
-            'max_tokens' => 10000,
+            'max_tokens' => $maxtokens,
             'messages' => [
                 [
                     "role" => "system",

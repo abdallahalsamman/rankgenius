@@ -19,7 +19,12 @@ class PromptBuilder
 
     public function build($format = "json")
     {
-        $enforcer = "Make sure the response is in $format.";
+        $enforcer = "Make sure the response is in $format.\n\n";
+
+        if (strtolower($format) == "html") {
+            $enforcer .= "Don't include head and doctype tag.\n\n";
+        }
+
         if (substr($this->prompt, -strlen($enforcer)) !== $enforcer) {
             $this->prompt .= $enforcer;
         }
@@ -214,29 +219,6 @@ Bold important seo keywords.
                         "paragraph1": "",
                         "paragraph2": "",
                         "paragraph3": ""
-                    }
-                }
-            }
-        },
-        "FAQSection": {
-            "heading": "FAQ",
-            "content": {
-                "subsection1": {
-                    "question": "",
-                    "paragraphs": {
-                        "answer": ""
-                    }
-                },
-                "subsection2": {
-                    "question": "",
-                    "paragraphs": {
-                        "answer": ""
-                    }
-                },
-                "subsection3": {
-                    "question": "",
-                    "paragraphs": {
-                        "answer": ""
                     }
                 }
             }
