@@ -122,8 +122,8 @@ class ArticleGenerationService
             $userPromptBuilder->setLanguage($batch->language)->setArticleTitle($title);
         
             $generatedArticle = AIService::sendPrompt(
-                $systemPromptBuilder->build("JSON"),
-                $userPromptBuilder->build("JSON"),
+                $systemPromptBuilder->build("HTML"),
+                $userPromptBuilder->build("HTML"),
             );
         
             // $markdown = self::convertToMarkdown($generatedArticle);
@@ -314,7 +314,7 @@ class ArticleGenerationService
     public static function convertHTMLToEditorJsBlocks($htmlContent)
     {
         $doc = new DOMDocument();
-        @$doc->loadHTML($htmlContent, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        @$doc->loadHTML('<html>'.$htmlContent.'</html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         
         $blocks = [];
 

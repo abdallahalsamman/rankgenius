@@ -6,6 +6,33 @@ use OpenAI;
 use Illuminate\Support\Facades\Log;
 
 class AIService {
+    
+    static $PROMPT_PRICING = [
+        "gpt-3.5-turbo-16k-0613" => 0.0030,
+        "gpt-3.5-turbo-16k" => 0.0030,
+        "gpt-3.5-turbo-1106" => 0.0010,
+        "gpt-4-1106-preview" => 0.01,
+        "gpt-3.5-turbo-0613" => 0.0015,
+        "gpt-3.5-turbo-0301" => 0.0015,
+        "gpt-3.5-turbo-0125" => 0.0005,
+        "gpt-4" => 0.03,
+        "gpt-4-32k" => 0.06,
+        "gpt-4-0125-preview" => 0.01,
+    ];
+    
+    static $RESPONSE_PRICING = [
+        "gpt-3.5-turbo-16k-0613" => 0.0040,
+        "gpt-3.5-turbo-16k" => 0.0040,
+        "gpt-3.5-turbo-1106" => 0.0020,
+        "gpt-4-1106-preview" => 0.03,
+        "gpt-3.5-turbo-0613" => 0.0020,
+        "gpt-3.5-turbo-0301" => 0.0020,
+        "gpt-3.5-turbo-0125" => 0.0015,
+        "gpt-4" => 0.06,
+        "gpt-4-32k" => 0.12,
+        "gpt-4-0125-preview" => 0.03,
+    ];
+
     public static function sendPrompt($systemMessage, $userMessage, $model = "gpt-3.5-turbo-16k", $maxtokens = 4000, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
     {
         
@@ -56,7 +83,8 @@ class AIService {
             throw new \Exception("Failed to get a response after {$maxAttempts} attempts.");
         }
         Log::info('Received Prompt: ' . $result['choices'][0]['message']['content']);
-        Log::info('Article Cost: (Prompt Tokens: ' . $result['usage']['prompt_tokens'] . ', Completion Tokens: ' . $result['usage']['completion_tokens'] . ') $' . (($result['usage']['prompt_tokens'] / 1000) * 0.001) + (($result['usage']['completion_tokens'] / 1000) * 0.002));
+        Log::info('Article Cost: (Prompt Tokens: ' . $result['usage']['prompt_tokens'] . ', Completion Tokens: ' . $result['usage']['completion_tokens'] . ')' .
+        '$' . (($result['usage']['prompt_tokens'] / 1000) * self::$PROMPT_PRICING[$model]) + (($result['usage']['completion_tokens'] / 1000) * self::$RESPONSE_PRICING[$model]));
 
         if (isset($result['choices'][0]['finish_reason']) && $result['choices'][0]['finish_reason'] == "length") {
             Log::info('Received Stop Reason: ' . $result['choices'][0]['finish_reason']);
@@ -75,7 +103,7 @@ class AIService {
     {
         $client = OpenAI::client(config('services.openai.key'));
 
-        Log::info('SYSTEM PROMPT: ' . $systemMessage . "\n\nUSER MESSAGE: " . $userMessage);
+        // Log::info('SYSTEM PROMPT: ' . $systemMessage . "\n\nUSER MESSAGE: " . $userMessage);
 
         $additionalOptions = [];
         // if ($model == "gpt-3.5-turbo-1106") {

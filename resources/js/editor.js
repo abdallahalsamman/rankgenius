@@ -1,6 +1,7 @@
 import EditorJS from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import List from '@editorjs/list';
+import Table from '@editorjs/table'
 import _ from 'lodash';
 
 var last_article_id = null;
@@ -37,7 +38,8 @@ function initEditor(editorjs_div) {
             list: {
                 class: List,
                 inlineToolbar: true
-            }
+            },
+            table: Table,
         },
         onChange: _.debounce(mySaveFunction, 200)
     });
