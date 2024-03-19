@@ -5,22 +5,23 @@
         <x-tab name="simple-mode-tab" label="Simple mode">
             <x-form wire:submit="simpleMode">
                 <x-instruction-step number-class="py-[4px]" number="1" class="mt-5"
-                    instruction="Tell us your business" />
-                <x-input wire:model="businessUrl" placeholder="Your business URL" suffix="Optional" />
-                <x-textarea wire:model="businessDescription" placeholder="Description of your business" rows="3"
+                    instruction="Provide your Topic" />
+                <x-input wire:model="url" placeholder="Your business URL" suffix="Optional" />
+                <x-textarea wire:model="topic" placeholder="Describe your article topic in 30+ characters" rows="3"
                     class="resize-none text-[16px]" maxlength="1024" />
 
                 <x-instruction-step number-class="py-[4px]" number="2" class="mt-5"
-                    instruction="Generate Articles" />
+                    instruction="Article Language" />
 
-                <div class="grid grid-cols-[1fr_1fr_100px] gap-5">
+                {{-- <div class="grid grid-cols-[1fr_1fr_100px] gap-5"> --}}
+                <div class="grid grid-cols-[1fr_200px] gap-5">
                     @php
-                        $article_counts = [];
-                        foreach ($simple_mode_allowed_article_quantity as $i) {
-                            $article_counts[] = ['id' => $i, 'name' => $i . ' ' . Str::plural('article', $i)];
-                        }
+                        // $article_counts = [];
+                        // foreach ($simple_mode_allowed_article_quantity as $i) {
+                        //     $article_counts[] = ['id' => $i, 'name' => $i . ' ' . Str::plural('article', $i)];
+                        // }
                     @endphp
-                    <x-select class="text-base" :options="$article_counts" wire:model="quantity" />
+                    {{-- <x-select class="text-base" :options="$article_counts" wire:model="quantity" /> --}}
 
                     @php
                         $languages = json_decode(

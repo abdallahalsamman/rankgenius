@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 
 class GenerateArticles extends Component
 {
-    public $businessUrl, $businessDescription = "are german shepherds good pets for apartment owners?";
+    public $url, $topic;
     public $quantity = 1, $language = "English";
     public $preset = 0, $presetOptions = [];
     public $titles = "How to make bread at home?\nBest recipes for making bread\nWhat are the different types of bread";
@@ -28,14 +28,12 @@ class GenerateArticles extends Component
     public function simpleMode()
     {
         $this->validate([
-            'businessDescription' => "required|min:50|max:1024",
+            'url' => "nullable|url",
+            'topic' => "required|min:30|max:1024",
             'quantity' => "required|integer|in:" . join(",", $this->simple_mode_allowed_article_quantity)
         ]);
 
-        $mode = BatchModeEnum::CONTEXT;
-        $details = trim($this->businessUrl . "\n" . $this->businessDescription);
-        $quantity = $this->quantity;
-        return $this->generateArticles($mode, $details, $quantity);
+        return $this->generateArticles(BatchModeEnum::CONTEXT, $this->url, $this->topic, $this->quantity);
     }
 
     public function titleMode()
@@ -81,11 +79,12 @@ class GenerateArticles extends Component
         $this->presetOptions = auth()->user()->presets->toArray();
     }
 
-    public function generateArticles($mode, $details, $quantity)
+    public function generateArticles($mode, $url, $details, $quantity)
     {
         $batch = Batch::create([
             'id' => Str::uuid(),
             'mode' => $mode,
+            'url' => $url,
             'details' => $details,
             'language' => $this->language,
             'quantity' => $quantity,

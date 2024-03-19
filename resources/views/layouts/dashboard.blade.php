@@ -7,7 +7,7 @@
             <div class="flex items-end">
                 <a href="{{ route('dashboard') }}">
                     <div class="flex items-end gap-3">
-                        <img class="w-6"
+                        <img class="w-6" 
                             src="{{ asset('resources/images/logo-b.png') }}" />
                         <!-- <p class="text-[1.25rem] font-bold">{{ env('APP_NAME') }}</p> -->
                         <div>

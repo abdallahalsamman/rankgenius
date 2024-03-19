@@ -1,5 +1,13 @@
 <div>
+    <div class="mt-10 flex justify-between">
     <x-header size="text-xl font-[700]" title="Batch" />
+    <div>
+        <x-button
+            class="btn-sm bg-neutral-900 font-semibold text-white hover:bg-gray-700"
+            icon="o-plus-small" label="Generate More"
+            link="{{ route('dashboard') }}" />
+        </div>
+    </div>
     <div class="grid-row-4 grid">
         <div
             class="flex w-full items-center border-b-[1px] border-base-200 px-6 py-3">
@@ -30,8 +38,7 @@
             <div class="w-1/2 text-sm font-bold text-gray-600">
                 {{ $batch->mode }}</div>
             <div class="w-1/2">
-                <div class="whitespace-pre-line break-words">
-                    {{ $batch->details }}</div>
+                {{ $batch->details }}
             </div>
         </div>
 
@@ -53,17 +60,16 @@
                     {{ $batch->articles->count() }} / {{ $batch->quantity }}
                 </div>
                 <div>
-                    <x-button :disabled="$batch->articles->count() === 0"
+                    {{-- <x-button :disabled="$batch->articles->count() === 0"
                         class="btn-sm bg-neutral-900 font-semibold text-white hover:bg-gray-700"
                         icon="s-eye" label="View"
-                        wire:click="viewBatch('{{ $batch->id }}')" />
+                        wire:click="viewBatch('{{ $batch->id }}')" /> --}}
                     {{-- <x-button :disabled="$batch->articles->count() === 0"
                         class="btn-outline btn-sm ml-1 bg-neutral-900 font-semibold text-white hover:bg-gray-700"
                         icon="phosphor.download-simple-bold" label=".zip" /> --}}
                 </div>
             </div>
         </div>
-
     </div>
 
     <div class="mt-10 flex justify-between">
@@ -75,44 +81,36 @@
                 label="Publish all to Integration"
                 wire:click="publishBatchToIntegration" /> --}}
         </div>
-        <div>
-            <x-button
-                class="btn-sm bg-neutral-900 font-semibold text-white hover:bg-gray-700"
-                icon="o-plus-small" label="Generate More"
-                link="{{ route('dashboard') }}" />
-        </div>
     </div>
-    <x-modal class="popUpMessage" wire:model="batchModal">
-        <div class="relative flex h-full flex-col">
-            <div class="bg-white">
-                <div class="flex items-center gap-5 px-6 py-4"
-                    wire:loading.class="opacity-50">
-                    <x-button :disabled="$selectedArticleIdx === 0"
-                        class="btn-sm bg-white text-neutral-900 hover:border-black hover:bg-neutral-900 hover:text-white"
-                        icon="o-arrow-small-left" label="Previous" spinner
-                        wire:click="previous" />
+    @if ($batch->articles->count() > 0)
+    <div class="relative flex h-full flex-col">
+        <div class="bg-white">
+            <div class="flex items-center gap-5 px-6 py-4"
+                wire:loading.class="opacity-50">
+                <x-button :disabled="$selectedArticleIdx === 0"
+                    class="btn-sm bg-white text-neutral-900 hover:border-black hover:bg-neutral-900 hover:text-white"
+                    icon="o-arrow-small-left" label="Previous" spinner
+                    wire:click="previous" />
 
-                    <div class="w-full">
-                        <x-select :options="$batch->articles->toArray()" class="btn-sm pr-8"
-                            option_label="title"
-                            wire:model.change="selectedArticleId" />
-                    </div>
-
-                    <x-button :disabled="$selectedArticleIdx ==
-                        $batch->articles->count() - 1"
-                        class="btn-sm bg-white text-neutral-900 hover:border-black hover:bg-neutral-900 hover:text-white"
-                        icon-right="o-arrow-small-right" label="Next" spinner
-                        wire:click="next" />
-                    <x-button @click="$wire.batchModal = false"
-                        class="btn-sm border-0 bg-transparent px-[6px]"
-                        icon="bi.x-lg" />
+                <div class="w-full">
+                    <x-select :options="$batch->articles->toArray()" class="btn-sm pr-8"
+                        option_label="title"
+                        wire:model.change="selectedArticleId" />
                 </div>
+
+                <x-button :disabled="$selectedArticleIdx ==
+                    $batch->articles->count() - 1"
+                    class="btn-sm bg-white text-neutral-900 hover:border-black hover:bg-neutral-900 hover:text-white"
+                    icon-right="o-arrow-small-right" label="Next" spinner
+                    wire:click="next" />
+                {{-- <x-button @click="$wire.batchModal = false"
+                    class="btn-sm border-0 bg-transparent px-[6px]"
+                    icon="bi.x-lg" /> --}}
             </div>
-            @if ($selectedArticle)
-                <x-article-view :selectedArticle="$selectedArticle" />
-            @endif
         </div>
-    </x-modal>
+        <livewire:article-view :selectedArticle="$batch->articles[$selectedArticleIdx]" />
+    </div>
+    @endif
 </div>
 
 @vite(['resources/js/editor.js'])

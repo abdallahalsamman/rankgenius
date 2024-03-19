@@ -12,7 +12,7 @@ class Batch extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $fillable = ['id', 'mode', 'details', 'language', 'quantity', 'status', 'user_id'];
+    protected $fillable = ['id', 'mode', 'url', 'details', 'language', 'quantity', 'status', 'user_id'];
 
     /**
      * Define the relationship with the User model.

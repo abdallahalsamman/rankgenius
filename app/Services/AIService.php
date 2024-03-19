@@ -33,7 +33,7 @@ class AIService {
         "gpt-4-0125-preview" => 0.03,
     ];
 
-    public static function sendPrompt($systemMessage, $userMessage, $model = "gpt-3.5-turbo-16k", $maxtokens = 4000, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
+    public static function sendPrompt($systemMessage, $userMessage, $model = "gpt-4-1106-preview", $maxtokens = 4000, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
     {
         
         $client = OpenAI::factory()

@@ -29,7 +29,7 @@ class ArticleGenerationService
     {
         $userPromptBuilder = new PromptBuilder();
 
-        $url = substr($batch->details, 0, strpos($batch->details, "\n"));
+        $url = $batch->url;
         if (filter_var($url, FILTER_VALIDATE_URL)) {
             $websiteHTML = file_get_contents($url);
             $websiteHTML = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $websiteHTML);
@@ -40,67 +40,46 @@ class ArticleGenerationService
             $userPromptBuilder->addWebsiteContent($websiteText);
         }
 
-        $userPromptBuilder->setBusinessDescription($batch->details)->getBusinessSummary()->getArticleSuggestions($batch->quantity)->setLanguage($batch->language);
-
-        $result = AIService::sendPrompt(
-            "",
-            $userPromptBuilder->build("JSON")
-        );
-
-        $titles = $result['titles'];
-        $businessSummary = $result['businessSummary'];
-
-
         $systemPromptBuilder = new PromptBuilder();
         $systemPromptBuilder->addOutline();
 
-        $attempts = 0;
+        $attempts_max = 4;
         $longestShortArticle = ["length" => 0, "content" => ""];
         
-        for ($i = 0; $i < count($titles); $i++) {
-            $title = $titles[$i];
-            $userPromptBuilder->clear();
-            $userPromptBuilder->setBusinessDescription($businessSummary)->setArticleTitle($title)->setLanguage($batch->language);
-        
+        $userPromptBuilder->setArticleTopic($batch->details)->setLanguage($batch->language);
+
+        for ($attempts = 0; $attempts < $attempts_max; $attempts++) {
             $generatedArticle = AIService::sendPrompt(
                 $systemPromptBuilder->build("HTML"),
                 $userPromptBuilder->build("HTML"),
-                $attempts > 2 ? "gpt-4-1106-preview" : "gpt-3.5-turbo-16k"
+                "gpt-4-1106-preview"
             );
         
-            // $markdown = self::convertToMarkdown($generatedArticle);
-            $markdown = $generatedArticle;
+            $articleHTML = $generatedArticle;
         
-            if (strlen($markdown) < intval(env('MIN_ARTICLE_LENGTH'))) {
-                if ($attempts < 4) {
-                    if(strlen($markdown) > $longestShortArticle["length"]) {
-                        $longestShortArticle = ["length" => strlen($markdown), "content" => $markdown];
+            if (strlen($articleHTML) < intval(env('MIN_ARTICLE_LENGTH'))) {
+                if ($attempts < $attempts_max) {
+                    if(strlen($articleHTML) > $longestShortArticle["length"]) {
+                        $longestShortArticle = ["length" => strlen($articleHTML), "content" => $articleHTML];
                     }
                     Log::info("Article too short, retrying");
-                    $i--;
-                    $attempts++;
                     continue;
                 } else {
-                    $markdown = $longestShortArticle["content"];
-                    $attempts = 0;
-                    $longestShortArticle = ["length" => 0, "content" => ""];
+                    $articleHTML = $longestShortArticle["content"];
                 }
-            } else {
-                $attempts = 0;
-                $longestShortArticle = ["length" => 0, "content" => ""];
             }
-
-            $article = new Article();
-            $article->id = Str::uuid();
-            $article->title = $title;
-            $htmlString = Str::replaceFirst('```html', '', $markdown);
-            $htmlString = Str::replaceLast('```', '', $htmlString);
-            $article->content = self::convertHTMLToEditorJsBlocks($htmlString);
-            $article->image_url = "https://source.unsplash.com/random/800x600";
-            $article->batch_id = $batch->id;
-            $article->user_id = $batch->user_id;
-            $article->save();
         }
+
+        $article = new Article();
+        $article->id = Str::uuid();
+        $htmlString = Str::replaceFirst('```html', '', $articleHTML);
+        $htmlString = Str::replaceLast('```', '', $htmlString);
+        $article->content = self::convertHTMLToEditorJsBlocks($htmlString);
+        $article->title = json_decode($article->content)->blocks[0]->data->text;
+        $article->image_url = "https://source.unsplash.com/random/800x600";
+        $article->batch_id = $batch->id;
+        $article->user_id = $batch->user_id;
+        $article->save();
     }
 
     public static function titleMode($batch)

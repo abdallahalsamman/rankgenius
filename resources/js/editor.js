@@ -3,6 +3,8 @@ import Header from '@editorjs/header';
 import List from '@editorjs/list';
 import Table from '@editorjs/table'
 import _ from 'lodash';
+import Undo from 'editorjs-undo';
+import Assistant from './Assistant';
 
 var last_article_id = null;
 let debouncedCheckEditorjs = _.debounce(checkEditorjs, 200);
@@ -12,7 +14,7 @@ Livewire.hook('morph.removed', debouncedCheckEditorjs);
 setTimeout(() => checkEditorjs(), 500); // for initial page load
 
 function checkEditorjs() {
-    const editorjs_div =  document.getElementById('editorjs');
+    const editorjs_div = document.getElementById('editorjs');
     if (!editorjs_div) {
         return;
     }
@@ -27,9 +29,10 @@ function checkEditorjs() {
 }
 
 function initEditor(editorjs_div) {
+    const initialData = JSON.parse(editorjs_div.dataset.editorjsData);
     const editor = new EditorJS({
         holder: 'editorjs',
-        data: JSON.parse(editorjs_div.dataset.editorjsData),
+        data: initialData,
         tools: {
             header: {
                 class: Header,
@@ -40,23 +43,44 @@ function initEditor(editorjs_div) {
                 inlineToolbar: true
             },
             table: Table,
-        },
-        onChange: _.debounce(mySaveFunction, 200)
-    });
-
-    function mySaveFunction() {
-        editor.save().then((outputData) => {
-            fetch(editorjs_div.dataset.postUrl, {
-                method: 'POST',
-                credentials: "same-origin",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json",
-                    "X-Requested-With": "XMLHttpRequest",
-                    "X-CSRF-Token": document.querySelector('input[name="_token"]').value
+            assistant: {
+                class: Assistant,
+                config: {
+                    assistantUrl: editorjs_div.dataset.assistantUrl,
+                    csrfToken: document.querySelector('input[name="_token"]').value
                 },
-                body: JSON.stringify({data: outputData})
-            })
+                shortcut: 'CTRL+M'
+            }
+        },
+        onReady: () => {
+            const undo = new Undo({
+                editor,
+                config: {
+                    shortcuts: {
+                        undo: 'CTRL+Z',
+                        redo: 'CTRL+SHIFT+Z'
+                    }
+                }
+            });
+            undo.initialize(initialData);
+        },
+        onChange: _.debounce(() => mySaveFunction(editor, editorjs_div), 200)
+    });
+}
+
+function mySaveFunction(editor, editorjs_div) {
+    editor.save().then((outputData) => {
+        fetch(editorjs_div.dataset.postUrl, {
+            method: 'POST',
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+                "X-Requested-With": "XMLHttpRequest",
+                "X-CSRF-Token": document.querySelector('input[name="_token"]').value
+            },
+            body: JSON.stringify({ data: outputData })
+        })
             .then(response => response.json())
             .then(data => {
                 console.log('Success:', data);
@@ -64,6 +88,5 @@ function initEditor(editorjs_div) {
             .catch((error) => {
                 console.error('Error:', error);
             });
-        });
-    }
+    });
 }

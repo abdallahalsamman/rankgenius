@@ -14,7 +14,7 @@
             ACTIONS</div>
     </div>
     @foreach ($articles as $article)
-        <div class="grid grid-cols-[_1fr_6fr_1fr] gap-3 px-3 py-2 items-center hover:bg-base-200/50">
+        <div :key="$article->id" class="grid grid-cols-[_1fr_6fr_1fr] gap-3 px-3 py-2 items-center hover:bg-base-200/50">
             <div>{{ date('d/m', strtotime($article->created_at)) }}</div>
             <div>{{ Str::limit($article->title, 80, ' ...') }}</div>
             <div class="flex justify-end gap-3">
@@ -39,7 +39,7 @@
                     </div>
                 </div>
                 @if ($selectedArticle)
-                    <x-article-view :$selectedArticle />
+                    <livewire:article-view :$selectedArticle />
                 @endif
             </div>
         </x-modal>

@@ -50,10 +50,14 @@ PROMPT;
         return $this;
     }
 
-    public function setBusinessDescription($businessDescription)
+    public function setArticleTopic($articleTopic)
     {
-        $this->prompt .= "Here is a description of my business: ";
-        $this->prompt .= $businessDescription;
+        $this->prompt .= "I want to write an article about this topic: ";
+        $this->prompt .= $articleTopic;
+        $this->prompt .= "\n\n";
+        $this->prompt .= "Please write an article that is relevant to the topic, and include my business only at the end of the article.";
+        $this->prompt .= "\n\n";
+        $this->prompt .= "Please write an engaging title relevant to the topic.";
         $this->prompt .= "\n\n";
         return $this;
     }
@@ -118,6 +122,10 @@ PROMPT;
 You are an expert content writer that specialises in SEO.
 
 Generate articles that use this outline.
+
+make sure to stay relevant to the topic, make sure the articles are informative and engaging.
+
+don't make the article about the company, make it about the topic.
 
 Bold important seo keywords.
 
@@ -231,38 +239,42 @@ OUTLINE;
     }
     // #endregion
 
-    public function setArticleKeywords($businessDescription)
+    public function setArticleKeywords($articleTopic)
     {
-        $this->prompt = $businessDescription;
+        $this->prompt = $articleTopic;
     }
 
-    // public function setBusinessDescription($businessDescription)
-    // {
-    //     $this->businessDescription = $businessDescription;
-    // }
+    public function introduceWriter() {
+        $this->prompt .= <<<PROMPT
+I am a content writer that specialises in SEO.
 
-    // public function setBusinessDescription($businessDescription)
-    // {
-    //     $this->businessDescription = $businessDescription;
-    // }
+I need help with writing articles that are relevant to my business.
 
-    // public function setBusinessDescription($businessDescription)
-    // {
-    //     $this->businessDescription = $businessDescription;
-    // }
+I will send you and article in HTML, the selected text and a prompt, and I want you to send me back 5 to 10 suggestions that I can replace with the selected text.
 
-    // public function setBusinessDescription($businessDescription)
-    // {
-    //     $this->businessDescription = $businessDescription;
-    // }
+return the suggestions in a json response with a field "suggestions".
+PROMPT;
+        $this->prompt .= "\n\n";
+        return $this;
+    }
 
-    // public function setBusinessDescription($businessDescription)
-    // {
-    //     $this->businessDescription = $businessDescription;
-    // }
+    public function promptArticleAssistance($articleHTML, $selectedText, $prompt)
+    {
+        $this->prompt .= <<<PROMPT
+This is my article in HTML
 
-    // public function setBusinessDescription($businessDescription)
-    // {
-    //     $this->businessDescription = $businessDescription;
-    // }
+$articleHTML
+
+I want to replace this text:
+$selectedText
+
+With something that is relevant to my business.
+
+Here is the prompt I want you to use:
+$prompt
+PROMPT;
+        $this->prompt .= "\n\n";
+        return $this;
+    }
+
 }

@@ -24,6 +24,7 @@
         "@geoffcodesthings/tailwind-md-base": "^1.1.0",
         "@tailwindcss/typography": "^0.5.10",
         "dotenv": "^16.4.1",
+        "editorjs-undo": "^2.0.26",
         "lodash": "^4.17.21"
     }
 }
