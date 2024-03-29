@@ -93,7 +93,7 @@
                     wire:click="previous" />
 
                 <div class="w-full">
-                    <x-select :options="$batch->articles->toArray()" class="pr-8 btn-sm"
+                    <x-select :options="$batch->articles->toArray()" class="pr-8 btn-sm leading-[100%]"
                         option_label="title"
                         wire:model.change="selectedArticleId" />
                 </div>
