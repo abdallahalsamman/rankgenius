@@ -45,7 +45,7 @@ class GenerateArticles extends Component
         $mode = BatchModeEnum::TITLE;
         $details = $this->titles;
         $quantity = substr_count($this->titles, "\n") + 1;
-        return $this->generateArticles($mode, $details, $quantity);
+        return $this->generateArticles($mode, null, $details, $quantity);
     }
 
     public function keywordMode()
@@ -57,7 +57,7 @@ class GenerateArticles extends Component
         $mode = BatchModeEnum::KEYWORD;
         $details = $this->keywords;
         $quantity = substr_count($this->titles, "\n") + 1;
-        return $this->generateArticles($mode, $details, $quantity);
+        return $this->generateArticles($mode, null, $details, $quantity);
     }
 
     public function presetMode()
@@ -71,7 +71,7 @@ class GenerateArticles extends Component
         $details = $preset->details;
         $mode = $preset->mode;
         $quantity = $this->quantity;
-        return $this->generateArticles($mode, $details, $quantity);
+        return $this->generateArticles($mode, null, $details, $quantity);
     }
 
     public function mount()

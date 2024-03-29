@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('mode');
             $table->string('language');
             $table->integer('quantity');
-            $table->string('url');
+            $table->string('url')->nullable();
             $table->string('details');
             $table->string('status');
             $table->timestamps();

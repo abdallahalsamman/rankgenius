@@ -57,8 +57,8 @@ function initEditor(editorjs_div) {
                 editor,
                 config: {
                     shortcuts: {
-                        undo: 'CTRL+Z',
-                        redo: 'CTRL+SHIFT+Z'
+                        undo: 'CMD+Z',
+                        redo: 'CMD+SHIFT+Z'
                     }
                 }
             });
