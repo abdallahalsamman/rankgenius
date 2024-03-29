@@ -129,10 +129,10 @@ class ArticleGenerationService
 
             $article = new Article();
             $article->id = Str::uuid();
-            $article->title = $title;
             $htmlString = Str::replaceFirst('```html', '', $markdown);
             $htmlString = Str::replaceLast('```', '', $htmlString);
             $article->content = self::convertHTMLToEditorJsBlocks($htmlString);
+            $article->title = json_decode($article->content)->blocks[0]->data->text;
             $article->image_url = "https://source.unsplash.com/random/800x600";
             $article->batch_id = $batch->id;
             $article->user_id = $batch->user_id;
