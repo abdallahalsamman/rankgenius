@@ -52,3 +52,6 @@ yarn build
 
 sudo chown -R ubuntu:www-data .
 
+ sudo chmod -R o+w storage/
+
+ sudo chmod -R 775 storage/

@@ -16,11 +16,13 @@ class HistoryView extends Component
     public function next()
     {
         $this->selectedArticleIdx = $this->selectedArticleIdx + 1;
+        $this->selectedArticleId = $this->batch->articles[$this->selectedArticleIdx]->id;
     }
 
     public function previous()
     {
         $this->selectedArticleIdx = $this->selectedArticleIdx - 1;
+        $this->selectedArticleId = $this->batch->articles[$this->selectedArticleIdx]->id;
     }
 
     public function updatedSelectedArticleId($id)
