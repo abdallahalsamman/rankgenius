@@ -78,7 +78,7 @@
                         Bots
                     </div>
                 </div>
-            </a>
+            </a> --}}
 
             <a href="{{ route('integrations') }}">
                 <div
@@ -90,6 +90,7 @@
                 </div>
             </a>
 
+            {{--
             <a href="{{ route('publications') }}">
                 <div
                     class="{{ request()->routeIs('publications') ? 'border-b-[1px] border-neutral-900' : '' }}">
