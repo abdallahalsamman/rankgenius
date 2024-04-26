@@ -1,6 +1,5 @@
 <?php
 
-use App\Livewire\Home;
 use App\Livewire\History;
 use App\Livewire\Presets;
 use App\Livewire\Pricing;
@@ -28,13 +27,14 @@ use App\Http\Controllers\Auth\PasswordlessAuthenticationController;
 |
 */
 
-Route::domain(env('APP_DOMAIN'))->group(function () {
-    Route::get('/', Home::class)->name('home');
-    Route::view('/terms', 'legal.terms')->name('terms');
-    Route::view('/privacy', 'legal.privacy')->name('privacy');
-});
+// Route::domain(env('APP_DOMAIN'))->group(function () {
+//     Route::get('/', Home::class)->name('home');
+//     Route::view('/terms', 'legal.terms')->name('terms');
+//     Route::view('/privacy', 'legal.privacy')->name('privacy');
+// });
 
-Route::domain('app.' . env('APP_DOMAIN'))->group(function () {
+// Route::domain('app.' . env('APP_DOMAIN'))->group(function () {
+Route::domain(env('APP_DOMAIN'))->group(function () {
     Route::get('/', function () {
         return redirect()->route('dashboard');
     });

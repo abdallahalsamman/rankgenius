@@ -122,7 +122,7 @@
                         </div>
 
                         <div>
-                            <div class="mb-2 mr-3 pt-5 font-medium">Categories {{ gettype($wordpressIntegration['categories']) }}
+                            <div class="mb-2 mr-3 pt-5 font-medium">Categories
                             </div>
                             <x-choices :options="$categoriesOptions" {{-- search-function="searchMulti" searchable --}}
                                 hint="Please select from your Categories"

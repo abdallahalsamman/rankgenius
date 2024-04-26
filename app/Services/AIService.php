@@ -46,7 +46,7 @@ class AIService {
 
         $additionalOptions = [];
         // if ($model == "gpt-3.5-turbo-1106" || $model == "gpt-4-1106-preview") {
-        //     $additionalOptions = ['response_format' => ["type" => "json_object"]];
+        //     $additionalOptions = ['response_format' => ["type" => "json_obubject"]];
         // }
 
         $attempt = 0;

@@ -9,6 +9,7 @@ use App\Models\Integration;
 use Illuminate\Support\Str;
 use App\Models\IntegrationType;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Models\WordpressIntegration;
 use Illuminate\Support\Facades\Route;
 use MadeITBelgium\WordPress\WordPress;
@@ -26,9 +27,9 @@ class IntegrationView extends Component
     ];
 
     public $wordpressIntegration = [
-        "url" => "https://luggagenboxes.com",
-        "username" => "abbood",
-        "app_password" => "cXCw10FGY87fX0Uh9e9JjNZ8",
+        "url" => "https://www.aiobot.com/",
+        "username" => "sammanabdallah",
+        "app_password" => "",
         "status" => "publish",
         "categories" => [],
         "tags" => [],
@@ -60,7 +61,6 @@ class IntegrationView extends Component
         if (!empty($website) && !empty($username) && !empty($app_password)) {
             try {
                 $wp = (new WordPress($website))->setUsername($username)->setApplicationPassword($app_password);
-
                 // Auth Test
                 $tag = $wp->postCall('/wp-json/wp/v2/tags', ['name' => env('APP_NAME') . '_test']);
                 $wp->deleteCall('/wp-json/wp/v2/tags/' . $tag->id . '?force=true');
@@ -81,27 +81,29 @@ class IntegrationView extends Component
                 // While on /update returns "livewire.update"
                 // we only want to set the author to default to the first author in authorsOptions
             } catch (Exception $e) {
+                Log::error($e);
+
                 $errorMap = [
                     [
                         'match' => 'Could not resolve host: ',
-                        'error' => $website . ' is not responding.',
+                        'text' => $website . ' is not responding.',
                     ],
                     [
                         'match' => 'Unauthorized',
-                        'error' => 'Invalid Username or Application Password.',
+                        'text' => 'Invalid Username or Application Password.',
                     ],
                 ];
 
-                $error = $e->getMessage();
+                $error_text = $e->getMessage();
                 foreach ($errorMap as $error) {
                     if (Str::contains($e->getMessage(), $error['match'])) {
-                        $error = $error['error'];
+                        $error_text = $error['text'];
                         break;
                     }
                 }
 
                 toast()
-                    ->danger(strip_tags($error))
+                    ->danger(strip_tags($error_text))
                     ->duration(3000)->push();
             }
         }
