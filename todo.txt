@@ -1,0 +1,12 @@
+internal linking
+external linking
+credit system
+retry failed jobs shortcut
+shopify publishing
+wordpress publishing
+published articles screen
+insert image into editor
+agree on number of retries to get a good amount of words
+make wordpress username/tags/categories in intergrationview searchable
+add test button to test posting a draft post in integrationview
+test publishing an article to a non admin
