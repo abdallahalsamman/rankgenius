@@ -21,6 +21,7 @@ class IntegrationView extends Component
 
     public $action, $integrationId, $wordpressIntegrationId;
     public $categoriesOptions = [], $tagsOptions = [], $statusesOptions = [], $authorsOptions = [];
+    private $savedAuthorOption = [], $savedCategoriesOption = [], $savedTagsOption = [];
 
     public $integration = [
         'name' => "",
@@ -29,8 +30,8 @@ class IntegrationView extends Component
     public $wordpressIntegration = [
         "url" => "https://www.aiobot.com/",
         "username" => "sammanabdallah",
-        "app_password" => "",
-        "status" => "publish",
+        "app_password" => "UaoK qroT uPIC 7y4F I8GU PcGk",
+        "status" => "draft",
         "categories" => [],
         "tags" => [],
         "author" => 1,
@@ -45,6 +46,29 @@ class IntegrationView extends Component
         // "author" => 1,
         // "time_gap" => 0,
     ];
+
+    private function getWordPressSavedInfo()
+    {
+        $savedAuthor = $this->wordpressIntegration['author'];
+        $savedCategories = $this->wordpressIntegration['categories'];
+        $savedTags = $this->wordpressIntegration['tags'];
+
+        $wp = (new WordPress($this->wordpressIntegration['url']))
+            ->setUsername($this->wordpressIntegration['username'])
+            ->setApplicationPassword($this->wordpressIntegration['app_password']);
+
+        $this->savedAuthorOption = $this->makeOptions($wp
+                ->getCall('/wp-json/wp/v2/users?include=' . $savedAuthor)
+        );
+
+        $this->savedCategoriesOption = $this->makeOptions($wp
+                ->getCall('/wp-json/wp/v2/categories?include=' . implode(',', $savedCategories))
+        );
+
+        $this->savedTagsOption = $this->makeOptions($wp
+                ->getCall('/wp-json/wp/v2/tags?include=' . implode(',', $savedTags))
+        );
+    }
 
     public function updateWordPressInfo()
     {
@@ -72,10 +96,20 @@ class IntegrationView extends Component
 
                 toast()->success('Logged in successfully')->push();
 
+                if ($this->action == 'edit') {
+                    $this->getWordPressSavedInfo();
+                }
+
                 $this->authorsOptions = $this->makeOptions($authors);
                 $this->tagsOptions = $this->makeOptions($tags);
                 $this->statusesOptions = $this->makeOptions($statuses);
                 $this->categoriesOptions = $this->makeOptions($categories);
+
+                if ($this->action == 'edit') {
+                    $this->authorsOptions = array_merge($this->authorsOptions, $this->savedAuthorOption);
+                    $this->tagsOptions = array_merge($this->tagsOptions, $this->savedTagsOption);
+                    $this->categoriesOptions = array_merge($this->categoriesOptions, $this->savedCategoriesOption);
+                }
 
                 // Route::currentRouteName() on mount returns route name "integration.create"
                 // While on /update returns "livewire.update"
@@ -109,10 +143,14 @@ class IntegrationView extends Component
         }
     }
 
-    public function updated($key)
+    public function updated($key, $value)
     {
         if (in_array($key, ['wordpressIntegration.url', 'wordpressIntegration.username', 'wordpressIntegration.app_password'])) {
             $this->updateWordPressInfo();
+        }
+
+        if ($key == 'wordpressIntegration.author') {
+            $this->savedAuthorOption = $this->authorsOptions->where('id', $value)->toArray();
         }
     }
 
@@ -137,6 +175,8 @@ class IntegrationView extends Component
                 ->setApplicationPassword($this->wordpressIntegration['app_password'])
                 ->getCall('/wp-json/wp/v2/users?search=' . $search)
         );
+
+        $this->authorsOptions = array_merge($this->authorsOptions, $this->savedAuthorOption);
     }
 
     public function searchTags($search)
@@ -147,6 +187,8 @@ class IntegrationView extends Component
                 ->setApplicationPassword($this->wordpressIntegration['app_password'])
                 ->getCall('/wp-json/wp/v2/tags?search=' . $search)
         );
+
+        $this->tagsOptions = array_merge($this->tagsOptions, $this->savedTagsOption);
     }
 
     public function searchCategories($search)
@@ -157,6 +199,8 @@ class IntegrationView extends Component
                 ->setApplicationPassword($this->wordpressIntegration['app_password'])
                 ->getCall('/wp-json/wp/v2/categories?search=' . $search)
         );
+
+        $this->categoriesOptions = array_merge($this->categoriesOptions, $this->savedCategoriesOption);
     }
 
     public function mount()
