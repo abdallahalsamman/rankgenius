@@ -129,6 +129,36 @@ class IntegrationView extends Component
         return $options;
     }
 
+    public function searchUsers($search)
+    {
+        $this->authorsOptions = $this->makeOptions(
+            (new WordPress($this->wordpressIntegration['url']))
+                ->setUsername($this->wordpressIntegration['username'])
+                ->setApplicationPassword($this->wordpressIntegration['app_password'])
+                ->getCall('/wp-json/wp/v2/users?search=' . $search)
+        );
+    }
+
+    public function searchTags($search)
+    {
+        $this->tagsOptions = $this->makeOptions(
+            (new WordPress($this->wordpressIntegration['url']))
+                ->setUsername($this->wordpressIntegration['username'])
+                ->setApplicationPassword($this->wordpressIntegration['app_password'])
+                ->getCall('/wp-json/wp/v2/tags?search=' . $search)
+        );
+    }
+
+    public function searchCategories($search)
+    {
+        $this->categoriesOptions = $this->makeOptions(
+            (new WordPress($this->wordpressIntegration['url']))
+                ->setUsername($this->wordpressIntegration['username'])
+                ->setApplicationPassword($this->wordpressIntegration['app_password'])
+                ->getCall('/wp-json/wp/v2/categories?search=' . $search)
+        );
+    }
+
     public function mount()
     {
         // DB::enableQueryLog();
