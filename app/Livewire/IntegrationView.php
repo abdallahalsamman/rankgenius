@@ -322,8 +322,20 @@ class IntegrationView extends Component
     public function saveWordPress()
     {
         $this->validateWordpress();
+        $details = $this->prepareWordPressDetails();
 
-        $details = [
+        if ($this->action == 'create') {
+            $this->createWordPressIntegration($details);
+        } else if ($this->action == 'edit') {
+            $this->updateWordPressIntegration($details);
+        }
+
+        return redirect()->route('integrations');
+    }
+
+    private function prepareWordPressDetails()
+    {
+        return [
             'url' => $this->wordpressIntegration['url'],
             'username' => $this->wordpressIntegration['username'],
             'app_password' => $this->wordpressIntegration['app_password'],
@@ -333,61 +345,77 @@ class IntegrationView extends Component
             'author' => (int) $this->wordpressIntegration['author'],
             'time_gap' => $this->wordpressIntegration['time_gap'],
         ];
+    }
 
-        if ($this->action == 'create') {
-            DB::transaction(function () use ($details) {
-                $integration = Integration::create([
-                    "id" => Str::uuid(),
-                    "name" => $this->integration['name'],
-                    "integration_type_id" => IntegrationType::firstWhere('name', IntegrationTypeEnum::WORDPRESS->value)->id,
-                    "user_id" => auth()->user()->id,
-                ]);
-                WordpressIntegration::create(array_merge([
-                    "integration_id" => $integration->id,
-                ], $details));
-            });
-        } else if ($this->action == 'edit') {
-            DB::transaction(function () use ($details) {
-                Integration::updateOrCreate(['id' => $this->integrationId], ["name" => $this->integration['name']]);
-                WordpressIntegration::updateOrCreate(['id' => $this->wordpressIntegrationId], $details);
-            });
-        }
+    private function createWordPressIntegration($details)
+    {
+        DB::transaction(function () use ($details) {
+            $integration = Integration::create([
+                "id" => Str::uuid(),
+                "name" => $this->integration['name'],
+                "integration_type_id" => IntegrationType::firstWhere('name', IntegrationTypeEnum::WORDPRESS->value)->id,
+                "user_id" => auth()->user()->id,
+            ]);
+            WordpressIntegration::create(array_merge([
+                "integration_id" => $integration->id,
+            ], $details));
+        });
+    }
 
-        return redirect()->route('integrations');
+    private function updateWordPressIntegration($details)
+    {
+        DB::transaction(function () use ($details) {
+            Integration::updateOrCreate(['id' => $this->integrationId], ["name" => $this->integration['name']]);
+            WordpressIntegration::updateOrCreate(['id' => $this->wordpressIntegrationId], $details);
+        });
     }
 
     public function saveShopify()
     {
         $this->validateShopify();
+        $details = $this->prepareShopifyDetails();
 
-        $details = [
+        if ($this->action == 'create') {
+            $this->createShopifyIntegration($details);
+        } else if ($this->action == 'edit') {
+            $this->updateShopifyIntegration($details);
+        }
+
+        return redirect()->route('integrations');
+    }
+
+    private function prepareShopifyDetails()
+    {
+        return [
             'shop_name' => $this->shopifyIntegration['shop_name'],
             'access_token' => $this->shopifyIntegration['access_token'],
             'blog' => (int) $this->shopifyIntegration['blog'],
             'author' => $this->shopifyIntegration['author'],
         ];
+    }
 
-        if ($this->action == 'create') {
-            DB::transaction(function () use ($details) {
-                $integration = Integration::create([
-                    "id" => Str::uuid(),
-                    "name" => $this->integration['name'],
-                    "integration_type_id" => IntegrationType::firstWhere('name', IntegrationTypeEnum::SHOPIFY->value)->id,
-                    "user_id" => auth()->user()->id,
-                ]);
+    private function createShopifyIntegration($details)
+    {
+        DB::transaction(function () use ($details) {
+            $integration = Integration::create([
+                "id" => Str::uuid(),
+                "name" => $this->integration['name'],
+                "integration_type_id" => IntegrationType::firstWhere('name', IntegrationTypeEnum::SHOPIFY->value)->id,
+                "user_id" => auth()->user()->id,
+            ]);
 
-                ShopifyIntegration::create(array_merge([
-                    "integration_id" => $integration->id->toString(),
-                ], $details));
-            });
-        } else if ($this->action == 'edit') {
-            DB::transaction(function () use ($details) {
-                Integration::updateOrCreate(['id' => $this->integrationId], ["name" => $this->integration['name']]);
-                ShopifyIntegration::updateOrCreate(['id' => $this->shopifyIntegrationId], $details);
-            });
-        }
+            ShopifyIntegration::create(array_merge([
+                "integration_id" => $integration->id->toString(),
+            ], $details));
+        });
+    }
 
-        return redirect()->route('integrations');
+    private function updateShopifyIntegration($details)
+    {
+        DB::transaction(function () use ($details) {
+            Integration::updateOrCreate(['id' => $this->integrationId], ["name" => $this->integration['name']]);
+            ShopifyIntegration::updateOrCreate(['id' => $this->shopifyIntegrationId], $details);
+        });
     }
 
 
@@ -413,6 +441,7 @@ class IntegrationView extends Component
 
             switch ($integration->integrationType->name) {
                 case IntegrationTypeEnum::WORDPRESS->value:
+                    $this->selectedTab = IntegrationTypeEnum::WORDPRESS->value;
                     $wordpressIntegration = $integration->wordpressIntegration()->first();
                     $this->wordpressIntegrationId = $wordpressIntegration->id;
                     $this->wordpressIntegration = [
@@ -428,6 +457,7 @@ class IntegrationView extends Component
                     $this->updateWordPressInfo();
                     break;
                 case IntegrationTypeEnum::SHOPIFY->value:
+                    $this->selectedTab = IntegrationTypeEnum::SHOPIFY->value;
                     $shopifyIntegration = $integration->shopifyIntegration()->first();
                     $this->shopifyIntegrationId = $shopifyIntegration->id;
                     $this->shopifyIntegration = [

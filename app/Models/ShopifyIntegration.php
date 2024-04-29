@@ -12,7 +12,7 @@ class ShopifyIntegration extends Model
 
 protected $dates = ['deleted_at'];
 
-    protected $fillable = ['shop_name', 'access_token', 'blog', 'author'];
+    protected $fillable = ['integration_id', 'shop_name', 'access_token', 'blog', 'author'];
 
     public function integration()
     {
