@@ -34,7 +34,8 @@ class HistoryView extends Component
 
     public function publishBatchToIntegration()
     {
-        dd($this->integration_id);
+        $integration = Integration::where('id', $this->integration_id)->first();
+        $integration->publishBatch($this->batch);
     }
 
     public function mount()

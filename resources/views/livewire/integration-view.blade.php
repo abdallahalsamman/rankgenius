@@ -1,7 +1,5 @@
 <div>
-    <x-header class="" size="text-xl font-[700]"
-        subtitle="Create a new AutoBlog to automatically generate & publish articles to your website."
-        title="AutoBlogs / {{ $action == 'create' ? 'Create' : $integration['name'] }}" />
+    <x-header class="" size="text-xl font-[700]" subtitle="Create a new AutoBlog to automatically generate & publish articles to your website." title="AutoBlogs / {{ $action == 'create' ? 'Create' : $integration['name'] }}" />
 
     <div class="mb-10 flex items-center justify-between rounded-md bg-[#c8eafe] px-4 py-3">
         <div class="flex items-center justify-center">
@@ -9,50 +7,37 @@
             <div>You must upgrade to <strong>AutoBlog</strong> to use
                 Integrations.</div>
         </div>
-        <x-button class="bg-neutral-900 font-semibold  hover:bg-gray-700 btn-sm text-white"
-            icon-right="o-arrow-small-right" link="{{ route('pricing') }}" label="Subscription" />
+        <x-button class="bg-neutral-900 font-semibold  hover:bg-gray-700 btn-sm text-white" icon-right="o-arrow-small-right" link="{{ route('pricing') }}" label="Subscription" />
     </div>
 
-    <x-tabs selected="wordPress">
+    <x-tabs :selected="$selectedTab">
         {{-- Wordpress part --}}
-        <x-tab icon="bi.wordpress" label="WordPress" name="wordPress">
+        <x-tab icon="bi.wordpress" label="WordPress" name="wordpress">
             <div>
                 <x-form wire:submit="saveWordPress">
                     <div>
                         <div class="mb-2 mr-3 mt-5 font-medium">Integration Name
                         </div>
-                        <x-input class="mb-2" maxlength="255" placeholder="My Wordpress Website" type="text"
-                            wire:model="integration.name" />
+                        <x-input class="mb-2" maxlength="255" placeholder="My Wordpress Website" type="text" wire:model="integration.name" />
                     </div>
                     <div>
                         <div class="mb-2 mr-3 mt-5 font-medium">Wordpress URL
                         </div>
-                        <x-input class="mb-2" hint="The URL where your Wordpress is installed." maxlength="255"
-                            placeholder="https://mywebsite.com" :disabled="$action == 'edit'" type="text"
-                            wire:model.live.debounce.1000ms="wordpressIntegration.url" />
+                        <x-input class="mb-2" hint="The URL where your Wordpress is installed." maxlength="255" placeholder="https://mywebsite.com" :disabled="$action == 'edit'" type="text" wire:model.live.debounce.1000ms="wordpressIntegration.url" />
                     </div>
                     <div>
                         <div class="mb-2 mr-3 mt-5 font-medium">Username
                         </div>
-                        <x-input class="mb-2"
-                            hint="The username/email you use to login to your Wordpress. (Should be admin)"
-                            maxlength="255" placeholder="admin@email.com" type="text" :disabled="$action == 'edit'"
-                            wire:model.live.debounce.1000ms="wordpressIntegration.username" />
+                        <x-input class="mb-2" hint="The username/email you use to login to your Wordpress. (Should be admin)" maxlength="255" placeholder="admin@email.com" type="text" :disabled="$action == 'edit'" wire:model.live.debounce.1000ms="wordpressIntegration.username" />
                     </div>
                     <div>
                         <div class="mb-2 mt-5 flex items-end justify-between">
                             <div class="mr-3 font-medium">Application
                                 Password
                             </div>
-                            <x-button
-                                class="border-black hover:bg-neutral-900 hover:text-white bg-white text-neutral-900 btn-xs"
-                                icon-right="phosphor.youtube-logo-fill" label="Watch Tutorial"
-                                link="{{ route('preset.create') }}" />
+                            <x-button class="border-black hover:bg-neutral-900 hover:text-white bg-white text-neutral-900 btn-xs" icon-right="phosphor.youtube-logo-fill" label="Watch Tutorial" link="{{ route('preset.create') }}" />
                         </div>
-                        <x-input class="mb-2"
-                            hint="This is not your normal password. This is a special Wordpress password for integrations. Watch the tutorial to learn more."
-                            maxlength="255" placeholder="Pnaz HXK8 ZYZW oc8l 5J1l 6WxR" :disabled="$action == 'edit'"
-                            type="text" wire:model.live.debounce.1000ms="wordpressIntegration.app_password" />
+                        <x-input class="mb-2" hint="This is not your normal password. This is a special Wordpress password for integrations. Watch the tutorial to learn more." maxlength="255" placeholder="Pnaz HXK8 ZYZW oc8l 5J1l 6WxR" :disabled="$action == 'edit'" type="text" wire:model.live.debounce.1000ms="wordpressIntegration.app_password" />
                     </div>
 
                     <div class="w-full py-2 text-center" wire:loading>
@@ -63,23 +48,12 @@
                     <div>
                         <div class="mb-2 mr-3 pt-5 font-medium">Author
                         </div>
-                        <x-choices
-                        :options="$authorsOptions"
-                        single
-                        searchable
-                        search-function="searchUsers"
-                        class="text-base"
-                        hint="Only admins are allowed to be authors."
-                        wire:model="wordpressIntegration.author"
-                        debounce="300ms"
-                        min-chars="2"
-                        />
+                        <x-choices :options="$authorsOptions" single searchable search-function="searchUsers" class="text-base" hint="Only admins are allowed to be authors." wire:model="wordpressIntegration.author" debounce="300ms" min-chars="2" />
                     </div>
                     <div>
                         <div class="mb-2 mr-3 pt-5 font-medium">Status
                         </div>
-                        <x-select :options="$statusesOptions" class="text-base"
-                            wire:model="wordpressIntegration.status" />
+                        <x-select :options="$statusesOptions" class="text-base" wire:model="wordpressIntegration.status" />
                     </div>
                     <div>
                         <div class="mb-2 mr-3 pt-5 font-medium">Time gap
@@ -114,101 +88,74 @@
                         ],
                         ];
                         @endphp
-                        <x-select :options="$timeGapOptions" class="text-base"
-                            wire:model="wordpressIntegration.time_gap" />
+                        <x-select :options="$timeGapOptions" class="text-base" wire:model="wordpressIntegration.time_gap" />
                     </div>
 
                     <div>
                         <div class="mb-2 mr-3 pt-5 font-medium">Categories
                         </div>
-                        <x-choices :options="$categoriesOptions" {{-- search-function="searchMulti" searchable --}}
-                            hint="Please select from your Categories"
-                            no-result-text="Ops! Nothing here ..."
-                            wire:model="wordpressIntegration.categories"
-                            debounce="300ms"
-                            min-chars="2"
-                            multiple
-                            searchable
-                            search-function="searchCategories" />
+                        <x-choices :options="$categoriesOptions" {{-- search-function="searchMulti" searchable --}} hint="Please select from your Categories" no-result-text="Ops! Nothing here ..." wire:model="wordpressIntegration.categories" debounce="300ms" min-chars="2" multiple searchable search-function="searchCategories" />
                     </div>
 
                     <div>
                         <div class="mb-2 mr-3 pt-5 font-medium">Tags
                         </div>
-                        <x-choices :options="$tagsOptions" {{-- search-function="searchMulti" searchable --}}
-                            hint="Please select from your Tags"
-                            no-result-text="Ops! Nothing here ..."
-                            wire:model="wordpressIntegration.tags"
-                            debounce="300ms"
-                            min-chars="2"
-                            multiple
-                            searchable
-                            search-function="searchTags" />
+                        <x-choices :options="$tagsOptions" {{-- search-function="searchMulti" searchable --}} hint="Please select from your Tags" no-result-text="Ops! Nothing here ..." wire:model="wordpressIntegration.tags" debounce="300ms" min-chars="2" multiple searchable search-function="searchTags" />
                     </div>
                     @endif
                     <div class="mt-5 grid w-full grid-cols-2 gap-5">
-                        <x-button
-                            class="border-black hover:bg-neutral-900 hover:text-white bg-white text-neutral-900 w-full text-base"
-                            label="Cancel" link="{{ route('integrations') }}" />
-                        <x-button :disabled="empty($tagsOptions)"
-                            :label="$action === 'create' ? 'Create New integration' : 'Save'"
-                            class="bg-neutral-900 font-semibold  hover:bg-gray-700 text-white w-full text-base"
-                            type="submit" wire:loading.attr="disabled" />
+                        <x-button class="border-black hover:bg-neutral-900 hover:text-white bg-white text-neutral-900 w-full text-base" label="Cancel" link="{{ route('integrations') }}" />
+                        <x-button :disabled="empty($tagsOptions)" :label="$action === 'create' ? 'Create New integration' : 'Save'" class="bg-neutral-900 font-semibold  hover:bg-gray-700 text-white w-full text-base" type="submit" wire:loading.attr="disabled" />
                     </div>
                 </x-form>
             </div>
         </x-tab>
 
         {{-- Shopify part --}}
-        {{-- <x-tab icon="fab.shopify" label="Shopify" name="shopify">
+        <x-tab icon="fab.shopify" label="Shopify" name="shopify">
             <div>
-                livewire autoformat vscode<x-form wire:submit="shopify">
+                <x-form wire:submit="saveShopify">
                     <div>
                         <div class="mb-2 mr-3 mt-5 font-medium">Integration Name
                         </div>
-                        <x-input class="mb-2" maxlength="255"
-                            placeholder="My Wordpress Website" type="text"
-                            wire:model="preset.callToAction" />
+                        <x-input class="mb-2" maxlength="255" placeholder="My Shopify Store" type="text" wire:model="integration.name" />
                     </div>
                     <div>
-                        <div class="mb-2 mr-3 mt-5 font-medium">Shop Name
+                        <div class="mb-2 mr-3 mt-5 font-medium">Domain
                         </div>
-                        <x-input class="mb-2" maxlength="255"
-                            placeholder="My Wordpress Website" type="text"
-                            wire:model="wordpressIntegration.callToAction" />
+                        <x-input class="mb-2" maxlength="255" placeholder="0ae717-b8" type="text" wire:model.live.debounce.1000ms="shopifyIntegration.shop_name" />
                     </div>
                     <div>
                         <div class="mb-2 mt-5 flex items-end justify-between">
-                            <div class="mr-3 font-medium">Application
-                                Password
+                            <div class="mr-3 font-medium">Access Token
                             </div>
-                            <x-button class="btn-primary btn-outline btn-xs"
-                                icon-right="phosphor.youtube-logo-fill"
-                                label="Watch Tutorial"
-                                link="{{ route('preset.create') }}" />
-</div>
-<x-input class="mb-2" maxlength="255" placeholder="" type="text" wire:model="wordpressIntegration.app_password" />
-</div>
-<div>
-    <div class="mb-2 mr-3 pt-5 font-medium">Blog
-    </div>
-    <x-choices :options="[]" no-result-text="Ops! Nothing here ..." search-function="searchMulti" searchable
-        wire:model="users_multi_searchable_ids" />
-</div>
-<div>
-    <div class="mb-2 mr-3 mt-5 font-medium">Author Name
-    </div>
-    <x-input class="mb-2" maxlength="255" placeholder="My Wordpress Website" type="text"
-        wire:model="wordpressIntegration.author" />
-</div>
-<div class="mt-5 grid w-full grid-cols-2 gap-5">
-    <x-button class="btn-primary btn-outline w-full text-base text-base-100" label="Cancel"
-        link="{{ route('integrations') }}" />
-    <x-button :label="$action === 'create' ? 'Create New integration' : 'Save'"
-        class="btn-primary w-full text-base text-base-100" type="submit" wire:loading.attr="disabled" />
-</div>
-</x-form>
-</div>
-</x-tab> --}}
-</x-tabs>
+                            <x-button class="btn-primary btn-outline btn-xs" icon-right="phosphor.youtube-logo-fill" label="Watch Tutorial" link="{{ route('preset.create') }}" />
+                        </div>
+                        <x-input class="mb-2" maxlength="255" placeholder="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" type="text" wire:model.live.debounce.1000ms="shopifyIntegration.access_token" />
+                    </div>
+
+                    <div class="w-full py-2 text-center" wire:loading>
+                        <span class="loading loading-dots loading-lg"></span>
+                    </div>
+
+                    @if (!empty($shopifyBlogs))
+                    <div>
+                        <div class="mb-2 mr-3 pt-5 font-medium">Blog
+                        </div>
+                        <x-select :options="$shopifyBlogs" option_label="title" wire:model="shopifyIntegration.blog" />
+                    </div>
+                    <div>
+                        <div class="mb-2 mr-3 mt-5 font-medium">Author Name</div>
+                        <x-select :options="$shopifyAuthors" class="mb-2" wire:model="shopifyIntegration.author" />
+                    </div>
+                    @endif
+
+                    <div class="mt-5 grid w-full grid-cols-2 gap-5">
+                        <x-button class="btn-primary btn-outline w-full text-base text-base-100" label="Cancel" link="{{ route('integrations') }}" />
+                        <x-button :label="$action === 'create' ? 'Create New integration' : 'Save'" class="btn-primary w-full text-base text-base-100" type="submit" wire:loading.attr="disabled" />
+                    </div>
+                </x-form>
+            </div>
+        </x-tab>
+    </x-tabs>
 </div>

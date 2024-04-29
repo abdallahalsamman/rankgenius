@@ -13,10 +13,10 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/js/editor.js'
             ],
-            refresh: true,
+            refresh: false,
         }),
     ],
-    server: { 
+    server: {
         host: true,
         hmr: { host },
     }

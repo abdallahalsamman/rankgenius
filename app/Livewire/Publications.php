@@ -3,10 +3,11 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Illuminate\Support\Facades\DB;
+use Livewire\WithPagination;
 
 class Publications extends Component
 {
+    use WithPagination;
 
     public $publications;
 

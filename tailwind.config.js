@@ -6,7 +6,6 @@ const defaultTheme = require("tailwindcss/resolveConfig")(
 
 export default {
   content: [
-    // You will probably also need these lines
     "./resources/**/**/*.blade.php",
     "./resources/**/**/*.js",
     "./app/View/Components/**/**/*.php",
@@ -14,6 +13,7 @@ export default {
     "./vendor/robsontenorio/mary/src/View/Components/**/*.php",
     "./vendor/usernotnull/tall-toasts/config/**/*.php",
     "./vendor/usernotnull/tall-toasts/resources/views/**/*.blade.php",
+    "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
   ],
   theme: {
     markdownBase: {

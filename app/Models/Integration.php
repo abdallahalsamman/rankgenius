@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\IntegrationTypeEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Integration extends Model
 {
     use HasFactory, SoftDeletes;
 
-protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at'];
 
     public $incrementing = false;
     protected $keyType = 'string';
@@ -21,6 +22,29 @@ protected $dates = ['deleted_at'];
         'integration_type_id',
         'user_id',
     ];
+
+    public function publishBatch($batch)
+    {
+        switch ($this->integrationType->name) {
+            case IntegrationTypeEnum::WORDPRESS->value:
+                $this->wordpressIntegration->publishBatch($batch);
+                break;
+            case IntegrationTypeEnum::SHOPIFY->value:
+                $this->shopifyIntegration->publishBatch($batch);
+                break;
+            default:
+                break;
+        }
+
+        foreach ($batch->articles as $article) {
+            Publication::create([
+                'user_id' => $this->user_id,
+                'article_id' => $article->id,
+                'integration_id' => $this->id,
+                'url' => ''
+            ]);
+        }
+    }
 
     public function integrationType()
     {

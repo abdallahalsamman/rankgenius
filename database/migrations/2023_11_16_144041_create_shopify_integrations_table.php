@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('shopify_integrations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('integration_id');
+            $table->foreignId('integration_id')->constrained();
             $table->string('shop_name');
             $table->string('access_token');
             $table->string('blog');
