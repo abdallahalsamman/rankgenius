@@ -3,7 +3,6 @@
 namespace App\Livewire;
 
 use Exception;
-use Mary\Traits\Toast;
 use Livewire\Component;
 use App\Models\Integration;
 use Illuminate\Support\Str;
@@ -21,7 +20,7 @@ class IntegrationView extends Component
 
     public $action, $integrationId, $wordpressIntegrationId;
     public $categoriesOptions = [], $tagsOptions = [], $statusesOptions = [], $authorsOptions = [];
-    private $savedAuthorOption = [], $savedCategoriesOption = [], $savedTagsOption = [];
+    public $savedAuthorOption = [], $savedCategoriesOption = [], $savedTagsOption = [];
 
     public $integration = [
         'name' => "",
@@ -47,7 +46,7 @@ class IntegrationView extends Component
         // "time_gap" => 0,
     ];
 
-    private function getWordPressSavedInfo()
+    public function getWordPressSavedInfo()
     {
         $savedAuthor = $this->wordpressIntegration['author'];
         $savedCategories = $this->wordpressIntegration['categories'];
@@ -147,10 +146,6 @@ class IntegrationView extends Component
     {
         if (in_array($key, ['wordpressIntegration.url', 'wordpressIntegration.username', 'wordpressIntegration.app_password'])) {
             $this->updateWordPressInfo();
-        }
-
-        if ($key == 'wordpressIntegration.author') {
-            $this->savedAuthorOption = $this->authorsOptions->where('id', $value)->toArray();
         }
     }
 
