@@ -1,7 +1,6 @@
 internal linking
 external linking
 credit system
-shopify publishing
 insert image into editor
 
 add test button to test posting a draft post in integrationview

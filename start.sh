@@ -1,3 +1,4 @@
+composer install
 yarn dev &
 php artisan optimize:clear &
 while true; do
