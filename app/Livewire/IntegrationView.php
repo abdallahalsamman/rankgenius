@@ -22,7 +22,7 @@ class IntegrationView extends Component
 {
     use WireToast;
 
-    public $selectedTab = 'shopify';
+    public $selectedTab = IntegrationTypeEnum::WORDPRESS->value;
 
     public $action, $integrationId;
     public $wordpressIntegrationId, $shopifyIntegrationId;
@@ -31,56 +31,62 @@ class IntegrationView extends Component
 
     public $shopifyBlogs = [], $shopifyAuthors = [];
     public $shopifyIntegration = [
-        "shop_name" => "0ae717-b8",
-        "access_token" => "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",
+        // "shop_name" => "0ae717-b8",
+        // "access_token" => "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",
+        // "blog" => null,
+        // "author" => null,
+
+        "shop_name" => null,
+        "access_token" => null,
         "blog" => null,
         "author" => null,
     ];
 
     public $integration = [
-        'name' => "test",
+        'name' => "",
     ];
 
     public $wordpressIntegration = [
-        "url" => "https://www.aiobot.com/",
-        "username" => "sammanabdallah",
-        "app_password" => "UaoK qroT uPIC 7y4F I8GU PcGk",
-        "status" => "draft",
-        "categories" => [],
-        "tags" => [],
-        "author" => 1,
-        "time_gap" => 0,
-
-        // "url" => "",
-        // "username" => "",
-        // "app_password" => "",
-        // "status" => "publish",
+        // "url" => "https://www.aiobot.com/",
+        // "username" => "sammanabdallah",
+        // "app_password" => "UaoK qroT uPIC 7y4F I8GU PcGk",
+        // "status" => "draft",
         // "categories" => [],
         // "tags" => [],
         // "author" => 1,
         // "time_gap" => 0,
+
+        "url" => "",
+        "username" => "",
+        "app_password" => "",
+        "status" => "publish",
+        "categories" => [],
+        "tags" => [],
+        "author" => 1,
+        "time_gap" => 0,
     ];
+
+    private function initializeWordPressClient()
+    {
+        return (new WordPress($this->wordpressIntegration['url']))
+            ->setUsername($this->wordpressIntegration['username'])
+            ->setApplicationPassword($this->wordpressIntegration['app_password']);
+    }
 
     public function getWordPressSavedInfo()
     {
-        $savedAuthor = $this->wordpressIntegration['author'];
-        $savedCategories = $this->wordpressIntegration['categories'];
-        $savedTags = $this->wordpressIntegration['tags'];
-
-        $wp = (new WordPress($this->wordpressIntegration['url']))
-            ->setUsername($this->wordpressIntegration['username'])
-            ->setApplicationPassword($this->wordpressIntegration['app_password']);
+        $wp = $this->initializeWordPressClient();
 
         $this->savedAuthorOption = $this->makeOptions(
-            $wp->getCall('/wp-json/wp/v2/users?include=' . $savedAuthor)
+            $wp->getCall('/wp-json/wp/v2/users?include=' . $this->wordpressIntegration['author'])
         );
 
         $this->savedCategoriesOption = $this->makeOptions(
-            $wp->getCall('/wp-json/wp/v2/categories?include=' . implode(',', $savedCategories))
+            $wp->getCall('/wp-json/wp/v2/categories?include=' . implode(',', $this->wordpressIntegration['categories']))
         );
 
         $this->savedTagsOption = $this->makeOptions(
-            $wp->getCall('/wp-json/wp/v2/tags?include=' . implode(',', $savedTags))
+            $wp->getCall('/wp-json/wp/v2/tags?include=' . implode(',', $this->wordpressIntegration['tags']))
         );
     }
 
@@ -89,132 +95,126 @@ class IntegrationView extends Component
         $this->shopifyAuthors = [];
         $this->shopifyBlogs = [];
 
-        $shop_name = $this->shopifyIntegration['shop_name'];
-        $access_token = $this->shopifyIntegration['access_token'];
-
-        if (!empty($shop_name) && !empty($access_token)) {
+        if (!empty($this->shopifyIntegration['shop_name']) && !empty($this->shopifyIntegration['access_token'])) {
             try {
-                $shopify = new Shopify($access_token, $shop_name . '.myshopify.com', '2024-04');
-
+                $shopify = new Shopify($this->shopifyIntegration['access_token'], $this->shopifyIntegration['shop_name'] . '.myshopify.com', '2024-04');
                 $shopify->getBlogsCount();
-
-                toast()->success('Logged in successfully to shopify')->push();
+                toast()->success('Logged in successfully to Shopify')->push();
 
                 $this->shopifyBlogs = $shopify->getBlogs()->toArray();
                 $shopifyAuthors = $shopify->getArticleAuthors();
-                $this->shopifyAuthors = array_map(function ($name) {
-                    return ['id' => $name, 'name' => $name];
-                }, $shopifyAuthors);
+                $this->shopifyAuthors = array_map(fn ($name) => ['id' => $name, 'name' => $name], $shopifyAuthors);
 
                 if ($this->action == 'create') {
                     $this->shopifyIntegration['author'] = $shopifyAuthors[0];
                     $this->shopifyIntegration['blog'] = $this->shopifyBlogs[0]['id'];
                 }
-
-                // Route::currentRouteName() on mount returns route name "integration.create"
-                // While on /update returns "livewire.update"
-                // we only want to set the author to default to the first author in authorsOptions
             } catch (Exception $e) {
                 Log::error($e);
-
-                // $errorMap = [
-                //     [
-                //         'match' => 'Could not resolve host: ',
-                //         'text' => $website . ' is not responding.',
-                //     ],
-                //     [
-                //         'match' => 'Unauthorized',
-                //         'text' => 'Invalid Username or Application Password.',
-                //     ],
-                // ];
-
-                $error_text = $e->getMessage();
-                // foreach ($errorMap as $error) {
-                //     if (Str::contains($e->getMessage(), $error['match'])) {
-                //         $error_text = $error['text'];
-                //         break;
-                //     }
-                // }
-
-                toast()
-                    ->danger(strip_tags($error_text))
-                    ->duration(3000)->push();
+                toast()->danger(strip_tags($e->getMessage()))->duration(3000)->push();
             }
         }
     }
 
-
     public function updateWordPressInfo()
     {
-        $this->tagsOptions = [];
-        $this->statusesOptions = [];
-        $this->categoriesOptions = [];
-        $this->authorsOptions = [];
+        $this->resetOptions();
+        $wp = $this->initializeWordPressClient();
 
-        $website = $this->wordpressIntegration['url'];
-        $username = $this->wordpressIntegration['username'];
-        $app_password = $this->wordpressIntegration['app_password'];
-        $app_password = str_replace(' ', '', $app_password);
-
-        if (!empty($website) && !empty($username) && !empty($app_password)) {
+        if ($this->validWordPressCredentials()) {
             try {
-                $wp = (new WordPress($website))->setUsername($username)->setApplicationPassword($app_password);
-                // Auth Test
-                $tag = $wp->postCall('/wp-json/wp/v2/tags', ['name' => env('APP_NAME') . '_test']);
-                $wp->deleteCall('/wp-json/wp/v2/tags/' . $tag->id . '?force=true');
+                $this->performWordPressAuthTest($wp);
 
-                $tags = $wp->getCall('/wp-json/wp/v2/tags?per_page=100');
-                $statuses = $wp->getCall('/wp-json/wp/v2/statuses?per_page=100');
-                $categories = $wp->getCall('/wp-json/wp/v2/categories?per_page=100');
-                $authors = $wp->getCall('/wp-json/wp/v2/users?per_page=100');
+                $this->authorsOptions = $this->makeOptions($wp->getCall('/wp-json/wp/v2/users?per_page=100'));
+                $this->tagsOptions = $this->makeOptions($wp->getCall('/wp-json/wp/v2/tags?per_page=100'));
+                $this->statusesOptions = $this->makeOptions($wp->getCall('/wp-json/wp/v2/statuses?per_page=100'));
+                $this->categoriesOptions = $this->makeOptions($wp->getCall('/wp-json/wp/v2/categories?per_page=100'));
 
                 toast()->success('Logged in successfully')->push();
 
                 if ($this->action == 'edit') {
                     $this->getWordPressSavedInfo();
+                    $this->mergeSavedOptions();
                 }
-
-                $this->authorsOptions = $this->makeOptions($authors);
-                $this->tagsOptions = $this->makeOptions($tags);
-                $this->statusesOptions = $this->makeOptions($statuses);
-                $this->categoriesOptions = $this->makeOptions($categories);
-
-                if ($this->action == 'edit') {
-                    $this->authorsOptions = array_merge($this->authorsOptions, $this->savedAuthorOption);
-                    $this->tagsOptions = array_merge($this->tagsOptions, $this->savedTagsOption);
-                    $this->categoriesOptions = array_merge($this->categoriesOptions, $this->savedCategoriesOption);
-                }
-
-                // Route::currentRouteName() on mount returns route name "integration.create"
-                // While on /update returns "livewire.update"
-                // we only want to set the author to default to the first author in authorsOptions
             } catch (Exception $e) {
-                Log::error($e);
-
-                $errorMap = [
-                    [
-                        'match' => 'Could not resolve host: ',
-                        'text' => $website . ' is not responding.',
-                    ],
-                    [
-                        'match' => 'Unauthorized',
-                        'text' => 'Invalid Username or Application Password.',
-                    ],
-                ];
-
-                $error_text = $e->getMessage();
-                foreach ($errorMap as $error) {
-                    if (Str::contains($e->getMessage(), $error['match'])) {
-                        $error_text = $error['text'];
-                        break;
-                    }
-                }
-
-                toast()
-                    ->danger(strip_tags($error_text))
-                    ->duration(3000)->push();
+                $this->handleWordPressError($e);
             }
         }
+    }
+
+    private function resetOptions()
+    {
+        $this->tagsOptions = $this->statusesOptions = $this->categoriesOptions = $this->authorsOptions = [];
+    }
+
+    private function validWordPressCredentials()
+    {
+        return !empty($this->wordpressIntegration['url']) && !empty($this->wordpressIntegration['username']) && !empty($this->wordpressIntegration['app_password']);
+    }
+
+    private function performWordPressAuthTest($wp)
+    {
+        $tag = $wp->postCall('/wp-json/wp/v2/tags', ['name' => env('APP_NAME') . '_test']);
+        $wp->deleteCall('/wp-json/wp/v2/tags/' . $tag->id . '?force=true');
+    }
+
+    private function mergeSavedOptions()
+    {
+        $this->authorsOptions = array_merge($this->authorsOptions, $this->savedAuthorOption);
+        $this->tagsOptions = array_merge($this->tagsOptions, $this->savedTagsOption);
+        $this->categoriesOptions = array_merge($this->categoriesOptions, $this->savedCategoriesOption);
+
+        // remove duplicates
+        $this->authorsOptions = array_unique($this->authorsOptions, SORT_REGULAR);
+        $this->tagsOptions = array_unique($this->tagsOptions, SORT_REGULAR);
+        $this->categoriesOptions = array_unique($this->categoriesOptions, SORT_REGULAR);
+    }
+
+    private function handleWordPressError($e)
+    {
+        Log::error($e);
+        $error_text = $this->parseWordPressError($e->getMessage());
+        toast()->danger(strip_tags($error_text))->duration(3000)->push();
+    }
+
+    private function parseWordPressError($message)
+    {
+        $errorMap = [
+            ['match' => 'Could not resolve host: ', 'text' => $this->wordpressIntegration['url'] . ' is not responding.'],
+            ['match' => 'Unauthorized', 'text' => 'Invalid Username or Application Password.'],
+        ];
+
+        foreach ($errorMap as $error) {
+            if (Str::contains($message, $error['match'])) {
+                return $error['text'];
+            }
+        }
+
+        return $message;
+    }
+
+    public function searchUsers($search)
+    {
+        $this->authorsOptions = $this->makeOptions(
+            $this->initializeWordPressClient()->getCall('/wp-json/wp/v2/users?search=' . $search)
+        );
+        $this->mergeSavedOptions();
+    }
+
+    public function searchTags($search)
+    {
+        $this->tagsOptions = $this->makeOptions(
+            $this->initializeWordPressClient()->getCall('/wp-json/wp/v2/tags?search=' . $search)
+        );
+        $this->mergeSavedOptions();
+    }
+
+    public function searchCategories($search)
+    {
+        $this->categoriesOptions = $this->makeOptions(
+            $this->initializeWordPressClient()->getCall('/wp-json/wp/v2/categories?search=' . $search)
+        );
+        $this->mergeSavedOptions();
     }
 
     public function updated($key, $value)
@@ -241,42 +241,6 @@ class IntegrationView extends Component
         return $options;
     }
 
-    public function searchUsers($search)
-    {
-        $this->authorsOptions = $this->makeOptions(
-            (new WordPress($this->wordpressIntegration['url']))
-                ->setUsername($this->wordpressIntegration['username'])
-                ->setApplicationPassword($this->wordpressIntegration['app_password'])
-                ->getCall('/wp-json/wp/v2/users?search=' . $search)
-        );
-
-        $this->authorsOptions = array_merge($this->authorsOptions, $this->savedAuthorOption);
-    }
-
-    public function searchTags($search)
-    {
-        $this->tagsOptions = $this->makeOptions(
-            (new WordPress($this->wordpressIntegration['url']))
-                ->setUsername($this->wordpressIntegration['username'])
-                ->setApplicationPassword($this->wordpressIntegration['app_password'])
-                ->getCall('/wp-json/wp/v2/tags?search=' . $search)
-        );
-
-        $this->tagsOptions = array_merge($this->tagsOptions, $this->savedTagsOption);
-    }
-
-    public function searchCategories($search)
-    {
-        $this->categoriesOptions = $this->makeOptions(
-            (new WordPress($this->wordpressIntegration['url']))
-                ->setUsername($this->wordpressIntegration['username'])
-                ->setApplicationPassword($this->wordpressIntegration['app_password'])
-                ->getCall('/wp-json/wp/v2/categories?search=' . $search)
-        );
-
-        $this->categoriesOptions = array_merge($this->categoriesOptions, $this->savedCategoriesOption);
-    }
-
     private function validateWordpress()
     {
         $this->validate([
@@ -287,17 +251,14 @@ class IntegrationView extends Component
             'wordpressIntegration.status' => 'required',
             'wordpressIntegration.author' => 'required|in:' . implode(',', array_column($this->authorsOptions, 'id')),
             'wordpressIntegration.time_gap' => 'required',
-        ], [
-            'wordpressIntegration.url.required' => 'The URL field is required.',
-            'wordpressIntegration.url.max' => 'The URL field may not be greater than 300 characters.',
-            'wordpressIntegration.username.required' => 'The username field is required.',
-            'wordpressIntegration.username.min' => 'The username field must be at least 3 characters.',
-            'wordpressIntegration.username.max' => 'The username field may not be greater than 100 characters.',
-            'wordpressIntegration.app_password.required' => 'The app password field is required.',
-            'wordpressIntegration.app_password.max' => 'The app password field may not be greater than 100 characters.',
-            'wordpressIntegration.status.required' => 'The status field is required.',
-            'wordpressIntegration.author.required' => 'The author field is required.',
-            'wordpressIntegration.time_gap.required' => 'The time gap field is required.',
+        ], [], [
+            'integration.name' => 'Integration Name',
+            'wordpressIntegration.url' => 'WordPress URL',
+            'wordpressIntegration.username' => 'Username',
+            'wordpressIntegration.app_password' => 'Application Password',
+            'wordpressIntegration.status' => 'Status',
+            'wordpressIntegration.author' => 'Author',
+            'wordpressIntegration.time_gap' => 'Time Gap',
         ]);
     }
 
@@ -309,13 +270,12 @@ class IntegrationView extends Component
             'shopifyIntegration.access_token' => 'required|max:100',
             'shopifyIntegration.author' => 'required|in:' . implode(',', array_column($this->shopifyAuthors, 'id')),
             'shopifyIntegration.blog' => 'required|in:' . implode(',', array_column($this->shopifyBlogs, 'id')),
-        ], [
-            'shopifyIntegration.shop_name.required' => 'The shop name field is required.',
-            'shopifyIntegration.shop_name.max' => 'The shop name field may not be greater than 300 characters.',
-            'shopifyIntegration.access_token.required' => 'The access token field is required.',
-            'shopifyIntegration.access_token.max' => 'The access token field may not be greater than 100 characters.',
-            'shopifyIntegration.author.required' => 'The author field is required.',
-            'shopifyIntegration.blog.required' => 'The blog field is required.',
+        ], [], [
+            'integration.name' => 'Integration Name',
+            'shopifyIntegration.shop_name' => 'Shop Name',
+            'shopifyIntegration.access_token' => 'Access Token',
+            'shopifyIntegration.author' => 'Author',
+            'shopifyIntegration.blog' => 'Blog',
         ]);
     }
 
@@ -418,59 +378,65 @@ class IntegrationView extends Component
         });
     }
 
+    private function loadIntegrationData()
+    {
+        $this->integrationId = Route::current()->parameter('id');
+        $integration = Integration::where('id', $this->integrationId)->first();
+        $this->integration = [
+            'name' => $integration->name,
+            'integration_type_id' => $integration->integration_type_id,
+        ];
+
+        switch ($integration->integrationType->name) {
+            case IntegrationTypeEnum::WORDPRESS->value:
+                $this->loadWordPressIntegration($integration);
+                break;
+            case IntegrationTypeEnum::SHOPIFY->value:
+                $this->loadShopifyIntegration($integration);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private function loadWordPressIntegration($integration)
+    {
+        $this->selectedTab = IntegrationTypeEnum::WORDPRESS->value;
+        $wordpressIntegration = $integration->wordpressIntegration()->first();
+        $this->wordpressIntegrationId = $wordpressIntegration->id;
+        $this->wordpressIntegration = [
+            "url" => $wordpressIntegration->url,
+            "username" => $wordpressIntegration->username,
+            "app_password" => $wordpressIntegration->app_password,
+            "status" => $wordpressIntegration->status,
+            "categories" => json_decode($wordpressIntegration->categories, true),
+            "tags" => json_decode($wordpressIntegration->tags, true),
+            "author" => $wordpressIntegration->author,
+            "time_gap" => $wordpressIntegration->time_gap,
+        ];
+        $this->updateWordPressInfo();
+    }
+
+    private function loadShopifyIntegration($integration)
+    {
+        $this->selectedTab = IntegrationTypeEnum::SHOPIFY->value;
+        $shopifyIntegration = $integration->shopifyIntegration()->first();
+        $this->shopifyIntegrationId = $shopifyIntegration->id;
+        $this->shopifyIntegration = [
+            "shop_name" => $shopifyIntegration->shop_name,
+            "access_token" => $shopifyIntegration->access_token,
+            "blog" => $shopifyIntegration->blog,
+            "author" => $shopifyIntegration->author,
+        ];
+        $this->updateShopifyInfo();
+    }
 
     public function mount()
     {
-        // DB::enableQueryLog();
-        // $result = IntegrationType::where('name', IntegrationTypeEnum::WORDPRESS->value)->pluck('id');
-        // $query = DB::getQueryLog(); dd($query, $result);
-
         $this->action = Route::currentRouteName() === "integration.create" ? "create" : "edit";
 
-        // TESTING ONLY
-        // $this->updateWordPressInfo();
-        $this->updateShopifyInfo();
-
         if ($this->action === 'edit') {
-            $this->integrationId = Route::current()->parameter('id');
-            $integration = Integration::where('id', $this->integrationId)->first();
-            $this->integration = [
-                'name' => $integration->name,
-                'integration_type_id' => $integration->integration_type_id,
-            ];
-
-            switch ($integration->integrationType->name) {
-                case IntegrationTypeEnum::WORDPRESS->value:
-                    $this->selectedTab = IntegrationTypeEnum::WORDPRESS->value;
-                    $wordpressIntegration = $integration->wordpressIntegration()->first();
-                    $this->wordpressIntegrationId = $wordpressIntegration->id;
-                    $this->wordpressIntegration = [
-                        "url" => $wordpressIntegration->url,
-                        "username" => $wordpressIntegration->username,
-                        "app_password" => $wordpressIntegration->app_password,
-                        "status" => $wordpressIntegration->status,
-                        "categories" => json_decode($wordpressIntegration->categories, true),
-                        "tags" => json_decode($wordpressIntegration->tags, true),
-                        "author" => $wordpressIntegration->author,
-                        "time_gap" => $wordpressIntegration->time_gap,
-                    ];
-                    $this->updateWordPressInfo();
-                    break;
-                case IntegrationTypeEnum::SHOPIFY->value:
-                    $this->selectedTab = IntegrationTypeEnum::SHOPIFY->value;
-                    $shopifyIntegration = $integration->shopifyIntegration()->first();
-                    $this->shopifyIntegrationId = $shopifyIntegration->id;
-                    $this->shopifyIntegration = [
-                        "shop_name" => $shopifyIntegration->shop_name,
-                        "access_token" => $shopifyIntegration->access_token,
-                        "blog" => $shopifyIntegration->blog,
-                        "author" => $shopifyIntegration->author,
-                    ];
-                    $this->updateShopifyInfo();
-                    break;
-                default:
-                    break;
-            }
+            $this->loadIntegrationData();
         }
     }
 
