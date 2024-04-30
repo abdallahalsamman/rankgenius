@@ -12,13 +12,15 @@ use Illuminate\Support\Str;
 
 class GenerateArticles extends Component
 {
-    public $url, $topic, $external_linking, $sitemap_url;
+    public $url = "https://www.aiobot.com/";
+    public $topic = "what is sneaker reselling and how much money can you make out of it ";
+    public $sitemap_url = "https://www.aiobot.com/sitemap.xml", $external_linking = true;
     public $quantity = 1, $language = "English";
     public $preset = 0, $presetOptions = [];
     public $titles = "How to make bread at home?\nBest recipes for making bread\nWhat are the different types of bread";
     public $keywords;
 
-    public $simple_mode_allowed_article_quantity = [1, 3, 5, 10, 20];
+    public $topic_mode_allowed_article_quantity = [1, 3, 5, 10, 20];
     public $preset_mode_allowed_article_quantity = [1, 3, 5, 10, 20, 40, 60, 80, 100, 150, 300];
 
     public function mount()
@@ -31,9 +33,9 @@ class GenerateArticles extends Component
         return view('livewire.generate-articles')->extends('layouts.dashboard')->section('dashboard-content');
     }
 
-    public function simpleMode()
+    public function topicMode()
     {
-        $this->validateInputs('simple_mode_allowed_article_quantity', BatchModeEnum::CONTEXT);
+        $this->validateInputs('topic_mode_allowed_article_quantity', BatchModeEnum::TOPIC);
     }
 
     public function presetMode()
@@ -112,6 +114,8 @@ class GenerateArticles extends Component
             'details' => $data['details'],
             'language' => $data['language'],
             'quantity' => $data['quantity'],
+            'external_linking' => $data['external_linking'],
+            'sitemap_url' => $data['sitemap_url'],
             'status' => BatchStatusEnum::IN_PROGRESS,
             'user_id' => auth()->user()->id,
         ]);

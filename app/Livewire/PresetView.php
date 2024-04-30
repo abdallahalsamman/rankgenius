@@ -34,7 +34,7 @@ class PresetView extends Component
 
     public function mount()
     {
-        $this->preset['generationMode'] = BatchModeEnum::CONTEXT->value;
+        $this->preset['generationMode'] = BatchModeEnum::TOPIC->value;
         $this->action = Route::currentRouteName() === 'preset.create' ? "create" : "edit";
 
         if ($this->action === 'edit') {

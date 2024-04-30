@@ -42,7 +42,7 @@
                                 'name' => 'Specific Titles',
                             ],
                             [
-                                'id' => \App\Enums\BatchModeEnum::CONTEXT->value,
+                                'id' => \App\Enums\BatchModeEnum::TOPIC->value,
                                 'name' => 'Business Description',
                             ],
                         ];
@@ -59,8 +59,8 @@
 
                     @php
                         $generationOptions = [
-                            \App\Enums\BatchModeEnum::CONTEXT->value => [
-                                'label' => 'Context Description',
+                            \App\Enums\BatchModeEnum::TOPIC->value => [
+                                'label' => 'Topic Description',
                                 'placeholder' => 'SpaceX is a company that produces rockets.',
                             ],
                             \App\Enums\BatchModeEnum::TITLE->value => [

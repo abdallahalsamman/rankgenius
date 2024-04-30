@@ -45,6 +45,8 @@ echo -n "server {
 }" | sudo tee /etc/nginx/sites-available/default
 
 composer install
+composer require  --ignore-platform-reqs alc/sitemap-crawler
+
 npm install -g yarn
 yarn
 yarn build

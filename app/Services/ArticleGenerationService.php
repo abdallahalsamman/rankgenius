@@ -2,20 +2,21 @@
 
 namespace App\Services;
 
+use DOMDocument;
 use App\Models\Batch;
+use Alc\SitemapCrawler;
+use App\Models\Article;
 use Illuminate\Support\Str;
 use App\Enums\BatchModeEnum;
 use App\Helpers\PromptBuilder;
-use App\Models\Article;
 use Illuminate\Support\Facades\Log;
-use DOMDocument;
 
 class ArticleGenerationService
 {
     public static function generateArticles(Batch $batch)
     {
-        if ($batch->mode == BatchModeEnum::CONTEXT->value) {
-            $articles = self::contextMode($batch);
+        if ($batch->mode == BatchModeEnum::TOPIC->value) {
+            $articles = self::topicMode($batch);
         } else if ($batch->mode == BatchModeEnum::TITLE->value) {
             $articles = self::titleMode($batch);
         } else if ($batch->mode == BatchModeEnum::KEYWORD->value) {
@@ -25,61 +26,71 @@ class ArticleGenerationService
         }
     }
 
-    public static function contextMode($batch)
+    public static function topicMode($batch)
     {
-        $userPromptBuilder = new PromptBuilder();
+        // $userPromptBuilder = new PromptBuilder();
 
-        $url = $batch->url;
-        if (filter_var($url, FILTER_VALIDATE_URL)) {
-            $websiteHTML = file_get_contents($url);
-            $websiteHTML = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $websiteHTML);
-            $websiteHTML = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', "", $websiteHTML);
-            $websiteText = strip_tags($websiteHTML);
-            $websiteText = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $websiteText);
+        // $url = $batch->url;
+        // if (filter_var($url, FILTER_VALIDATE_URL)) {
+        //     $websiteHTML = file_get_contents($url);
+        //     $websiteHTML = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $websiteHTML);
+        //     $websiteHTML = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', "", $websiteHTML);
+        //     $websiteText = strip_tags($websiteHTML);
+        //     $websiteText = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $websiteText);
 
-            $userPromptBuilder->addWebsiteContent($websiteText);
-        }
+        //     $userPromptBuilder->addWebsiteContent($websiteText);
+        // }
 
-        $systemPromptBuilder = new PromptBuilder();
-        $systemPromptBuilder->addOutline();
+        $crawler = new SitemapCrawler();
 
-        $attempts_max = 4;
-        $longestShortArticle = ["length" => 0, "content" => ""];
-        
-        $userPromptBuilder->setArticleTopic($batch->details)->setLanguage($batch->language);
-
-        for ($attempts = 0; $attempts < $attempts_max; $attempts++) {
-            $generatedArticle = AIService::sendPrompt(
-                $systemPromptBuilder->build("HTML"),
-                $userPromptBuilder->build("HTML"),
-                "gpt-4-1106-preview"
-            );
-        
-            $articleHTML = $generatedArticle;
-        
-            if (strlen($articleHTML) < intval(env('MIN_ARTICLE_LENGTH'))) {
-                if ($attempts < $attempts_max) {
-                    if(strlen($articleHTML) > $longestShortArticle["length"]) {
-                        $longestShortArticle = ["length" => strlen($articleHTML), "content" => $articleHTML];
-                    }
-                    Log::info("Article too short, retrying");
-                    continue;
-                } else {
-                    $articleHTML = $longestShortArticle["content"];
-                }
+        if ($batch->sitemap_url) {
+            if (!defined('MAX_FILE_SIZE')) {
+                define('MAX_FILE_SIZE', 5*1024*1024); // 5 MB
             }
+            $data = $crawler->crawl($batch->sitemap_url);
+            dd($data);
         }
 
-        $article = new Article();
-        $article->id = Str::uuid();
-        $htmlString = Str::replaceFirst('```html', '', $articleHTML);
-        $htmlString = Str::replaceLast('```', '', $htmlString);
-        $article->content = self::convertHTMLToEditorJsBlocks($htmlString);
-        $article->title = json_decode($article->content)->blocks[0]->data->text;
-        $article->image_url = "https://source.unsplash.com/random/800x600";
-        $article->batch_id = $batch->id;
-        $article->user_id = $batch->user_id;
-        $article->save();
+        // $systemPromptBuilder = new PromptBuilder();
+        // $systemPromptBuilder->addOutline();
+
+        // $attempts_max = 4;
+        // $longestShortArticle = ["length" => 0, "content" => ""];
+        
+        // $userPromptBuilder->setArticleTopic($batch->details)->setLanguage($batch->language);
+
+        // for ($attempts = 0; $attempts < $attempts_max; $attempts++) {
+        //     $generatedArticle = AIService::sendPrompt(
+        //         $systemPromptBuilder->build("HTML"),
+        //         $userPromptBuilder->build("HTML"),
+        //         "gpt-4-1106-preview"
+        //     );
+        
+        //     $articleHTML = $generatedArticle;
+        
+        //     if (strlen($articleHTML) < intval(env('MIN_ARTICLE_LENGTH'))) {
+        //         if ($attempts < $attempts_max) {
+        //             if(strlen($articleHTML) > $longestShortArticle["length"]) {
+        //                 $longestShortArticle = ["length" => strlen($articleHTML), "content" => $articleHTML];
+        //             }
+        //             Log::info("Article too short, retrying");
+        //             continue;
+        //         } else {
+        //             $articleHTML = $longestShortArticle["content"];
+        //         }
+        //     }
+        // }
+
+        // $article = new Article();
+        // $article->id = Str::uuid();
+        // $htmlString = Str::replaceFirst('```html', '', $articleHTML);
+        // $htmlString = Str::replaceLast('```', '', $htmlString);
+        // $article->content = self::convertHTMLToEditorJsBlocks($htmlString);
+        // $article->title = json_decode($article->content)->blocks[0]->data->text;
+        // $article->image_url = "https://source.unsplash.com/random/800x600";
+        // $article->batch_id = $batch->id;
+        // $article->user_id = $batch->user_id;
+        // $article->save();
     }
 
     public static function titleMode($batch)

@@ -153,13 +153,3 @@
 // }
 
 // print(convertHTMLToEditorJsBlocks($HTML));
-
-require __DIR__ . '/vendor/autoload.php';
-
-use Alc\SitemapCrawler;
-
-$crawler = new SitemapCrawler();
-
-$data = $crawler->crawl('https://www.aiobot.com/sitemap.xml');
-
-print_r($data);
