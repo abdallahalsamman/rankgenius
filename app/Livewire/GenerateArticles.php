@@ -12,7 +12,7 @@ use Illuminate\Support\Str;
 
 class GenerateArticles extends Component
 {
-    public $url, $topic;
+    public $url, $topic, $external_linking, $sitemap_url;
     public $quantity = 1, $language = "English";
     public $preset = 0, $presetOptions = [];
     public $titles = "How to make bread at home?\nBest recipes for making bread\nWhat are the different types of bread";
@@ -30,10 +30,18 @@ class GenerateArticles extends Component
         $this->validate([
             'url' => "nullable|url",
             'topic' => "required|min:30|max:1024",
+            'sitemap_url' => "nullable|url",
             'quantity' => "required|integer|in:" . join(",", $this->simple_mode_allowed_article_quantity)
         ]);
 
-        return $this->generateArticles(BatchModeEnum::CONTEXT, $this->url, $this->topic, $this->quantity);
+        return $this->generateArticles(
+            BatchModeEnum::CONTEXT,
+            $this->url,
+            $this->topic,
+            $this->quantity,
+            $this->sitemap_url,
+            $this->external_linking
+        );
     }
 
     public function titleMode()
@@ -63,7 +71,7 @@ class GenerateArticles extends Component
     public function presetMode()
     {
         $this->validate([
-            'preset' =>"required|exists:presets,id",
+            'preset' => "required|exists:presets,id",
             'quantity' => "required|integer|in:" . join(",", $this->preset_mode_allowed_article_quantity)
         ]);
 
@@ -79,7 +87,7 @@ class GenerateArticles extends Component
         $this->presetOptions = auth()->user()->presets->toArray();
     }
 
-    public function generateArticles($mode, $url, $details, $quantity)
+    public function generateArticles($mode, $url, $details, $quantity, $sitemap_url, $external_linking)
     {
         $batch = Batch::create([
             'id' => Str::uuid(),
