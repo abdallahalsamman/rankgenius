@@ -36,10 +36,10 @@ class IntegrationView extends Component
         // "blog" => null,
         // "author" => null,
 
-        "shop_name" => null,
-        "access_token" => null,
+        "shop_name" => "",
+        "access_token" => "",
         "blog" => null,
-        "author" => null,
+        "author" => "",
     ];
 
     public $integration = [
@@ -73,10 +73,8 @@ class IntegrationView extends Component
             ->setApplicationPassword($this->wordpressIntegration['app_password']);
     }
 
-    public function getWordPressSavedInfo()
+    private function fetchSavedWordPressOptions($wp)
     {
-        $wp = $this->initializeWordPressClient();
-
         $this->savedAuthorOption = $this->makeOptions(
             $wp->getCall('/wp-json/wp/v2/users?include=' . $this->wordpressIntegration['author'])
         );
@@ -92,30 +90,57 @@ class IntegrationView extends Component
 
     public function updateShopifyInfo()
     {
+        $this->resetShopifyCollections();
+        $this->fetchShopifyCollections();
+    }
+
+    private function resetShopifyCollections()
+    {
         $this->shopifyAuthors = [];
         $this->shopifyBlogs = [];
+    }
 
-        if (!empty($this->shopifyIntegration['shop_name']) && !empty($this->shopifyIntegration['access_token'])) {
+    private function fetchShopifyCollections()
+    {
+        if ($this->shopifyIntegration['shop_name'] && $this->shopifyIntegration['access_token']) {
             try {
                 $shopify = new Shopify($this->shopifyIntegration['access_token'], $this->shopifyIntegration['shop_name'] . '.myshopify.com', '2024-04');
                 $shopify->getBlogsCount();
                 toast()->success('Logged in successfully to Shopify')->push();
 
                 $this->shopifyBlogs = $shopify->getBlogs()->toArray();
-                $shopifyAuthors = $shopify->getArticleAuthors();
-                $this->shopifyAuthors = array_map(fn ($name) => ['id' => $name, 'name' => $name], $shopifyAuthors);
+                $this->shopifyAuthors = $this->formatShopifyAuthors($shopify->getArticleAuthors());
 
-                if ($this->action == 'create') {
-                    $this->shopifyIntegration['author'] = $shopifyAuthors[0];
-                    $this->shopifyIntegration['blog'] = $this->shopifyBlogs[0]['id'];
-                }
+                $this->setDefaultShopifyOptionsOnCreate();
+
             } catch (Exception $e) {
-                Log::error($e);
-                toast()->danger(strip_tags($e->getMessage()))->duration(3000)->push();
+                $this->handleShopifyException($e);
             }
         }
     }
 
+    private function formatShopifyAuthors($authors)
+    {
+        return array_map(function ($name) {
+            return ['id' => $name, 'name' => $name];
+        }, $authors);
+    }
+
+    private function setDefaultShopifyOptionsOnCreate()
+    {
+        if ($this->action == 'create') {
+            $this->shopifyIntegration['author'] = $this->shopifyAuthors[0]['id'];
+            $this->shopifyIntegration['blog'] = $this->shopifyBlogs[0]['id'];
+        }
+    }
+
+    private function handleShopifyException($e)
+    {
+        Log::error($e);
+        $error_text = strip_tags($e->getMessage());
+        toast()->danger($error_text)->duration(3000)->push();
+    }
+    
     public function updateWordPressInfo()
     {
         $this->resetOptions();
@@ -133,7 +158,7 @@ class IntegrationView extends Component
                 toast()->success('Logged in successfully')->push();
 
                 if ($this->action == 'edit') {
-                    $this->getWordPressSavedInfo();
+                    $this->fetchSavedWordPressOptions($wp);
                     $this->mergeSavedOptions();
                 }
             } catch (Exception $e) {
@@ -268,7 +293,7 @@ class IntegrationView extends Component
             'integration.name' => 'required|min:3|max:100',
             'shopifyIntegration.shop_name' => 'required|max:300',
             'shopifyIntegration.access_token' => 'required|max:100',
-            'shopifyIntegration.author' => 'required|in:' . implode(',', array_column($this->shopifyAuthors, 'id')),
+            'shopifyIntegration.author' => 'required',
             'shopifyIntegration.blog' => 'required|in:' . implode(',', array_column($this->shopifyBlogs, 'id')),
         ], [], [
             'integration.name' => 'Integration Name',
