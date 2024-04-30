@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use App\Enums\BatchModeEnum;
 use App\Helpers\PromptBuilder;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class ArticleGenerationService
 {
@@ -44,11 +45,19 @@ class ArticleGenerationService
         $crawler = new SitemapCrawler();
 
         if ($batch->sitemap_url) {
+            // this is required because SitemapCrawler uses an underlying 
+            // library which parses XML and has a default MAX_FILE_SIZE of 600000
+            // which is too small for large sitemaps
             if (!defined('MAX_FILE_SIZE')) {
                 define('MAX_FILE_SIZE', 5*1024*1024); // 5 MB
             }
-            $data = $crawler->crawl($batch->sitemap_url);
-            dd($data);
+
+            $cacheKey = 'sitemap_data_' . md5($batch->sitemap_url);
+            $urls = Cache::remember($cacheKey, 86400, function () use ($crawler, $batch) {
+                return array_keys($crawler->crawl($batch->sitemap_url));
+            });
+            
+            dd($urls);
         }
 
         // $systemPromptBuilder = new PromptBuilder();
