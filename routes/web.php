@@ -34,7 +34,7 @@ use App\Http\Controllers\Auth\PasswordlessAuthenticationController;
 // });
 
 // Route::domain('app.' . env('APP_DOMAIN'))->group(function () {
-Route::domain(env('APP_DOMAIN'))->group(function () {
+// Route::domain(env('APP_DOMAIN'))->group(function () {
     Route::get('/', function () {
         return redirect()->route('dashboard');
     });
@@ -67,4 +67,4 @@ Route::domain(env('APP_DOMAIN'))->group(function () {
 
         Route::get('/logout', [PasswordlessAuthenticationController::class, 'logout'])->name('logout');
     });
-});
+// });
