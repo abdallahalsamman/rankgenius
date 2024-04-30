@@ -1,4 +1,5 @@
 composer install
+php artisan migrate
 yarn dev &
 php artisan optimize:clear &
 while true; do
