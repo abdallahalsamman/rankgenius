@@ -44,7 +44,7 @@ class RunBatch implements ShouldQueue
      *
      * @var bool
      */
-    public $failOnTimeout = false;
+    public $failOnTimeout = true;
 
     /**
      * Create a new job instance.

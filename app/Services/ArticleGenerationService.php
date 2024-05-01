@@ -6,10 +6,14 @@ use DOMDocument;
 use App\Models\Batch;
 use Alc\SitemapCrawler;
 use App\Models\Article;
+use App\Models\Sitemap;
 use Illuminate\Support\Str;
 use App\Enums\BatchModeEnum;
 use App\Helpers\PromptBuilder;
+use App\Models\SitemapEmbedding;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
+use App\Jobs\ProcessSitemapEmbedding;
 use Illuminate\Support\Facades\Cache;
 
 class ArticleGenerationService
@@ -57,15 +61,26 @@ class ArticleGenerationService
                 return array_keys($crawler->crawl($batch->sitemap_url));
             });
 
-            // get first 5 urls
-            $urls = array_slice($urls, 0, 5);
+            $sitemap = Sitemap::updateOrCreate([
+                'url' => $batch->sitemap_url
+            ], [
+                'last_fetched' => now()
+            ]);
 
-            $embeddingsCacheKey = 'sitemap_embeddings_' . md5($batch->sitemap_url);
-            $embeddings = Cache::remember($embeddingsCacheKey, 86400, function () use ($urls) {
-                return AIService::generateEmbeddings($urls);
-            });
-            
-            dd($embeddings);
+            // keep only urls that are not already in the database
+            $urls = array_diff($urls, $sitemap->embeddings->pluck('url')->toArray());
+
+            $batch = Bus::batch(
+                collect($urls)->map(function ($url) use ($sitemap) {
+                    return function () use ($url, $sitemap) {
+                        ProcessSitemapEmbedding::dispatch($url, $sitemap->id);
+                    };
+                })
+            )->dispatch()->allowFailures();
+
+            while (! $batch->finished()) {
+                sleep(1);
+            }
         }
 
         // $systemPromptBuilder = new PromptBuilder();
