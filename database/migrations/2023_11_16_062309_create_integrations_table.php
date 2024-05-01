@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -15,10 +14,13 @@ return new class extends Migration
         Schema::create('integrations', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('name');
-            $table->foreignId('integration_type_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->softDeletes();
             $table->timestamps();
+        });
+
+        Schema::table('auto_blogs', function (Blueprint $table) {
+            $table->foreignUuid('integration_id')->constrained();
         });
     }
 

@@ -17,6 +17,10 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::table('integrations', function (Blueprint $table) {
+            $table->foreignId('integration_type_id')->constrained();
+        });
+
         $integrationTypes = [
             'wordpress',
             'shopify',

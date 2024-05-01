@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('wordpress_integrations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('integration_id')->constrained();
+            $table->foreignUuid('integration_id')->constrained();
             $table->string('url');
             $table->string('username');
             $table->string('app_password');
