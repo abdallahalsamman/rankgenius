@@ -56,8 +56,16 @@ class ArticleGenerationService
             $urls = Cache::remember($cacheKey, 86400, function () use ($crawler, $batch) {
                 return array_keys($crawler->crawl($batch->sitemap_url));
             });
+
+            // get first 5 urls
+            $urls = array_slice($urls, 0, 5);
+
+            $embeddingsCacheKey = 'sitemap_embeddings_' . md5($batch->sitemap_url);
+            $embeddings = Cache::remember($embeddingsCacheKey, 86400, function () use ($urls) {
+                return AIService::generateEmbeddings($urls);
+            });
             
-            dd($urls);
+            dd($embeddings);
         }
 
         // $systemPromptBuilder = new PromptBuilder();

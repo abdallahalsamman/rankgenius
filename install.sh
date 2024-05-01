@@ -44,8 +44,8 @@ echo -n "server {
     }
 }" | sudo tee /etc/nginx/sites-available/default
 
-composer install
-composer require  --ignore-platform-reqs alc/sitemap-crawler
+# ignoring platform reqs because of "alc/sitemap-crawler"
+composer install --ignore-platform-reqs
 
 npm install -g yarn
 yarn

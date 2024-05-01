@@ -140,4 +140,24 @@ class AIService {
         $content = json_decode(trim($responseText), true);
         return $content;
     }
+
+    public static function generateEmbeddings($data)
+    {
+        $client = OpenAI::client(config('services.openai.key'));
+
+        $result = [];
+        foreach ($data as $key => $value) {
+            $embedding = $client->embeddings()->create([
+                'model' => 'text-embedding-3-large',
+                'input' => $value
+                
+            ]);
+            $result[] = [
+                'text' => $value,
+                'embedding' => $embedding['data'][0]['embedding']
+            ];
+        }
+
+        return $result;
+    }
 }
