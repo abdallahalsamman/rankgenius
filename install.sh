@@ -1,5 +1,5 @@
 # REDIS
-lsb-release curl gpg
+sudo apt install lsb-release curl gpg
 curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
 
 echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
@@ -31,7 +31,7 @@ sudo apt install just
 sudo apt install postgresql postgresql-contrib
 sudo systemctl start postgresql.service
 sudo -u postgres createdb rankgeniusdb
-sudo -u postgres psql "ALTER ROLE postgres WITH PASSWORD 'postgres'";
+sudo -u postgres psql -c "ALTER ROLE postgres WITH PASSWORD 'postgres'";
 
 # PHP, Composer
 sudo add-apt-repository -y ppa:ondrej/php
