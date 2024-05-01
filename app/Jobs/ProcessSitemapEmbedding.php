@@ -2,17 +2,18 @@
 
 namespace App\Jobs;
 
-use App\Models\SitemapEmbedding;
 use App\Services\AIService;
+use Illuminate\Bus\Batchable;
 use Illuminate\Bus\Queueable;
+use App\Models\SitemapEmbedding;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 
 class ProcessSitemapEmbedding implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, Batchable;
 
     /**
      * The number of seconds the job can run before timing out.

@@ -73,18 +73,13 @@ class ArticleGenerationService
             Log::info('Starting batch. Processing ' . count($urls) . ' urls');
             $batch = Bus::batch(
                 collect($urls)->map(function ($url) use ($sitemap) {
-                    return function () use ($url, $sitemap) {
-                        ProcessSitemapEmbedding::dispatch($url, $sitemap->id);
-                    };
-                })
-            )->allowFailures()->dispatch();
+                    return new ProcessSitemapEmbedding($url, $sitemap->id);
+                })->values()->toArray()
+            )->finally(function ($batch) {
+                Log::info('Batch finished');
+                Log::info("Progress: " . $batch->progress() . "% | " . $batch->totalJobs . " jobs remaining.");
+            })->allowFailures()->dispatch();
 
-            while (! $batch->finished()) {
-                Log::info("Waiting for batch to finish. Progress: " . $batch->progress() . "% | " . $batch->totalJobs . " jobs remaining.");
-                sleep(1);
-            }
-
-            Log::info('Batch finished');
         }
 
         // $systemPromptBuilder = new PromptBuilder();
