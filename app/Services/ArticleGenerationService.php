@@ -70,17 +70,21 @@ class ArticleGenerationService
             // keep only urls that are not already in the database
             $urls = array_diff($urls, $sitemap->embeddings->pluck('url')->toArray());
 
+            Log::info('Starting batch. Processing ' . count($urls) . ' urls');
             $batch = Bus::batch(
                 collect($urls)->map(function ($url) use ($sitemap) {
                     return function () use ($url, $sitemap) {
                         ProcessSitemapEmbedding::dispatch($url, $sitemap->id);
                     };
                 })
-            )->dispatch()->allowFailures();
+            )->allowFailures()->dispatch();
 
             while (! $batch->finished()) {
+                Log::info("Waiting for batch to finish. Progress: " . $batch->progress() . "% | " . $batch->totalJobs . " jobs remaining.");
                 sleep(1);
             }
+
+            Log::info('Batch finished');
         }
 
         // $systemPromptBuilder = new PromptBuilder();

@@ -53,12 +53,12 @@ class ProcessSitemapEmbedding implements ShouldQueue
 
     public function handle()
     {
-        $embedding = AIService::generateEmbeddings([$this->url])[0];
+        // $embedding = AIService::generateEmbeddings([$this->url])[0];
 
-        SitemapEmbedding::create([
-            'url' => $embedding['text'],
-            'embedding' => $embedding['embedding'],
-            'sitemap_id' => $this->sitemapId
-        ]);
+        // SitemapEmbedding::create([
+        //     'url' => $embedding['text'],
+        //     'embedding' => $embedding['embedding'],
+        //     'sitemap_id' => $this->sitemapId
+        // ]);
     }
 }

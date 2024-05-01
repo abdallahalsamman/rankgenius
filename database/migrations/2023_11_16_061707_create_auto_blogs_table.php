@@ -17,8 +17,8 @@ return new class extends Migration
             $table->integer('quantity');
             $table->integer('interval');
             $table->boolean('status');
-            $table->foreignId('preset_id')->constrained();
-            $table->foreignId('integration_id')->constrained();
+            $table->foreignUuid('preset_id')->constrained();
+            $table->foreignUuid('integration_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->softDeletes();
             $table->timestamps();

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('articles', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('batch_id')->constrained();
+            $table->foreignUuid('batch_id')->constrained();
             $table->string('title');
             $table->string('content');
             $table->string('image_url');

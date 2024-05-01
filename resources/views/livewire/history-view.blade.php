@@ -91,6 +91,6 @@
         <livewire:article-view :selectedArticle="$batch->articles[$selectedArticleIdx]" :key="$batch->articles[$selectedArticleIdx]->id" />
     </div>
     @endif
-</div>
 
-@vite(['resources/js/editor.js'])
+    @vite(['resources/js/editor.js'])
+</div>

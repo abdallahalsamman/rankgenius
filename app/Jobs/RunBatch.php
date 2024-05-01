@@ -59,6 +59,8 @@ class RunBatch implements ShouldQueue
      */
     public function handle(): void
     {
+        Log::info('Job started with arguments: ' . $this->batch->id . ' ' . rand(1, 1000));
+
         ArticleGenerationService::generateArticles($this->batch);
 
         $this->batch->update(['status' => BatchStatusEnum::DONE]);
