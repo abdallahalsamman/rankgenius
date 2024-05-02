@@ -46,15 +46,16 @@ class ArticleGenerationService
         //     $userPromptBuilder->addWebsiteContent($websiteText);
         // }
 
-        $crawler = new SitemapCrawler();
 
         if ($batch->sitemap_url) {
             // this is required because SitemapCrawler uses an underlying 
             // library which parses XML and has a default MAX_FILE_SIZE of 600000
             // which is too small for large sitemaps
             if (!defined('MAX_FILE_SIZE')) {
-                define('MAX_FILE_SIZE', 5*1024*1024); // 5 MB
+                define('MAX_FILE_SIZE', 10 * 1024 * 1024); // 5 MB
             }
+
+            $crawler = new SitemapCrawler();
 
             $cacheKey = 'sitemap_data_' . md5($batch->sitemap_url);
             $urls = Cache::remember($cacheKey, 86400, function () use ($crawler, $batch) {
@@ -63,23 +64,36 @@ class ArticleGenerationService
 
             $sitemap = Sitemap::updateOrCreate([
                 'url' => $batch->sitemap_url
-            ], [
-                'last_fetched' => now()
-            ]);
+            ], ['last_fetched' => now()]);
 
             // keep only urls that are not already in the database
             $urls = array_diff($urls, $sitemap->embeddings->pluck('url')->toArray());
 
-            Log::info('Starting batch. Processing ' . count($urls) . ' urls');
-            $batch = Bus::batch(
-                collect($urls)->map(function ($url) use ($sitemap) {
-                    return new ProcessSitemapEmbedding($url, $sitemap->id);
-                })->values()->toArray()
-            )->finally(function ($batch) {
-                Log::info('Batch finished');
-                Log::info("Progress: " . $batch->progress() . "% | " . $batch->totalJobs . " jobs remaining.");
-            })->allowFailures()->dispatch();
+            $cacheKey = 'sitemap_embeddings_' . md5($batch->sitemap_url);
+            $embeddings = Cache::remember($cacheKey, 86400, function () use ($urls) {
+                return AIService::generateEmbeddings($urls);
+            });
 
+            // $embeddings = AIService::generateEmbeddings($urls);
+
+            $embeddingsToInsert = [];
+            foreach ($embeddings as $embedding) {
+                $embeddingsToInsert[] = [
+                    'url' => $embedding['text'],
+                    'embedding' => json_encode($embedding['embedding']),
+                    'sitemap_id' => $sitemap->id
+                ];
+
+                if (count($embeddingsToInsert) == 100) {
+                    SitemapEmbedding::insert($embeddingsToInsert);
+                    $embeddingsToInsert = [];
+                }
+            }
+
+            if (count($embeddingsToInsert) > 0) {
+                SitemapEmbedding::insert($embeddingsToInsert);
+                $embeddingsToInsert = [];
+            }
         }
 
         // $systemPromptBuilder = new PromptBuilder();
@@ -87,7 +101,7 @@ class ArticleGenerationService
 
         // $attempts_max = 4;
         // $longestShortArticle = ["length" => 0, "content" => ""];
-        
+
         // $userPromptBuilder->setArticleTopic($batch->details)->setLanguage($batch->language);
 
         // for ($attempts = 0; $attempts < $attempts_max; $attempts++) {
@@ -96,9 +110,9 @@ class ArticleGenerationService
         //         $userPromptBuilder->build("HTML"),
         //         "gpt-4-1106-preview"
         //     );
-        
+
         //     $articleHTML = $generatedArticle;
-        
+
         //     if (strlen($articleHTML) < intval(env('MIN_ARTICLE_LENGTH'))) {
         //         if ($attempts < $attempts_max) {
         //             if(strlen($articleHTML) > $longestShortArticle["length"]) {
@@ -136,23 +150,23 @@ class ArticleGenerationService
 
         $attempts = 0;
         $longestShortArticle = ["length" => 0, "content" => ""];
-        
+
         for ($i = 0; $i < count($titles); $i++) {
             $title = $titles[$i];
             $userPromptBuilder->clear();
             $userPromptBuilder->setLanguage($batch->language)->setArticleTitle($title);
-        
+
             $generatedArticle = AIService::sendPrompt(
                 $systemPromptBuilder->build("HTML"),
                 $userPromptBuilder->build("HTML"),
             );
-        
+
             // $markdown = self::convertToMarkdown($generatedArticle);
             $markdown = $generatedArticle;
-        
+
             if (strlen($markdown) < intval(env('MIN_ARTICLE_LENGTH'))) {
                 if ($attempts < 3) {
-                    if(strlen($markdown) > $longestShortArticle["length"]) {
+                    if (strlen($markdown) > $longestShortArticle["length"]) {
                         $longestShortArticle = ["length" => strlen($markdown), "content" => $markdown];
                     }
                     Log::info("Article too short, retrying");
@@ -187,7 +201,7 @@ class ArticleGenerationService
     {
         $markdown = "";
         foreach ($paragraphs as $paragraph) {
-            if (! empty($paragraph)) {
+            if (!empty($paragraph)) {
                 $markdown .= $paragraph . "\n\n";
             }
         }
@@ -202,7 +216,7 @@ class ArticleGenerationService
             $subHeading = $section["subHeading"] ?? $section["question"] ?? "";
             $paragraphs = $section["paragraphs"];
 
-            if (! empty($subHeading)) {
+            if (!empty($subHeading)) {
                 $markdown .= "### " . $subHeading . "\n\n";
             }
 
@@ -219,7 +233,7 @@ class ArticleGenerationService
             $heading = $section["heading"];
             $content = $section["content"];
 
-            if (! empty($heading)) {
+            if (!empty($heading)) {
                 $markdown .= "## " . $heading . "\n\n";
             }
 
@@ -229,11 +243,12 @@ class ArticleGenerationService
         return $markdown;
     }
 
-    public static function isEffectivelyEmpty($node) {
+    public static function isEffectivelyEmpty($node)
+    {
         if ($node->nodeType == XML_TEXT_NODE) {
             return trim($node->nodeValue) === '';
         }
-    
+
         if ($node->nodeType == XML_ELEMENT_NODE) {
             foreach ($node->childNodes as $child) {
                 if (!self::isEffectivelyEmpty($child)) {
@@ -241,16 +256,17 @@ class ArticleGenerationService
                 }
             }
         }
-    
+
         return true; // No non-empty text nodes or elements found
     }
 
-    public static function handleElement($element) {
+    public static function handleElement($element)
+    {
         // Skip effectively empty elements
         if (self::isEffectivelyEmpty($element)) {
             return null;
         }
-        
+
         $block = [];
         switch ($element->tagName) {
             case 'h1':
@@ -307,10 +323,10 @@ class ArticleGenerationService
                     ]
                 ];
                 break;
-            // case 'article':
-            // case 'section':
-            // case 'body':
-            // case 'div':
+                // case 'article':
+                // case 'section':
+                // case 'body':
+                // case 'div':
             default:
                 $nestedBlocks = [];
                 foreach ($element->childNodes as $childNode) {
@@ -335,8 +351,8 @@ class ArticleGenerationService
     public static function convertHTMLToEditorJsBlocks($htmlContent)
     {
         $doc = new DOMDocument();
-        @$doc->loadHTML('<html>'.$htmlContent.'</html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        
+        @$doc->loadHTML('<html>' . $htmlContent . '</html>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+
         $blocks = [];
 
         foreach ($doc->childNodes as $node) {
@@ -360,9 +376,10 @@ class ArticleGenerationService
         return json_encode($editorJsData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 
-    public static function convertJSONToEditorJsBlocks($data) {
+    public static function convertJSONToEditorJsBlocks($data)
+    {
         $blocks = [];
-    
+
         $blocks[] = [
             'type' => 'header',
             'data' => [
@@ -370,7 +387,7 @@ class ArticleGenerationService
                 'level' => 1
             ]
         ];
-    
+
         foreach ($data['articleBody'] as $sectionKey => $section) {
             if (!empty($section['heading'])) {
                 $blocks[] = [
@@ -381,7 +398,7 @@ class ArticleGenerationService
                     ]
                 ];
             }
-    
+
             foreach ($section['content'] as $subsectionKey => $subsection) {
                 if (!empty($subsection['subHeading']) || !empty($subsection['question'])) {
                     $subHeading = $subsection['subHeading'] ?? $subsection['question'];
@@ -393,7 +410,7 @@ class ArticleGenerationService
                         ]
                     ];
                 }
-    
+
                 foreach ($subsection['paragraphs'] as $paragraphKey => $paragraph) {
                     if (!empty($paragraph)) {
                         $blocks[] = [
@@ -406,13 +423,13 @@ class ArticleGenerationService
                 }
             }
         }
-    
+
         $editorJsData = [
             'time' => time(),
             'blocks' => $blocks,
             'version' => '2.22.2'
         ];
-    
+
         return json_encode($editorJsData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
     }
 

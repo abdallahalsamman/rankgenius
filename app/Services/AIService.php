@@ -145,16 +145,16 @@ class AIService {
     {
         $client = OpenAI::client(config('services.openai.key'));
 
+        $embeddings = $client->embeddings()->create([
+            'model' => 'text-embedding-3-large',
+            'input' => $data
+        ]);
+
         $result = [];
-        foreach ($data as $key => $value) {
-            $embedding = $client->embeddings()->create([
-                'model' => 'text-embedding-3-large',
-                'input' => $value
-                
-            ]);
+        foreach ($embeddings['data'] as $embedding) {
             $result[] = [
-                'text' => $value,
-                'embedding' => $embedding['data'][0]['embedding']
+                'text' => $data[$embedding['index']],
+                'embedding' => $embedding['embedding']
             ];
         }
 

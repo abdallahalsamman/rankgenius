@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -14,9 +15,11 @@ return new class extends Migration
         Schema::create('sitemap_embeddings', function (Blueprint $table) {
             $table->id();
             $table->string("url");
-            $table->text("embedding");
+            $table->vector("embedding", 3072);
             $table->foreignId("sitemap_id")->constrained("sitemaps");
             $table->timestamps();
+
+            DB::statement('CREATE INDEX my_index ON sitemap_embeddings USING hnsw (embedding vector_l2_ops)');
         });
     }
 
@@ -25,6 +28,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        DB::statement('DROP INDEX my_index');
         Schema::dropIfExists('sitemap_embeddings');
     }
 };

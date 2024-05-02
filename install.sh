@@ -28,16 +28,25 @@ sudo apt update
 sudo apt install just
 
 # install postgres
-sudo apt install postgresql postgresql-contrib
+sudo apt install postgresql-16 postgresql-contrib
 sudo systemctl start postgresql.service
 sudo -u postgres createdb rankgeniusdb
 sudo -u postgres psql -c "ALTER ROLE postgres WITH PASSWORD 'postgres'";
+
+# install pgvector
+sudo apt install -y postgresql-common
+sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+postgres_version=$(psql --version | grep -oP 'PostgreSQL\) \K\d+' | head -n1)
+sudo apt install postgresql-$postgres_version-pgvector
+sudo -u postgres psql rankgeniusdb -c "CREATE EXTENSION vector;"
 
 # PHP, Composer
 sudo add-apt-repository -y ppa:ondrej/php
 sudo apt-get install -y php8.2-{curl,cli,common,fpm,mysql,zip,gd,mbstring,curl,xml,bcmath,pgsql,redis}
 curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 sudo mkdir -p /etc/apt/keyrings
+sudo sed -i 's/memory_limit = 128M/memory_limit = 512M/g' /etc/php/8.2/fpm/php.ini
+sudo systemctl restart php8.2-fpm
 
 // Node, NPM, NVM
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash

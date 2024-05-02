@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Pgvector\Laravel\Vector;
+use Pgvector\Laravel\HasNeighbors;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SitemapEmbedding extends Model
 {
-    use HasFactory;
+    use HasFactory, HasNeighbors;
 
     protected $fillable = [
         'url',
@@ -15,18 +17,10 @@ class SitemapEmbedding extends Model
         'sitemap_id'
     ];
 
+    protected $casts = ['embedding' => Vector::class];
+
     public function sitemap()
     {
         return $this->belongsTo(Sitemap::class);
-    }
-
-    public function getEmbeddingAttribute($value)
-    {
-        return json_decode($value, true);
-    }
-
-    public function setEmbeddingAttribute($value)
-    {
-        $this->attributes['embedding'] = json_encode($value);
     }
 }
