@@ -30,7 +30,6 @@ class InternalLinking extends Command
     {
         $query_embedding_text = $this->argument('query');
         $query_embedding = AIService::generateEmbeddings([$query_embedding_text]);
-        dd($query_embedding);
-        echo SitemapEmbedding::query()->nearestNeighbors('embedding', $query_embedding[0]['text'], Distance::L2)->take(20)->get()->pluck('url');
+        echo SitemapEmbedding::query()->nearestNeighbors('embedding', $query_embedding[0]['embedding'], Distance::L2)->take(20)->get()->pluck('url');
     }
 }

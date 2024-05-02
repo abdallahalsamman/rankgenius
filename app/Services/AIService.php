@@ -143,7 +143,6 @@ class AIService
 
     public static function generateEmbeddings($data)
     {
-        dd(config('services'));
         $client = OpenAI::client(config('services.openai.key'));
 
         $embeddings = $client->embeddings()->create([
