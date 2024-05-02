@@ -13,6 +13,7 @@ use App\Helpers\PromptBuilder;
 use Pgvector\Laravel\Distance;
 use App\Models\SitemapEmbedding;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 
 class ArticleGenerationService
@@ -94,6 +95,28 @@ class ArticleGenerationService
             $query_embedding = AIService::generateEmbeddings([$batch->details]);
             $nearestNeighbors = SitemapEmbedding::query()->nearestNeighbors('embedding', $query_embedding[0]['embedding'], Distance::L2)->take(rand(2, 5))->get()->pluck('url');
             $userPromptBuilder->addInternalLinks($nearestNeighbors->toArray());
+        }
+
+        if ($batch->external_linking) {
+            $response = Http::withHeaders([
+                'X-Subscription-Token' => env('BRAVE_SEARCH_API_KEY'),
+                'Accept' => 'application/json',
+            ])->get('https://api.search.brave.com/res/v1/web/search', [
+                'q' => $batch->details
+            ]);
+
+            $data = $response->json();
+            $externalLinks = collect($data['web']['results'])->take(rand(1,3))->map(function ($item) {
+                return [
+                    'title' => $item['title'],
+                    'url'   => $item['url']
+                ];
+            })->values()->reduce(function ($carry, $item) {
+                $carry .= $item['url'] . ': ' . $item['title'] . "\n";
+                return $carry;
+            }, '');
+
+            $userPromptBuilder->addExternalLinks($externalLinks);
         }
 
         $systemPromptBuilder = new PromptBuilder();

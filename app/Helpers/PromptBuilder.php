@@ -94,6 +94,14 @@ PROMPT;
         return $this;
     }
 
+    public function addExternalLinks($urls)
+    {
+        $this->prompt .= "Include these links in the article: ";
+        $this->prompt .= $urls;
+        $this->prompt .= "\n\n";
+        return $this;
+    }
+
     // public $flavorMap = ["tables" => 0, "ordered_list" => 0, "unordered_list" => 0];
     // public function flavorParagraph()
     // {
