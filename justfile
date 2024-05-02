@@ -17,8 +17,11 @@ supervisor-status:
 supervisor-stop:
     sudo supervisorctl stop all
 
-supervisor-restart:
-    sudo supervisorctl restart all
+supervisor-restart: 
+    supervisor restart all
+
+supervisor ARG:
+    sudo supervisorctl {{ARG}}
 
 logs:
     sudo tail -f storage/logs/*.log
