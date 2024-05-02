@@ -80,7 +80,7 @@ PROMPT;
 
     public function addWebsiteContent($websiteText)
     {
-        $this->prompt .= "Here is the content of my website: ";
+        $this->prompt .= "Here is the content of my website:\n";
         $this->prompt .= $websiteText;
         $this->prompt .= "\n\n";
         return $this;
@@ -88,7 +88,7 @@ PROMPT;
 
     public function addInternalLinks($urls)
     {
-        $this->prompt .= "Include these links in the article: ";
+        $this->prompt .= "Include these links in the article:\n";
         $this->prompt .= implode(", ", $urls);
         $this->prompt .= "\n\n";
         return $this;
@@ -96,7 +96,7 @@ PROMPT;
 
     public function addExternalLinks($urls)
     {
-        $this->prompt .= "Include these links in the article: ";
+        $this->prompt .= "Include these links in the article:\n";
         $this->prompt .= $urls;
         $this->prompt .= "\n\n";
         return $this;
