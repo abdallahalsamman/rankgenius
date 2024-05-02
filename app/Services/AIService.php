@@ -36,7 +36,6 @@ class AIService
 
     public static function sendPrompt($systemMessage, $userMessage, $model = "gpt-4-1106-preview", $maxtokens = 4000, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
     {
-
         $client = OpenAI::factory()
             ->withApiKey(config('services.openai.key'))
             ->withHttpClient(new \GuzzleHttp\Client(['timeout' => config('services.openai.timeout')]))
@@ -144,6 +143,7 @@ class AIService
 
     public static function generateEmbeddings($data)
     {
+        dd(config('services'));
         $client = OpenAI::client(config('services.openai.key'));
 
         $embeddings = $client->embeddings()->create([

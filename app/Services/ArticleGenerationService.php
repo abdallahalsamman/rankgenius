@@ -95,7 +95,10 @@ class ArticleGenerationService
                 $embeddingsToInsert = [];
             }
 
-            $query_embedding = AIService::generateEmbeddings([$batch->details]);
+            $queryEmbeddingCacheKey = 'query_embedding_' . md5($batch->details);
+            $query_embedding = Cache::remember($queryEmbeddingCacheKey, 86400, function () use ($batch) {
+                return AIService::generateEmbeddings([$batch->details]);
+            });
             $nearestNeighbors = SitemapEmbedding::query()->nearestNeighbors('embedding', $query_embedding[0]['embedding'], Distance::L2)->take(rand(2, 5))->get()->pluck('url');
             $userPromptBuilder->addInternalLinks($nearestNeighbors->toArray());
         }

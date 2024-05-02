@@ -4,6 +4,7 @@ alias S := supervisor-stop
 alias r := supervisor-restart
 alias l := logs
 alias j := laravel-clear-jobs
+alias cmpsr := composer
 
 default:
     just --list
@@ -17,6 +18,9 @@ supervisor *ARG:
 supervisor-status: (supervisor 'status')
 supervisor-stop: (supervisor 'stop all')
 supervisor-restart: (supervisor 'restart all')
+
+composer CMD *ARGS:
+    composer {{CMD}} --ignore-platform-reqs {{ARGS}}
 
 logs:
     sudo tail -f storage/logs/*.log
