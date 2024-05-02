@@ -86,6 +86,14 @@ PROMPT;
         return $this;
     }
 
+    public function addInternalLinks($urls)
+    {
+        $this->prompt .= "Include these links in the article: ";
+        $this->prompt .= implode(", ", $urls);
+        $this->prompt .= "\n\n";
+        return $this;
+    }
+
     // public $flavorMap = ["tables" => 0, "ordered_list" => 0, "unordered_list" => 0];
     // public function flavorParagraph()
     // {
@@ -113,9 +121,9 @@ PROMPT;
     // #region addOutline
     public function addOutline()
     {
-    //     $flavoredParagraphs = [];
-    //     for ($i = 0; $i < 30; $i++) {
-    //         $flavoredParagraphs[] = $this->flavorParagraph($i);
+        //     $flavoredParagraphs = [];
+        //     for ($i = 0; $i < 30; $i++) {
+        //         $flavoredParagraphs[] = $this->flavorParagraph($i);
         // }
 
         $this->prompt .= <<<OUTLINE
@@ -244,7 +252,8 @@ OUTLINE;
         $this->prompt = $articleTopic;
     }
 
-    public function introduceWriter() {
+    public function introduceWriter()
+    {
         $this->prompt .= <<<PROMPT
 I am a content writer that specialises in SEO.
 
@@ -276,5 +285,4 @@ PROMPT;
         $this->prompt .= "\n\n";
         return $this;
     }
-
 }

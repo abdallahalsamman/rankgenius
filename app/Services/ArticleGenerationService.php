@@ -10,10 +10,9 @@ use App\Models\Sitemap;
 use Illuminate\Support\Str;
 use App\Enums\BatchModeEnum;
 use App\Helpers\PromptBuilder;
+use Pgvector\Laravel\Distance;
 use App\Models\SitemapEmbedding;
-use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Log;
-use App\Jobs\ProcessSitemapEmbedding;
 use Illuminate\Support\Facades\Cache;
 
 class ArticleGenerationService
@@ -33,18 +32,18 @@ class ArticleGenerationService
 
     public static function topicMode($batch)
     {
-        // $userPromptBuilder = new PromptBuilder();
+        $userPromptBuilder = new PromptBuilder();
 
-        // $url = $batch->url;
-        // if (filter_var($url, FILTER_VALIDATE_URL)) {
-        //     $websiteHTML = file_get_contents($url);
-        //     $websiteHTML = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $websiteHTML);
-        //     $websiteHTML = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', "", $websiteHTML);
-        //     $websiteText = strip_tags($websiteHTML);
-        //     $websiteText = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $websiteText);
+        $url = $batch->url;
+        if (filter_var($url, FILTER_VALIDATE_URL)) {
+            $websiteHTML = file_get_contents($url);
+            $websiteHTML = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $websiteHTML);
+            $websiteHTML = preg_replace('/<style\b[^>]*>(.*?)<\/style>/is', "", $websiteHTML);
+            $websiteText = strip_tags($websiteHTML);
+            $websiteText = preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $websiteText);
 
-        //     $userPromptBuilder->addWebsiteContent($websiteText);
-        // }
+            $userPromptBuilder->addWebsiteContent($websiteText);
+        }
 
 
         if ($batch->sitemap_url) {
@@ -95,48 +94,52 @@ class ArticleGenerationService
                 SitemapEmbedding::insert($embeddingsToInsert);
                 $embeddingsToInsert = [];
             }
+
+            $query_embedding = AIService::generateEmbeddings([$batch->details]);
+            $nearestNeighbors = SitemapEmbedding::query()->nearestNeighbors('embedding', $query_embedding[0]['embedding'], Distance::L2)->take(rand(2, 5))->get()->pluck('url');
+            $userPromptBuilder->addInternalLinks($nearestNeighbors->toArray());
         }
 
-        // $systemPromptBuilder = new PromptBuilder();
-        // $systemPromptBuilder->addOutline();
+        $systemPromptBuilder = new PromptBuilder();
+        $systemPromptBuilder->addOutline();
 
-        // $attempts_max = 4;
-        // $longestShortArticle = ["length" => 0, "content" => ""];
+        $attempts_max = 4;
+        $longestShortArticle = ["length" => 0, "content" => ""];
 
-        // $userPromptBuilder->setArticleTopic($batch->details)->setLanguage($batch->language);
+        $userPromptBuilder->setArticleTopic($batch->details)->setLanguage($batch->language);
 
-        // for ($attempts = 0; $attempts < $attempts_max; $attempts++) {
-        //     $generatedArticle = AIService::sendPrompt(
-        //         $systemPromptBuilder->build("HTML"),
-        //         $userPromptBuilder->build("HTML"),
-        //         "gpt-4-1106-preview"
-        //     );
+        for ($attempts = 0; $attempts < $attempts_max; $attempts++) {
+            $generatedArticle = AIService::sendPrompt(
+                $systemPromptBuilder->build("HTML"),
+                $userPromptBuilder->build("HTML"),
+                "gpt-4-1106-preview"
+            );
 
-        //     $articleHTML = $generatedArticle;
+            $articleHTML = $generatedArticle;
 
-        //     if (strlen($articleHTML) < intval(env('MIN_ARTICLE_LENGTH'))) {
-        //         if ($attempts < $attempts_max) {
-        //             if(strlen($articleHTML) > $longestShortArticle["length"]) {
-        //                 $longestShortArticle = ["length" => strlen($articleHTML), "content" => $articleHTML];
-        //             }
-        //             Log::info("Article too short, retrying");
-        //             continue;
-        //         } else {
-        //             $articleHTML = $longestShortArticle["content"];
-        //         }
-        //     }
-        // }
+            if (strlen($articleHTML) < intval(env('MIN_ARTICLE_LENGTH'))) {
+                if ($attempts < $attempts_max) {
+                    if (strlen($articleHTML) > $longestShortArticle["length"]) {
+                        $longestShortArticle = ["length" => strlen($articleHTML), "content" => $articleHTML];
+                    }
+                    Log::info("Article too short, retrying");
+                    continue;
+                } else {
+                    $articleHTML = $longestShortArticle["content"];
+                }
+            }
+        }
 
-        // $article = new Article();
-        // $article->id = Str::uuid();
-        // $htmlString = Str::replaceFirst('```html', '', $articleHTML);
-        // $htmlString = Str::replaceLast('```', '', $htmlString);
-        // $article->content = self::convertHTMLToEditorJsBlocks($htmlString);
-        // $article->title = json_decode($article->content)->blocks[0]->data->text;
-        // $article->image_url = "https://source.unsplash.com/random/800x600";
-        // $article->batch_id = $batch->id;
-        // $article->user_id = $batch->user_id;
-        // $article->save();
+        $article = new Article();
+        $article->id = Str::uuid();
+        $htmlString = Str::replaceFirst('```html', '', $articleHTML);
+        $htmlString = Str::replaceLast('```', '', $htmlString);
+        $article->content = self::convertHTMLToEditorJsBlocks($htmlString);
+        $article->title = json_decode($article->content)->blocks[0]->data->text;
+        $article->image_url = "https://source.unsplash.com/random/800x600";
+        $article->batch_id = $batch->id;
+        $article->user_id = $batch->user_id;
+        $article->save();
     }
 
     public static function titleMode($batch)
