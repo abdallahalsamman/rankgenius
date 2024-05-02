@@ -1,9 +1,9 @@
-alias cjl := clear-jobs-logs
-alias ss := supervisor-status
-alias sS := supervisor-stop
-alias sr := supervisor-restart
+alias c := clear-jobs-logs
+alias s := supervisor-status
+alias S := supervisor-stop
+alias r := supervisor-restart
 alias l := logs
-alias ljp := laravel-jobs-prune
+alias j := laravel-clear-jobs
 
 default:
     just --list
@@ -11,22 +11,17 @@ default:
 clear-jobs-logs:
     sudo truncate -s 0 storage/logs/queue*
 
-supervisor-status:
-    sudo supervisorctl status
-
-supervisor-stop:
-    sudo supervisorctl stop all
-
-supervisor-restart: 
-    supervisor restart all
-
-supervisor ARG:
+supervisor *ARG:
     sudo supervisorctl {{ARG}}
+
+supervisor-status: (supervisor 'status')
+supervisor-stop: (supervisor 'stop all')
+supervisor-restart: (supervisor 'restart all')
 
 logs:
     sudo tail -f storage/logs/*.log
 
-laravel-jobs-prune:
+laravel-clear-jobs:
     php artisan queue:clear
     php artisan queue:prune-failed
     php artisan queue:prune-batches
