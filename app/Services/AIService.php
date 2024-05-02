@@ -3,7 +3,11 @@
 namespace App\Services;
 
 use OpenAI;
+use Alc\SitemapCrawler;
+use App\Models\Sitemap;
+use App\Models\SitemapEmbedding;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class AIService
 {
@@ -159,5 +163,52 @@ class AIService
         }
 
         return $result;
+    }
+
+    public static function embedSitemap($sitemap_url)
+    {
+        // this is required because SitemapCrawler uses an underlying 
+        // library which parses XML and has a default MAX_FILE_SIZE of 600000
+        // which is too small for large sitemaps
+        if (!defined('MAX_FILE_SIZE')) {
+            define('MAX_FILE_SIZE', 10 * 1024 * 1024); // 5 MB
+        }
+
+        $crawler = new SitemapCrawler();
+
+        $cacheKey = 'sitemap_data_' . md5($sitemap_url);
+        $urls = Cache::remember($cacheKey, 86400, function () use ($crawler, $sitemap_url) {
+            return array_keys($crawler->crawl($sitemap_url));
+        });
+
+        $sitemap = Sitemap::updateOrCreate([
+            'url' => $sitemap_url
+        ], ['last_fetched' => now()]);
+
+        // keep only urls that are not already in the database
+        $urls = array_diff($urls, $sitemap->embeddings->pluck('url')->toArray());
+
+        if (count($urls) > 0) {
+            $embeddings = self::generateEmbeddings($urls);
+
+            $embeddingsToInsert = [];
+            foreach ($embeddings as $embedding) {
+                $embeddingsToInsert[] = [
+                    'url' => $embedding['text'],
+                    'embedding' => json_encode($embedding['embedding']),
+                    'sitemap_id' => $sitemap->id
+                ];
+
+                if (count($embeddingsToInsert) == 100) {
+                    SitemapEmbedding::insert($embeddingsToInsert);
+                    $embeddingsToInsert = [];
+                }
+            }
+
+            if (count($embeddingsToInsert) > 0) {
+                SitemapEmbedding::insert($embeddingsToInsert);
+                $embeddingsToInsert = [];
+            }
+        }
     }
 }

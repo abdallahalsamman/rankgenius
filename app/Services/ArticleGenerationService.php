@@ -2,18 +2,8 @@
 
 namespace App\Services;
 
-use DOMDocument;
 use App\Models\Batch;
-use Alc\SitemapCrawler;
-use App\Models\Article;
-use App\Models\Sitemap;
-use Illuminate\Support\Str;
 use App\Enums\BatchModeEnum;
-use Pgvector\Laravel\Distance;
-use App\Models\SitemapEmbedding;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Cache;
 use App\Services\Modes\TitleModeService;
 use App\Services\Modes\TopicModeService;
 use App\Services\Modes\PresetModeService;

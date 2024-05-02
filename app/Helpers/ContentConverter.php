@@ -2,8 +2,17 @@
 
 namespace App\Helpers;
 
+use DOMDocument;
+
 class ContentConverter
 {
+    public static function htmlToText($html)
+    {
+        $dom = new DOMDocument();
+        @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        return $dom->textContent;
+    }
+
     public static function convertParagraphsToMarkdown($paragraphs)
     {
         $markdown = "";

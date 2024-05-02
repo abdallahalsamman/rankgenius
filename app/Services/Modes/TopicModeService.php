@@ -3,7 +3,15 @@
 namespace App\Services\Modes;
 
 use App\Models\Batch;
+use App\Models\Article;
+use App\Services\AIService;
+use Illuminate\Support\Str;
 use App\Helpers\PromptBuilder;
+use Pgvector\Laravel\Distance;
+use App\Models\SitemapEmbedding;
+use App\Services\BraveSearchAPI;
+use App\Helpers\ContentConverter;
+use Illuminate\Support\Facades\Log;
 
 class TopicModeService
 {
@@ -12,82 +20,27 @@ class TopicModeService
         $userPromptBuilder = new PromptBuilder();
 
         if ($batch->url) {
-            $websiteHTML = file_get_contents($batch->url);
-            $dom = new DOMDocument();
-            @$dom->loadHTML($websiteHTML, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-            $userPromptBuilder->addWebsiteContent($dom->textContent);
+            $html = file_get_contents($batch->url);
+            $userPromptBuilder->addWebsiteContent(
+                ContentConverter::htmlToText($html)
+            );
         }
 
         if ($batch->sitemap_url) {
-            // this is required because SitemapCrawler uses an underlying 
-            // library which parses XML and has a default MAX_FILE_SIZE of 600000
-            // which is too small for large sitemaps
-            if (!defined('MAX_FILE_SIZE')) {
-                define('MAX_FILE_SIZE', 10 * 1024 * 1024); // 5 MB
-            }
-
-            $crawler = new SitemapCrawler();
-
-            $cacheKey = 'sitemap_data_' . md5($batch->sitemap_url);
-            $urls = Cache::remember($cacheKey, 86400, function () use ($crawler, $batch) {
-                return array_keys($crawler->crawl($batch->sitemap_url));
-            });
-
-            $sitemap = Sitemap::updateOrCreate([
-                'url' => $batch->sitemap_url
-            ], ['last_fetched' => now()]);
-
-            // keep only urls that are not already in the database
-            $urls = array_diff($urls, $sitemap->embeddings->pluck('url')->toArray());
-
-            if (count($urls) > 0) {
-                $embeddings = AIService::generateEmbeddings($urls);
-
-                $embeddingsToInsert = [];
-                foreach ($embeddings as $embedding) {
-                    $embeddingsToInsert[] = [
-                        'url' => $embedding['text'],
-                        'embedding' => json_encode($embedding['embedding']),
-                        'sitemap_id' => $sitemap->id
-                    ];
-
-                    if (count($embeddingsToInsert) == 100) {
-                        SitemapEmbedding::insert($embeddingsToInsert);
-                        $embeddingsToInsert = [];
-                    }
-                }
-
-                if (count($embeddingsToInsert) > 0) {
-                    SitemapEmbedding::insert($embeddingsToInsert);
-                    $embeddingsToInsert = [];
-                }
-            }
-
+            AIService::embedSitemap($batch->sitemap_url);
             $query_embedding = AIService::generateEmbeddings([$batch->details]);
-            $nearestNeighbors = SitemapEmbedding::query()->nearestNeighbors('embedding', $query_embedding[0]['embedding'], Distance::L2)->take(rand(2, 5))->get()->pluck('url');
+            $nearestNeighbors = SitemapEmbedding::query()
+                ->nearestNeighbors('embedding', $query_embedding[0]['embedding'], Distance::L2)
+                ->take(rand(2, 5))
+                ->get()
+                ->pluck('url');
             $userPromptBuilder->addInternalLinks($nearestNeighbors->toArray());
         }
 
         if ($batch->external_linking) {
-            $response = Http::withHeaders([
-                'X-Subscription-Token' => env('BRAVE_SEARCH_API_KEY'),
-                'Accept' => 'application/json',
-            ])->get('https://api.search.brave.com/res/v1/web/search', [
-                'q' => $batch->details
-            ]);
-
-            $data = $response->json();
-            $externalLinks = collect($data['web']['results'])->take(rand(1, 3))->map(function ($item) {
-                return [
-                    'title' => $item['title'],
-                    'url'   => $item['url']
-                ];
-            })->values()->reduce(function ($carry, $item) {
-                $carry .= $item['url'] . ': ' . $item['title'] . "\n";
-                return $carry;
-            }, '');
-
-            $userPromptBuilder->addExternalLinks($externalLinks);
+            $userPromptBuilder->addExternalLinks(
+                BraveSearchAPI::getExternalLinks($batch->details)
+            );
         }
 
         $systemPromptBuilder = new PromptBuilder();
@@ -124,7 +77,7 @@ class TopicModeService
         $article->id = Str::uuid();
         $htmlString = Str::replaceFirst('```html', '', $articleHTML);
         $htmlString = Str::replaceLast('```', '', $htmlString);
-        $article->content = self::convertHTMLToEditorJsBlocks($htmlString);
+        $article->content = ContentConverter::convertHTMLToEditorJsBlocks($htmlString);
         $article->title = json_decode($article->content)->blocks[0]->data->text;
         $article->image_url = "https://source.unsplash.com/random/800x600";
         $article->batch_id = $batch->id;
