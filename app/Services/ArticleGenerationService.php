@@ -69,6 +69,7 @@ class ArticleGenerationService
             // keep only urls that are not already in the database
             $urls = array_diff($urls, $sitemap->embeddings->pluck('url')->toArray());
 
+            // todo: remove cache once this hits production
             $cacheKey = 'sitemap_embeddings_' . md5($batch->sitemap_url);
             $embeddings = Cache::remember($cacheKey, 86400, function () use ($urls) {
                 return AIService::generateEmbeddings($urls);

@@ -15,12 +15,12 @@ return new class extends Migration
         Schema::create('sitemap_embeddings', function (Blueprint $table) {
             $table->id();
             $table->string("url");
-            $table->vector("embedding", 3072);
+            $table->vector("embedding", 1536);
             $table->foreignId("sitemap_id")->constrained("sitemaps");
             $table->timestamps();
-
-            DB::statement('CREATE INDEX my_index ON sitemap_embeddings USING hnsw (embedding vector_l2_ops)');
         });
+
+        DB::statement('CREATE INDEX my_index ON sitemap_embeddings USING hnsw (embedding vector_l2_ops)');
     }
 
     /**

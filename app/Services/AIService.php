@@ -5,8 +5,9 @@ namespace App\Services;
 use OpenAI;
 use Illuminate\Support\Facades\Log;
 
-class AIService {
-    
+class AIService
+{
+
     static $PROMPT_PRICING = [
         "gpt-3.5-turbo-16k-0613" => 0.0030,
         "gpt-3.5-turbo-16k" => 0.0030,
@@ -19,7 +20,7 @@ class AIService {
         "gpt-4-32k" => 0.06,
         "gpt-4-0125-preview" => 0.01,
     ];
-    
+
     static $RESPONSE_PRICING = [
         "gpt-3.5-turbo-16k-0613" => 0.0040,
         "gpt-3.5-turbo-16k" => 0.0040,
@@ -35,11 +36,11 @@ class AIService {
 
     public static function sendPrompt($systemMessage, $userMessage, $model = "gpt-4-1106-preview", $maxtokens = 4000, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
     {
-        
+
         $client = OpenAI::factory()
-        ->withApiKey(config('services.openai.key'))
-        ->withHttpClient(new \GuzzleHttp\Client(['timeout' => config('services.openai.timeout')]))
-        ->make();
+            ->withApiKey(config('services.openai.key'))
+            ->withHttpClient(new \GuzzleHttp\Client(['timeout' => config('services.openai.timeout')]))
+            ->make();
 
         Log::info('MODEL: ' . $model);
         Log::info('SYSTEM PROMPT: ' . $systemMessage . "\n\nUSER MESSAGE: " . $userMessage);
@@ -72,7 +73,7 @@ class AIService {
                         ]
                     ],
                 ], $additionalOptions));
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 Log::error('Exception caught on openai Request: ' . $e->getMessage());
                 $attempt++;
                 sleep(1); // Wait a bit before retrying
@@ -84,7 +85,7 @@ class AIService {
         }
         Log::info('Received Prompt: ' . $result['choices'][0]['message']['content']);
         Log::info('Article Cost: (Prompt Tokens: ' . $result['usage']['prompt_tokens'] . ', Completion Tokens: ' . $result['usage']['completion_tokens'] . ')' .
-        '$' . (($result['usage']['prompt_tokens'] / 1000) * self::$PROMPT_PRICING[$model]) + (($result['usage']['completion_tokens'] / 1000) * self::$RESPONSE_PRICING[$model]));
+            '$' . (($result['usage']['prompt_tokens'] / 1000) * self::$PROMPT_PRICING[$model]) + (($result['usage']['completion_tokens'] / 1000) * self::$RESPONSE_PRICING[$model]));
 
         if (isset($result['choices'][0]['finish_reason']) && $result['choices'][0]['finish_reason'] == "length") {
             Log::info('Received Stop Reason: ' . $result['choices'][0]['finish_reason']);
@@ -95,7 +96,7 @@ class AIService {
         if (json_last_error() !== JSON_ERROR_NONE) {
             $content = $rawContent; // Fallback to raw content if not JSON
         }
-        
+
         return $content;
     }
 
@@ -131,7 +132,7 @@ class AIService {
 
         Log::info('Received Prompt: ');
         $responseText = '';
-        foreach($stream as $response){
+        foreach ($stream as $response) {
             $text = $response->choices[0]->delta->content;
             Log::info($text);
             $responseText .= $text;
@@ -146,7 +147,7 @@ class AIService {
         $client = OpenAI::client(config('services.openai.key'));
 
         $embeddings = $client->embeddings()->create([
-            'model' => 'text-embedding-3-large',
+            'model' => 'text-embedding-3-small',
             'input' => $data
         ]);
 
