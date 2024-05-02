@@ -3,14 +3,17 @@
 namespace App\Helpers;
 
 use DOMDocument;
+use Stevebauman\Hypertext\Transformer;
 
 class ContentConverter
 {
     public static function htmlToText($html)
     {
-        $dom = new DOMDocument();
-        @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        return $dom->textContent;
+        $transformer = new Transformer();
+        $transformer->keepNewLines();
+        $transformer->keepLinks();
+
+        return $transformer->toText($html);
     }
 
     public static function convertParagraphsToMarkdown($paragraphs)

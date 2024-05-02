@@ -24,6 +24,7 @@
         "robsontenorio/mary": "^1.2",
         "saade/blade-iconsax": "^1.1",
         "signifly/laravel-shopify": "^1.2",
+        "stevebauman/hypertext": "^1.1",
         "usernotnull/tall-toasts": "^2.0"
     },
     "require-dev": {
