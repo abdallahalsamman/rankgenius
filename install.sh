@@ -28,14 +28,15 @@ sudo apt update
 sudo apt install just
 
 # install postgres
+sudo apt install -y postgresql-common
+sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+
 sudo apt install postgresql-16 postgresql-contrib
 sudo systemctl start postgresql.service
 sudo -u postgres createdb rankgeniusdb
 sudo -u postgres psql -c "ALTER ROLE postgres WITH PASSWORD 'postgres'";
 
 # install pgvector
-sudo apt install -y postgresql-common
-sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
 postgres_version=$(psql --version | grep -oP 'PostgreSQL\) \K\d+' | head -n1)
 sudo apt install postgresql-$postgres_version-pgvector
 sudo -u postgres psql rankgeniusdb -c "CREATE EXTENSION vector;"

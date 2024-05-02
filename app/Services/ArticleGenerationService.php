@@ -68,37 +68,30 @@ class ArticleGenerationService
             // keep only urls that are not already in the database
             $urls = array_diff($urls, $sitemap->embeddings->pluck('url')->toArray());
 
-            // todo: remove cache once this hits production
-            $cacheKey = 'sitemap_embeddings_' . md5($batch->sitemap_url);
-            $embeddings = Cache::remember($cacheKey, 86400, function () use ($urls) {
-                return AIService::generateEmbeddings($urls);
-            });
-
-            // $embeddings = AIService::generateEmbeddings($urls);
-
-            $embeddingsToInsert = [];
-            foreach ($embeddings as $embedding) {
-                $embeddingsToInsert[] = [
-                    'url' => $embedding['text'],
-                    'embedding' => json_encode($embedding['embedding']),
-                    'sitemap_id' => $sitemap->id
-                ];
-
-                if (count($embeddingsToInsert) == 100) {
+            if (count($urls) > 0) {
+                $embeddings = AIService::generateEmbeddings($urls);
+    
+                $embeddingsToInsert = [];
+                foreach ($embeddings as $embedding) {
+                    $embeddingsToInsert[] = [
+                        'url' => $embedding['text'],
+                        'embedding' => json_encode($embedding['embedding']),
+                        'sitemap_id' => $sitemap->id
+                    ];
+    
+                    if (count($embeddingsToInsert) == 100) {
+                        SitemapEmbedding::insert($embeddingsToInsert);
+                        $embeddingsToInsert = [];
+                    }
+                }
+    
+                if (count($embeddingsToInsert) > 0) {
                     SitemapEmbedding::insert($embeddingsToInsert);
                     $embeddingsToInsert = [];
                 }
             }
-
-            if (count($embeddingsToInsert) > 0) {
-                SitemapEmbedding::insert($embeddingsToInsert);
-                $embeddingsToInsert = [];
-            }
-
-            $queryEmbeddingCacheKey = 'query_embedding_' . md5($batch->details);
-            $query_embedding = Cache::remember($queryEmbeddingCacheKey, 86400, function () use ($batch) {
-                return AIService::generateEmbeddings([$batch->details]);
-            });
+    
+            $query_embedding = AIService::generateEmbeddings([$batch->details]);
             $nearestNeighbors = SitemapEmbedding::query()->nearestNeighbors('embedding', $query_embedding[0]['embedding'], Distance::L2)->take(rand(2, 5))->get()->pluck('url');
             $userPromptBuilder->addInternalLinks($nearestNeighbors->toArray());
         }
@@ -106,7 +99,7 @@ class ArticleGenerationService
         $systemPromptBuilder = new PromptBuilder();
         $systemPromptBuilder->addOutline();
 
-        $attempts_max = 4;
+        $attempts_max = 1;
         $longestShortArticle = ["length" => 0, "content" => ""];
 
         $userPromptBuilder->setArticleTopic($batch->details)->setLanguage($batch->language);
@@ -296,7 +289,7 @@ class ArticleGenerationService
                 $block = [
                     'type' => 'paragraph',
                     'data' => [
-                        'text' => $element->textContent
+                        'text' => $element->ownerDocument->saveHTML($element)
                     ]
                 ];
                 break;
@@ -316,7 +309,7 @@ class ArticleGenerationService
                                     $liContent .= $childBlock['data']['text'] . ' ';
                                 }
                             } elseif ($childNode->nodeType == XML_TEXT_NODE) {
-                                $liContent .= $childNode->nodeValue . ' ';
+                                $liContent .= $childNode->ownerDocument->saveHTML($childNode) . ' ';
                             }
                         }
                         $items[] = trim($liContent);

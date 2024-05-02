@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignUuid('batch_id')->constrained();
             $table->string('title');
-            $table->string('content');
+            $table->longText('content');
             $table->string('image_url');
             $table->timestamps();
         });

@@ -1,5 +1,7 @@
 # ignoring platform reqs because of "alc/sitemap-crawler"
-composer install --ignore-platform-reqs
+just cmpsr install
+sudo chmod -R o+w storage/
+sudo chmod -R 775 storage/
 yarn dev &
 php artisan migrate
 php artisan optimize:clear
