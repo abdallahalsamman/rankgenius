@@ -1,17 +1,21 @@
-import EditorJS from '@editorjs/editorjs';
-import Header from '@editorjs/header';
-import List from '@editorjs/list';
-import Table from '@editorjs/table'
 import _ from 'lodash';
 import Undo from 'editorjs-undo';
+import List from '@editorjs/list';
+import Table from '@editorjs/table'
 import Assistant from './Assistant';
+import Header from '@editorjs/header';
+import ImageTool from '@editorjs/image';
+import EditorJS from '@editorjs/editorjs';
+import DragDrop from 'editorjs-drag-drop';
 
 var last_article_id = null;
+
 let debouncedCheckEditorjs = _.debounce(checkEditorjs, 200);
+// for initial page load
+setTimeout(() => debouncedCheckEditorjs(), 500);
 Livewire.hook('morph.added', debouncedCheckEditorjs);
 Livewire.hook('morph.updated', debouncedCheckEditorjs);
 Livewire.hook('morph.removed', debouncedCheckEditorjs);
-setTimeout(() => checkEditorjs(), 500); // for initial page load
 
 function checkEditorjs() {
     const editorjs_div = document.getElementById('editorjs');
@@ -50,9 +54,20 @@ function initEditor(editorjs_div) {
                     csrfToken: document.querySelector('input[name="_token"]').value
                 },
                 shortcut: 'CTRL+M'
+            },
+            image: {
+                class: ImageTool,
+                config: {
+                    endpoints: {
+                        byFile: 'http://localhost:8008/uploadFile', // Your backend file uploader endpoint
+                        byUrl: 'http://localhost:8008/fetchUrl', // Your endpoint that provides uploading by Url
+                    }
+                }
             }
         },
         onReady: () => {
+            new DragDrop(editor);
+
             const undo = new Undo({
                 editor,
                 config: {

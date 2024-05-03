@@ -34,6 +34,13 @@
   dependencies:
     "@codexteam/icons" "^0.0.5"
 
+"@editorjs/image@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@editorjs/image/-/image-2.9.0.tgz#0c83252d569a0dc3af14c3f7d16b6df033b9c37b"
+  integrity sha512-xItihKJFiWJ06SMtLWQZvzHv4LRPNAFZYaHAXesBFzXvWwUrtVaVMcNSf0eNnw3InrPO3Po1vZRRgpsT+Ya3Bg==
+  dependencies:
+    "@codexteam/icons" "^0.0.6"
+
 "@editorjs/list@^1.9.0":
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/@editorjs/list/-/list-1.9.0.tgz#5242095d0cee38671d852b02aa02293f54400f2c"
@@ -397,6 +404,11 @@ dotenv@^16.4.1:
   version "16.4.1"
   resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.4.1.tgz#1d9931f1d3e5d2959350d1250efab299561f7f11"
   integrity sha512-CjA3y+Dr3FyFDOAMnxZEGtnW9KBR2M0JvvUtXNW+dYJL5ROWxP9DUHCwgFqpMk0OXCc0ljhaNTr2w/kutYIcHQ==
+
+editorjs-drag-drop@^1.1.14:
+  version "1.1.14"
+  resolved "https://registry.yarnpkg.com/editorjs-drag-drop/-/editorjs-drag-drop-1.1.14.tgz#83a1053b1f8f9d7d2688dacc07dc146bb8cace2b"
+  integrity sha512-FpH3ILtfsadWrb/VcRfET7kC2fK3cBnlrTBY4wjm1bLNSxpM/OSmaRToeJJMxaIuwMldkKyuG+qWP4CiOLUu3g==
 
 editorjs-undo@^2.0.26:
   version "2.0.26"
