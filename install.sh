@@ -51,6 +51,10 @@ sudo apt install -y nginx
 echo -n "server {
     listen 80;
     listen [::]:80;
+
+    # server_name needed for let's encrypt certbot to work
+    server_name rankgenius.duckdns.org;
+    
     root /var/www/html/rankgenius/public/;
     add_header X-Frame-Options \"SAMEORIGIN\";
     add_header X-Content-Type-Options \"nosniff\";
@@ -130,8 +134,10 @@ nvm use --lts
 echo fs.inotify.max_user_watches=131070 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
 # certbot
-apt install certbot 
-sudo apt install python-certbot-nginx
+sudo apt install -y certbot python3-certbot-nginx
+# make sure port 80 is open
+sudo certbot --nginx -d rankgenius.duckdns.org
+sudo systemctl restart nginx
 
 # using just for ignoring platform reqs because of "alc/sitemap-crawler"
 just composer install
