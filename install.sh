@@ -139,9 +139,13 @@ sudo apt install -y certbot python3-certbot-nginx
 sudo certbot --nginx -d rankgenius.duckdns.org
 sudo systemctl restart nginx
 
+
 # using just for ignoring platform reqs because of "alc/sitemap-crawler"
 just composer install
 
 npm install -g yarn
 yarn
 yarn build
+
+# only on dev env
+sudo chmod -R 777 /var/www/html/rankgenius/
