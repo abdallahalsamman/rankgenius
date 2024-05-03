@@ -149,7 +149,7 @@ class AIService
     {
         $client = OpenAI::client(config('services.openai.key'));
 
-        Log::info('Generating Embeddings for ' . count($data) . ' items:\n' . implode("\n", $data));
+        // Log::info('Generating Embeddings for ' . count($data) . ' items:\n' . implode("\n", $data));
         $embeddings = $client->embeddings()->create([
             'model' => 'text-embedding-3-small',
             'input' => $data
@@ -178,9 +178,14 @@ class AIService
         $crawler = new SitemapCrawler();
 
         $cacheKey = 'sitemap_data_' . md5($sitemap_url);
-        $urls = Cache::remember($cacheKey, 86400, function () use ($crawler, $sitemap_url) {
+        $urlsNotClean = Cache::remember($cacheKey, 86400, function () use ($crawler, $sitemap_url) {
             return array_keys($crawler->crawl($sitemap_url));
         });
+
+        // if urlsNotClean have <![CDATA[ and ]]> remove them
+        $urls = array_map(function ($url) {
+            return str_replace(['<![CDATA[', ']]>'], '', $url);
+        }, $urlsNotClean);
 
         $sitemap = Sitemap::updateOrCreate([
             'url' => $sitemap_url
