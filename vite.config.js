@@ -1,9 +1,5 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import dotenv from 'dotenv';
-dotenv.config();
-
-const host = process.env.APP_DOMAIN;
 
 export default defineConfig({
     plugins: [
@@ -18,6 +14,5 @@ export default defineConfig({
     ],
     server: {
         host: true,
-        hmr: { host },
     }
 });

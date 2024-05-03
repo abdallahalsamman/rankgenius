@@ -1,3 +1,7 @@
+# apt install immediately, don't ask for confirmation
+echo 'APT::Get::Assume-Yes "true";' | sudo tee -a /etc/apt/apt.conf.d/90forceyes
+
+# put private key in ~/.ssh/id_rsa for github
 echo -n "-----BEGIN OPENSSH PRIVATE KEY-----
 b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn
 NhAAAAAwEAAQAAAYEA61DTT3NWVYs3erTz/RmHoW3zmoQqR1WrcTOORUCJTDffbtgjdVtm
@@ -39,6 +43,8 @@ N+ipfjygvcbkVhAAAACXVzZXJAdXNlcgE=
 " | sudo tee ~/.ssh/id_rsa
 sudo chmod 0400 ~/.ssh/id_rsa
 sudo apt install -y git
+git config --global user.name "abdallah alsamman"
+git config --global user.email "sammanabdallah@gmail.com"
 
 # NGINX
 sudo apt install -y nginx
@@ -73,18 +79,17 @@ cd rankgenius
 sudo chown -R www-data storage
 sudo chown -R www-data bootstrap/cache
 
-
 # Supervisor
-sudo apt install supervisor
+sudo apt install -y supervisor
 echo -n "[program:laravel-queue-worker]
 process_name=%(program_name)s_%(process_num)02d
-command=php /home/$USER/dev/rankgenius/artisan queue:work --sleep=3 --tries=3
+command=php /var/www/html/rankgenius/artisan queue:work --sleep=3 --tries=3
 autostart=true
 autorestart=true
 user=www-data
 numprocs=8
 redirect_stderr=true
-stdout_logfile=/home/$USER/dev/rankgenius/storage/logs/queue-worker.log" | sudo tee /etc/supervisor/conf.d/laravel-queue-worker.conf
+stdout_logfile=/var/www/html/rankgenius/storage/logs/queue-worker.log" | sudo tee /etc/supervisor/conf.d/laravel-queue-worker.conf
 sudo supervisorctl reread
 sudo supervisorctl update
 
@@ -115,15 +120,18 @@ sudo mkdir -p /etc/apt/keyrings
 sudo sed -i 's/memory_limit = 128M/memory_limit = 512M/g' /etc/php/8.2/fpm/php.ini
 sudo systemctl restart php8.2-fpm
 
-// Node, NPM, NVM
+# Node, NPM, NVM
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 source ~/.nvm/nvm.sh
 nvm install --lts
 nvm use --lts
 
+# Yarn dev puts so many watchers so need this to increase the limit 
 echo fs.inotify.max_user_watches=131070 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
 
-
+# certbot
+apt install certbot 
+sudo apt install python-certbot-nginx
 
 # using just for ignoring platform reqs because of "alc/sitemap-crawler"
 just composer install
