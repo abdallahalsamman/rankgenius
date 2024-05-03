@@ -27,14 +27,15 @@ class TopicModeService
         }
 
         if ($batch->sitemap_url) {
-            AIService::embedSitemap($batch->sitemap_url);
-            $query_embedding = AIService::generateEmbeddings([$batch->details]);
-            $nearestNeighbors = SitemapEmbedding::query()
-                ->nearestNeighbors('embedding', $query_embedding[0]['embedding'], Distance::L2)
+            $sitemap = AIService::embedSitemap($batch->sitemap_url);
+            $query_embedding = AIService::getEmbedding($batch->details);
+            $internal_links = SitemapEmbedding::query()
+                ->where('sitemap_id', $sitemap->id)
+                ->nearestNeighbors('embedding', $query_embedding, Distance::L2)
                 ->take(rand(2, 5))
                 ->get()
                 ->pluck('url');
-            $userPromptBuilder->addInternalLinks($nearestNeighbors->toArray());
+            $userPromptBuilder->addInternalLinks($internal_links->toArray());
         }
 
         if ($batch->external_linking) {

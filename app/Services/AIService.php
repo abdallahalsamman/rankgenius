@@ -7,6 +7,7 @@ use Alc\SitemapCrawler;
 use App\Models\Sitemap;
 use App\Models\SitemapEmbedding;
 use Illuminate\Support\Facades\Log;
+use Yethee\Tiktoken\EncoderProvider;
 use Illuminate\Support\Facades\Cache;
 
 class AIService
@@ -145,25 +146,84 @@ class AIService
         return $content;
     }
 
-    public static function generateEmbeddings($data)
+    public static function &generateEmbeddings($data)
     {
         $client = OpenAI::client(config('services.openai.key'));
 
-        // Log::info('Generating Embeddings for ' . count($data) . ' items:\n' . implode("\n", $data));
-        $embeddings = $client->embeddings()->create([
-            'model' => 'text-embedding-3-small',
-            'input' => $data
-        ]);
+        $provider = new EncoderProvider();
+        $encoder = $provider->getForModel('gpt-3.5-turbo'); // because it uses cl100k_base like text-embedding-3-small
 
-        $result = [];
-        foreach ($embeddings['data'] as $embedding) {
-            $result[] = [
-                'text' => $data[$embedding['index']],
-                'embedding' => $embedding['embedding']
-            ];
+        // create chunks of urls to embed to avoid hitting the token limit
+        $chunk = [];
+        $tokenLimit = 8191;
+        $tokenCounter = 0;
+        Log::info('Initiating embedding ' . count($data) . ' urls');
+        foreach ($data as $item) {
+            $tokenCount = count($encoder->encode($item));
+            if ($tokenCounter + $tokenCount > $tokenLimit) {
+                Log::info(
+                    'Sending ' . count($chunk) . ' urls to embed'
+                );
+                $embeddings = $client->embeddings()->create([
+                    'model' => 'text-embedding-3-small',
+                    'input' => $chunk
+                ]);
+
+                $results = [];
+                foreach ($embeddings['data'] as $embedding) {
+                    $results[] = [
+                        'text' => $chunk[$embedding['index']],
+                        'embedding' => $embedding['embedding']
+                    ];
+                }
+
+                yield $results;
+                $chunk = [];
+                $tokenCounter = 0;
+            }
+
+            $chunk[] = $item;
+            $tokenCounter += $tokenCount;
         }
 
-        return $result;
+        if (count($chunk) > 0) {
+            Log::info(
+                'Sending ' . count($chunk) . ' urls to embed'
+            );
+            $embeddings = $client->embeddings()->create([
+                'model' => 'text-embedding-3-small',
+                'input' => $chunk
+            ]);
+
+            $results = [];
+            foreach ($embeddings['data'] as $embedding) {
+                $results[] = [
+                    'text' => $chunk[$embedding['index']],
+                    'embedding' => $embedding['embedding']
+                ];
+            }
+
+            yield $results;
+        }
+    }
+
+    public static function getEmbedding($data)
+    {
+        $client = OpenAI::client(config('services.openai.key'));
+        $provider = new EncoderProvider();
+        $encoder = $provider->getForModel('gpt-3.5-turbo'); // because it uses cl100k_base like text-embedding-3-small
+        $tokenCount = count($encoder->encode($data));
+
+        if ($tokenCount > 8191) {
+            throw new \Exception('Input is too large to embed');
+        }
+
+        $embedding = $client->embeddings()->create([
+            'model' => 'text-embedding-3-small',
+            'input' => $data
+        ])['data'][0];
+
+        return $embedding['embedding'];
     }
 
     public static function embedSitemap($sitemap_url)
@@ -193,28 +253,32 @@ class AIService
 
         // keep only urls that are not already in the database
         $urls = array_diff($urls, $sitemap->embeddings->pluck('url')->toArray());
+        Log::info('Embedding ' . count($urls) . ' urls');
 
         if (count($urls) > 0) {
-            $embeddings = self::generateEmbeddings($urls);
+            foreach (self::generateEmbeddings($urls) as $embeddings) {
+                Log::info('Inserting ' . count($embeddings) . ' embeddings from ' . $sitemap->url);
+                $embeddingsToInsert = [];
+                foreach ($embeddings as $embedding) {
+                    $embeddingsToInsert[] = [
+                        'url' => $embedding['text'],
+                        'embedding' => json_encode($embedding['embedding']),
+                        'sitemap_id' => $sitemap->id
+                    ];
 
-            $embeddingsToInsert = [];
-            foreach ($embeddings as $embedding) {
-                $embeddingsToInsert[] = [
-                    'url' => $embedding['text'],
-                    'embedding' => json_encode($embedding['embedding']),
-                    'sitemap_id' => $sitemap->id
-                ];
+                    if (count($embeddingsToInsert) == 100) {
+                        SitemapEmbedding::insert($embeddingsToInsert);
+                        $embeddingsToInsert = [];
+                    }
+                }
 
-                if (count($embeddingsToInsert) == 100) {
+                if (count($embeddingsToInsert) > 0) {
                     SitemapEmbedding::insert($embeddingsToInsert);
                     $embeddingsToInsert = [];
                 }
             }
-
-            if (count($embeddingsToInsert) > 0) {
-                SitemapEmbedding::insert($embeddingsToInsert);
-                $embeddingsToInsert = [];
-            }
         }
+
+        return $sitemap;
     }
 }

@@ -12,9 +12,9 @@ use Illuminate\Support\Str;
 
 class GenerateArticles extends Component
 {
-    public $url = "https://www.aiobot.com/";
+    public $url = "https://www.nikeshoebot.com/";
     public $topic = "what is sneaker reselling and how much money can you make out of it ";
-    public $sitemap_url = "https://www.aiobot.com/sitemap.xml", $external_linking = true;
+    public $sitemap_url = "https://www.nikeshoebot.com/sitemap.xml", $external_linking = false;
     public $quantity = 1, $language = "English";
     public $preset = 0, $presetOptions = [];
     public $titles = "How to make bread at home?\nBest recipes for making bread\nWhat are the different types of bread";
