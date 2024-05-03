@@ -149,6 +149,7 @@ class AIService
     {
         $client = OpenAI::client(config('services.openai.key'));
 
+        Log::info('Generating Embeddings for ' . count($data) . ' items:\n' . implode("\n", $data));
         $embeddings = $client->embeddings()->create([
             'model' => 'text-embedding-3-small',
             'input' => $data

@@ -11,3 +11,4 @@ ideas:
 fetch sitemap links for non 200s and do not embed
 embed whole blogs instead of urls only
 â remove these characters
+add sitemap url automatically
