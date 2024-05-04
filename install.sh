@@ -149,3 +149,10 @@ yarn build
 
 # only on dev env
 sudo chmod -R 777 /var/www/html/rankgenius/
+
+# only on prod env
+sudo find /var/www/html/rankgenius/ -type d -exec chmod 755 {} \;
+sudo find /var/www/html/rankgenius/ -type f -exec chmod 644 {} \;
+sudo chown -R root /var/www/html/rankgenius/
+sudo chown -R www-data /var/www/html/rankgenius/storage
+sudo chown -R www-data /var/www/html/rankgenius/bootstrap/cache

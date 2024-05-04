@@ -10,7 +10,7 @@ default:
     just --list
 
 clear-jobs-logs:
-    sudo truncate -s 0 storage/logs/*.log
+    sudo truncate -s 0 storage/logs/*.log /var/log/nginx/*
 
 supervisor *ARG:
     sudo supervisorctl {{ARG}}
@@ -23,7 +23,7 @@ composer CMD *ARGS:
     composer {{CMD}} --ignore-platform-reqs {{ARGS}}
 
 logs:
-    sudo tail -f storage/logs/*.log
+    sudo tail -f storage/logs/*.log /var/log/nginx/*
 
 laravel-retry-jobs:
     php artisan queue:retry all
