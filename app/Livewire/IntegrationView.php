@@ -47,23 +47,23 @@ class IntegrationView extends Component
     ];
 
     public $wordpressIntegration = [
-        // "url" => "https://www.aiobot.com/",
-        // "username" => "sammanabdallah",
-        // "app_password" => "UaoK qroT uPIC 7y4F I8GU PcGk",
-        // "status" => "draft",
-        // "categories" => [],
-        // "tags" => [],
-        // "author" => 1,
-        // "time_gap" => 0,
-
-        "url" => "",
-        "username" => "",
-        "app_password" => "",
-        "status" => "publish",
+        "url" => "https://www.aiobot.com/",
+        "username" => "sammanabdallah",
+        "app_password" => "UaoK qroT uPIC 7y4F I8GU PcGk",
+        "status" => "draft",
         "categories" => [],
         "tags" => [],
         "author" => 1,
         "time_gap" => 0,
+
+        // "url" => "",
+        // "username" => "",
+        // "app_password" => "",
+        // "status" => "publish",
+        // "categories" => [],
+        // "tags" => [],
+        // "author" => 1,
+        // "time_gap" => 0,
     ];
 
     private function initializeWordPressClient()
@@ -112,7 +112,6 @@ class IntegrationView extends Component
                 $this->shopifyAuthors = $this->formatShopifyAuthors($shopify->getArticleAuthors());
 
                 $this->setDefaultShopifyOptionsOnCreate();
-
             } catch (Exception $e) {
                 $this->handleShopifyException($e);
             }
@@ -140,7 +139,7 @@ class IntegrationView extends Component
         $error_text = strip_tags($e->getMessage());
         toast()->danger($error_text)->duration(3000)->push();
     }
-    
+
     public function updateWordPressInfo()
     {
         $this->resetOptions();

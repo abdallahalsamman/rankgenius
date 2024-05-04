@@ -1,5 +1,4 @@
 credit system
-insert image into editor
 disable publish to all integrations if no integrations
 
 add test button to test posting a draft post in integrationview
