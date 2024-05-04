@@ -16,6 +16,7 @@
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
+        "league/flysystem-aws-s3-v3": "^3.27",
         "livewire/livewire": "^3.1",
         "livewire/volt": "^1.4",
         "madeitbelgium/wordpress-php-sdk": "^1.5",

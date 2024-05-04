@@ -8,6 +8,9 @@ import ImageTool from '@editorjs/image';
 import EditorJS from '@editorjs/editorjs';
 import DragDrop from 'editorjs-drag-drop';
 
+
+
+
 var last_article_id = null;
 
 let debouncedCheckEditorjs = _.debounce(checkEditorjs, 200);
@@ -33,6 +36,10 @@ function checkEditorjs() {
 }
 
 function initEditor(editorjs_div) {
+    console.log(editorjs_div.dataset.saveArticleUrl)
+    console.log(editorjs_div.dataset.uploadImageByUrlUrl)
+    console.log(editorjs_div.dataset.uploadImageUrl)
+
     const initialData = JSON.parse(editorjs_div.dataset.editorjsData);
     const editor = new EditorJS({
         holder: 'editorjs',
@@ -59,8 +66,11 @@ function initEditor(editorjs_div) {
                 class: ImageTool,
                 config: {
                     endpoints: {
-                        byFile: '/uploadFile', // Your backend file uploader endpoint
-                        byUrl: '/fetchUrl', // Your endpoint that provides uploading by Url
+                        byFile: editorjs_div.dataset.uploadImageUrl,
+                        byUrl: editorjs_div.dataset.uploadImageByUrlUrl,
+                    },
+                    additionalRequestHeaders: {
+                        "X-CSRF-Token": document.querySelector('input[name="_token"]').value
                     }
                 }
             }
@@ -85,7 +95,7 @@ function initEditor(editorjs_div) {
 
 function mySaveFunction(editor, editorjs_div) {
     editor.save().then((outputData) => {
-        fetch(editorjs_div.dataset.postUrl, {
+        fetch(editorjs_div.dataset.saveArticleUrl, {
             method: 'POST',
             credentials: "same-origin",
             headers: {

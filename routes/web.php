@@ -43,8 +43,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/history/{id}', HistoryView::class)->name('history.view');
     Route::get('/dashboard/articles', Articles::class)->name('articles');
     Route::get('/dashboard/articles/edit/{id}', ArticleEdit::class)->name('article.edit');
+
+    # editorjs helper routes
     Route::post('/dashboard/articles/edit/{id}', [ArticleEdit::class, 'save'])->name('article.save');
     Route::post('/dashboard/articles/edit/{id}/assistant', [ArticleEdit::class, 'assistant'])->name('article.assistant');
+    Route::post('/dashboard/articles/edit/{id}/uploadImage', [ArticleEdit::class, 'uploadImage'])->name('article.upload-image');
+    Route::post('/dashboard/articles/edit/{id}/uploadImageByUrl', [ArticleEdit::class, 'uploadImageByUrl'])->name('article.upload-image-by-url');
+
     Route::get('/dashboard/presets', Presets::class)->name('presets');
     Route::get('/dashboard/presets/create', PresetView::class)->name('preset.create');
     Route::get('/dashboard/presets/{id}', PresetView::class)->name('preset.edit');

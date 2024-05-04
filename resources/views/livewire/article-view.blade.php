@@ -1,12 +1,6 @@
-<div class="py-2 px-6 overflow-y-scroll">
+<div class="py-2">
     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-    <div
-    class="editorjs max-w-full"
-    id="editorjs"
-    data-editorjs-data="{{ $selectedArticle->content }}"
-    data-article-id="{{ $selectedArticle->id }}"
-    data-assistant-url="{{ route('article.assistant', $selectedArticle->id) }}"
-    data-post-url="{{ route('article.save', $selectedArticle->id) }}"></div>
+    <div class="editorjs max-w-full" id="editorjs" data-editorjs-data="{{ $selectedArticle->content }}" data-article-id="{{ $selectedArticle->id }}" data-assistant-url="{{ route('article.assistant', $selectedArticle->id) }}" data-save-article-url="{{ route('article.save', $selectedArticle->id) }}" data-upload-image-url="{{ route('article.upload-image', $selectedArticle->id) }}" data-upload-image-by-url-url="{{ route('article.upload-image-by-url', $selectedArticle->id) }}"></div>
 
     <x-drawer wire:model="showDrawer" class="w-11/12 lg:w-1/3" right>
         <div id="ai-drawer">
@@ -17,7 +11,7 @@
 
 @script
 <script>
-Livewire.on('showDrawer', () => $wire.showDrawer = true)
-Livewire.on('hideDrawer', () => $wire.showDrawer = false)
+    Livewire.on('showDrawer', () => $wire.showDrawer = true)
+    Livewire.on('hideDrawer', () => $wire.showDrawer = false)
 </script>
 @endscript
