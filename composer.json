@@ -2,8 +2,17 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/abdallahalsamman/editorjs-simple-html-parser"
+        }
+    ],
     "require": {
         "php": "^8.1",
         "alc/sitemap-crawler": "^2.0",
@@ -27,7 +36,8 @@
         "signifly/laravel-shopify": "^1.2",
         "stevebauman/hypertext": "^1.1",
         "usernotnull/tall-toasts": "^2.0",
-        "yethee/tiktoken": "^0.4.0"
+        "yethee/tiktoken": "^0.4.0",
+        "edd-g/editorjs-simple-html-parser": "dev-master"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
