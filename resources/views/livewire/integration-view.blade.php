@@ -48,7 +48,7 @@
                     <div>
                         <div class="mb-2 mr-3 pt-5 font-medium">Author
                         </div>
-                        <x-choices :options="$authorsOptions" single searchable search-function="searchUsers" class="text-base" hint="Only admins are allowed to be authors." wire:model="wordpressIntegration.author" debounce="300ms" min-chars="2" />
+                        <x-choices :options="$authorsOptions" single searchable search-function="searchUsers" class="text-base" hint="Enter author's username." wire:model="wordpressIntegration.author" debounce="300ms" min-chars="2" />
                     </div>
                     <div>
                         <div class="mb-2 mr-3 pt-5 font-medium">Status

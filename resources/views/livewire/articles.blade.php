@@ -14,15 +14,15 @@
         <div>{{ date('d/m', strtotime($article->created_at)) }}</div>
         <div>{{ Str::limit($article->title, 80, ' ...') }}</div>
         <div class="flex justify-end gap-3">
-            <x-button class="btn-sm" label="View" wire:click="viewArticle('{{ $article->id }}')" wire:loading.attr="disabled" />
-            <x-button class="btn-sm" label="Edit" link="{{ route('article.edit', ['id' => $article->id]) }}" wire:loading.attr="disabled" />
+            <x-button class="btn-sm" label="View / Edit" wire:click="viewArticle('{{ $article->id }}')" wire:loading.attr="disabled" />
+            {{-- <x-button class="btn-sm" label="Edit" link="{{ route('article.edit', ['id' => $article->id]) }}" wire:loading.attr="disabled" /> --}}
         </div>
     </div>
     @endforeach
 
     <div>
         <x-modal class="popUpMessage" wire:model="articleModal">
-            <div class="relative flex h-full flex-col">
+            <div class="relative overflow-y-scroll px-5 flex h-full flex-col">
                 <div class="bg-white">
                     <div class="flex items-center justify-end gap-5 px-6 py-4">
                         <x-button @click="$wire.articleModal = false" class="btn-sm border-0 bg-transparent px-[6px]" icon="bi.x-lg" />

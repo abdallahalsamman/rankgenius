@@ -48,7 +48,7 @@ class IntegrationView extends Component
 
     public $wordpressIntegration = [
         "url" => "https://www.aiobot.com/",
-        "username" => "sammanabdallah",
+        "username" => "sammanabdalla",
         "app_password" => "UaoK qroT uPIC 7y4F I8GU PcGk",
         "status" => "draft",
         "categories" => [],

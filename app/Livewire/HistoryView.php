@@ -27,26 +27,26 @@ class HistoryView extends Component
 
     public function updatedSelectedArticleId($id)
     {
-        $this->selectedArticleIdx = $this->batch->articles->search(function ($article) use ($id) {
-            return $article->id == $id;
-        });
+        $this->selectedArticleIdx = $this->batch->articles->search($id);
     }
 
     public function publishBatchToIntegration()
     {
-        $integration = Integration::where('id', $this->integration_id)->first();
+        if (!$this->integration_id) {
+            return;
+        }
+
+        $integration = Integration::find($this->integration_id);
         $integration->publishBatch($this->batch);
     }
 
     public function mount()
     {
         $this->id = \Route::current()->parameter('id');
-        $this->batch = Batch::where('id', $this->id)->first();
+        $this->batch = Batch::find($this->id);
 
-        $this->integrationOptions = Integration::where('user_id', auth()->user()->id)->get()->toArray();
-        if (count($this->integrationOptions) > 0) {
-            $this->integration_id = $this->integrationOptions[0]['id'];
-        }
+        $this->integrationOptions = auth()->user()->integrations()->get();
+        $this->integration_id = $this->integrationOptions->first()?->id;
     }
 
     public function render()
