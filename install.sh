@@ -80,8 +80,7 @@ sudo systemctl restart nginx
 cd /var/www/html
 git clone git@github.com:abdallahalsamman/rankgenius.git
 cd rankgenius
-sudo chown -R www-data storage
-sudo chown -R www-data bootstrap/cache
+git config core.fileMode false
 
 # Supervisor
 sudo apt install -y supervisor
@@ -140,12 +139,24 @@ sudo certbot --nginx -d rankgenius.duckdns.org
 sudo systemctl restart nginx
 
 
+sudo rm -rf vendor
+sudo mkdir vendor
+sudo chown -R www-data vendor
 # using just for ignoring platform reqs because of "alc/sitemap-crawler"
-just composer install
+sudo -u www-data just composer install
 
+# Todo: remove yarn from prod
 npm install -g yarn
+rm -rf node_modules
 yarn
 yarn build
+
+# only on prod env
+sudo find /var/www/html/rankgenius/ -type d -exec chmod 755 {} \;
+sudo find /var/www/html/rankgenius/ -type f -exec chmod 644 {} \;
+sudo chown -R root:root /var/www/html/rankgenius/
+sudo chown -R www-data /var/www/html/rankgenius/storage
+sudo chown -R www-data /var/www/html/rankgenius/bootstrap/cache
 
 # only on dev env
 sudo chmod -R 777 /var/www/html/rankgenius/
