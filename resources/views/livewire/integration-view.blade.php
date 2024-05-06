@@ -123,7 +123,7 @@
                     <div>
                         <div class="mb-2 mr-3 mt-5 font-medium">Domain
                         </div>
-                        <x-input class="mb-2" maxlength="255" placeholder="0ae717-b8" type="text" wire:model.live.debounce.1000ms="shopifyIntegration.shop_name" />
+                        <x-input class="mb-2" maxlength="255" placeholder="0ae817-b8" type="text" wire:model.live.debounce.1000ms="shopifyIntegration.shop_name" />
                     </div>
                     <div>
                         <div class="mb-2 mt-5 flex items-end justify-between">
@@ -131,7 +131,7 @@
                             </div>
                             <x-button class="btn-primary btn-outline btn-xs" icon-right="phosphor.youtube-logo-fill" label="Watch Tutorial" link="{{ route('preset.create') }}" />
                         </div>
-                        <x-input class="mb-2" maxlength="255" placeholder="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" type="text" wire:model.live.debounce.1000ms="shopifyIntegration.access_token" />
+                        <x-input class="mb-2" maxlength="255" placeholder="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" type="text" wire:model.live.debounce.1000ms="shopifyIntegration.access_token" />
                     </div>
 
                     <div class="w-full py-2 text-center" wire:loading>

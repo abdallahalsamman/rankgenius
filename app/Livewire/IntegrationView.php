@@ -31,11 +31,6 @@ class IntegrationView extends Component
 
     public $shopifyBlogs = [], $shopifyAuthors = [];
     public $shopifyIntegration = [
-        // "shop_name" => "0ae717-b8",
-        // "access_token" => "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",
-        // "blog" => null,
-        // "author" => null,
-
         "shop_name" => "",
         "access_token" => "",
         "blog" => null,
@@ -47,24 +42,43 @@ class IntegrationView extends Component
     ];
 
     public $wordpressIntegration = [
-        "url" => "https://www.aiobot.com/",
-        "username" => "sammanabdalla",
-        "app_password" => "UaoK qroT uPIC 7y4F I8GU PcGk",
-        "status" => "draft",
+        "url" => "",
+        "username" => "",
+        "app_password" => "",
+        "status" => "publish",
         "categories" => [],
         "tags" => [],
         "author" => 1,
         "time_gap" => 0,
-
-        // "url" => "",
-        // "username" => "",
-        // "app_password" => "",
-        // "status" => "publish",
-        // "categories" => [],
-        // "tags" => [],
-        // "author" => 1,
-        // "time_gap" => 0,
     ];
+
+    public function mount()
+    {
+        $this->action = Route::currentRouteName() === "integration.create" ? "create" : "edit";
+
+        if (app()->environment('local')) {
+            $this->wordpressIntegration = array_merge($this->wordpressIntegration, [
+                "url" => "https://www.aiobot.com/",
+                "username" => "sammanabdallah",
+                "app_password" => "UaoK qroT uPIC 7y4F I8GU PcGk",
+                "status" => "draft",
+            ]);
+
+            $this->shopifyIntegration = array_merge($this->shopifyIntegration, [
+                "shop_name" => "0ae717b8",
+                "access_token" => "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"
+            ]);
+        }
+
+        if ($this->action === 'edit') {
+            $this->loadIntegrationData();
+        }
+    }
+
+    public function render()
+    {
+        return view('livewire.integration-view')->extends('layouts.dashboard')->section('dashboard-content');
+    }
 
     private function initializeWordPressClient()
     {
@@ -453,19 +467,5 @@ class IntegrationView extends Component
             "author" => $shopifyIntegration->author,
         ];
         $this->updateShopifyInfo();
-    }
-
-    public function mount()
-    {
-        $this->action = Route::currentRouteName() === "integration.create" ? "create" : "edit";
-
-        if ($this->action === 'edit') {
-            $this->loadIntegrationData();
-        }
-    }
-
-    public function render()
-    {
-        return view('livewire.integration-view')->extends('layouts.dashboard')->section('dashboard-content');
     }
 }

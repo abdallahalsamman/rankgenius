@@ -12,12 +12,12 @@ use Illuminate\Support\Str;
 
 class GenerateArticles extends Component
 {
-    public $url = "https://www.nikeshoebot.com/";
-    public $topic = "what is sneaker reselling and how much money can you make out of it ";
-    public $sitemap_url = "https://www.nikeshoebot.com/sitemap.xml", $external_linking = false;
+    public $url = "";
+    public $topic = "";
+    public $sitemap_url = "", $external_linking = false;
     public $quantity = 1, $language = "English";
     public $preset = 0, $presetOptions = [];
-    public $titles = "How to make bread at home?\nBest recipes for making bread\nWhat are the different types of bread";
+    public $titles = "";
     public $keywords;
 
     public $topic_mode_allowed_article_quantity = [1, 3, 5, 10, 20];
@@ -25,6 +25,14 @@ class GenerateArticles extends Component
 
     public function mount()
     {
+        if (app()->environment('local')) {
+            $this->url = "https://www.nikeshoebot.com/";
+            $this->topic = "what is sneaker reselling and how much money can you make out of it ";
+            $this->sitemap_url = "https://www.nikeshoebot.com/sitemap.xml";
+            $this->titles = "How to make bread at home?\nBest recipes for making bread\nWhat are the different types of bread";
+            // $this->keywords = "bread, recipes, types, make, home";
+        }
+
         // $this->presetOptions = auth()->user()->presets->toArray();
     }
 
