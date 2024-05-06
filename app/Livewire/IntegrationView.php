@@ -47,23 +47,23 @@ class IntegrationView extends Component
     ];
 
     public $wordpressIntegration = [
-        // "url" => "https://www.aiobot.com/",
-        // "username" => "sammanabdallah",
-        // "app_password" => "UaoK qroT uPIC 7y4F I8GU PcGk",
-        // "status" => "draft",
-        // "categories" => [],
-        // "tags" => [],
-        // "author" => 1,
-        // "time_gap" => 0,
-
-        "url" => "",
-        "username" => "",
-        "app_password" => "",
-        "status" => "publish",
+        "url" => "https://www.aiobot.com/",
+        "username" => "sammanabdallah",
+        "app_password" => "UaoK qroT uPIC 7y4F I8GU PcGk",
+        "status" => "draft",
         "categories" => [],
         "tags" => [],
         "author" => 1,
         "time_gap" => 0,
+
+        // "url" => "",
+        // "username" => "",
+        // "app_password" => "",
+        // "status" => "publish",
+        // "categories" => [],
+        // "tags" => [],
+        // "author" => 1,
+        // "time_gap" => 0,
     ];
 
     private function initializeWordPressClient()
