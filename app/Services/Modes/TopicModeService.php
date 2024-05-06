@@ -56,7 +56,6 @@ class TopicModeService
             $generatedArticle = AIService::sendPrompt(
                 $systemPromptBuilder->build("HTML"),
                 $userPromptBuilder->build("HTML"),
-                "gpt-4-1106-preview"
             );
 
             $articleHTML = $generatedArticle;

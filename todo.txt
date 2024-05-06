@@ -1,9 +1,8 @@
 credit system
 
-retry failed jobs shortcut
-
 ideas:
-add sitemap url automatically
 fetch sitemap links for non 200s and do not embed
 embed whole blogs instead of urls only
-â remove these characters
+
+
+get landing page with stripe support
