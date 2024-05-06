@@ -51,7 +51,7 @@ class IntegrationView extends Component
         // "username" => "sammanabdallah",
         // "app_password" => "UaoK qroT uPIC 7y4F I8GU PcGk",
         // "status" => "draft",
-                // "categories" => [],
+        // "categories" => [],
         // "tags" => [],
         // "author" => 1,
         // "time_gap" => 0,
