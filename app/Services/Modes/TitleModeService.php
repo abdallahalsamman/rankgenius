@@ -4,7 +4,11 @@ namespace App\Services\Modes;
 
 
 use App\Models\Batch;
+use App\Models\Article;
+use App\Services\AIService;
+use Illuminate\Support\Str;
 use App\Helpers\PromptBuilder;
+use App\Helpers\ContentConverter;
 
 class TitleModeService
 {
