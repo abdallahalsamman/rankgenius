@@ -1,7 +1,11 @@
 credit system
+some articles are not getting titles
+word count option
+
 
 ideas:
 fetch sitemap links for non 200s and do not embed
 embed whole blogs instead of urls only
 
 get landing page with stripe support
+user login activate email password

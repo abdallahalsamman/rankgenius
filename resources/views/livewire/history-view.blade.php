@@ -68,8 +68,11 @@
     <div class="flex justify-between my-10">
         <div class="flex gap-2">
             @php $publishingDisabled = $integrationOptions->count() === 0 || $batch->articles->count() === 0; @endphp
-            <x-select :disabled="$publishingDisabled" :placeholder="$publishingDisabled ? 'Please create an integration' : 'Select an integration'" :options="$integrationOptions" class="select-sm" wire:model="integration_id" />
-            <x-button :disabled="$publishingDisabled" wire-loading.attr="disabled" wire-target="publishBatchToIntegration" class="font-semibold text-white btn-sm bg-neutral-900 hover:bg-gray-700 disabled:text-white" :label="'Publish ' .  ($batch->articles->count() > 1 ? 'all articles' : '') . 'to Integration'" wire:click="publishBatchToIntegration" />
+            <x-select :disabled="$publishingDisabled" :placeholder="$publishingDisabled ? 'You have no integrations' : 'Select an integration'" :options="$integrationOptions" class="select-sm" wire:model="integration_id" />
+            <x-button :disabled="$publishingDisabled" wire-loading.attr="disabled" wire-target="publishBatchToIntegration" class="font-semibold text-white btn-sm bg-neutral-900 hover:bg-gray-700 disabled:text-white" :label="'Publish ' .  ($batch->articles->count() > 1 ? 'all articles ' : '') . 'to Integration'" wire:click="publishBatchToIntegration" />
+            @if ($integrationOptions->count() === 0)
+            <a href="{{ route('integrations.index') }}" class="font-semibold text-white btn-sm bg-neutral-900 hover:bg-gray-700 disabled:text-white">Create Integration</a>
+            @endif
         </div>
     </div>
     @if ($batch->articles->count() > 0)
