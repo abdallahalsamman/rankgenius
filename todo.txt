@@ -1,11 +1,14 @@
 credit system
 some articles are not getting titles
-word count option
-
+word count option to control article length
+make it consistent in returning html, no bold inside **
+Nuke AI Words: delve, dive, buckle up, and look no further
 
 ideas:
 fetch sitemap links for non 200s and do not embed
 embed whole blogs instead of urls only
 
 get landing page with stripe support
+user login activate email password
+
 user login activate email password
