@@ -21,6 +21,9 @@ class User extends Authenticatable
         'email',
     ];
 
+    // disable rememberMe since we're turning it on by default
+    protected $rememberTokenName = false;
+
     /**
      * Define the relationship with Presets.
      *
