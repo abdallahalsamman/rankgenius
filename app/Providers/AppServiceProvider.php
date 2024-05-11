@@ -24,10 +24,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if ($this->app->environment('production')) {
-            URL::forceScheme('https');
-        }
-
         // Log a warning if we spend more than a total of 2000ms querying.
         DB::whenQueryingForLongerThan(2000, function (Connection $connection) {
             Log::warning("Database queries exceeded 2 seconds on {$connection->getName()}");

@@ -20,6 +20,7 @@
         "codeat3/blade-phosphor-icons": "^2.0",
         "codeat3/blade-simple-icons": "^1.94",
         "davidhsianturi/blade-bootstrap-icons": "^1.4",
+        "edd-g/editorjs-simple-html-parser": "dev-master",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
@@ -28,6 +29,7 @@
         "livewire/livewire": "^3.1",
         "livewire/volt": "^1.4",
         "madeitbelgium/wordpress-php-sdk": "^1.5",
+        "monicahq/laravel-cloudflare": "^3.7",
         "openai-php/client": "^0.8.0",
         "owenvoke/blade-fontawesome": "^2.4",
         "pgvector/pgvector": "^0.1.4",
@@ -36,8 +38,7 @@
         "signifly/laravel-shopify": "^1.2",
         "stevebauman/hypertext": "^1.1",
         "usernotnull/tall-toasts": "^2.0",
-        "yethee/tiktoken": "^0.4.0",
-        "edd-g/editorjs-simple-html-parser": "dev-master"
+        "yethee/tiktoken": "^0.4.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
