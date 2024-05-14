@@ -53,7 +53,7 @@ echo -n "server {
     listen [::]:80;
 
     # server_name needed for let's encrypt certbot to work
-    server_name rankgenius.duckdns.org;
+    server_name seoyousoon.com;
     
     root /var/www/html/rankgenius/public/;
     add_header X-Frame-Options \"SAMEORIGIN\";
@@ -131,13 +131,6 @@ nvm use --lts
 
 # Yarn dev puts so many watchers so need this to increase the limit 
 echo fs.inotify.max_user_watches=131070 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p
-
-# certbot
-sudo apt install -y certbot python3-certbot-nginx
-# make sure port 80 is open
-sudo certbot --nginx -d rankgenius.duckdns.org
-sudo systemctl restart nginx
-
 
 sudo rm -rf vendor
 sudo mkdir vendor

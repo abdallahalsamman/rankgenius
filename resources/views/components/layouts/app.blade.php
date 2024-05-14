@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=1440">
 
-    <title>{{ $title ?? 'RankGenius' }}</title>
+    <title>{{ $title }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
