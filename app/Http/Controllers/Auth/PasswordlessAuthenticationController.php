@@ -34,11 +34,11 @@ class PasswordlessAuthenticationController extends Controller
             ['user' => $user->id]
         );
 
-        return redirect($url);
+        // return redirect($url);
 
-        // Mail::to($request->email)->send(new SendMail($url));
+        Mail::to($request->email)->send(new SendMail($url));
 
-        // return back()->with('success', 'A link has been sent to your email address. Please click the link in the email to login');
+        return back()->with('success', 'A link has been sent to your email address. Please click the link in the email to login');
     }
 
     public function authenticateUser(Request $request): RedirectResponse

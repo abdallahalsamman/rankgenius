@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=1440">
 
-    <title>{{ $title ?? 'SeoYouSoon' }}</title>
+    <title>{{ $title ?? env('APP_NAME') }}</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
