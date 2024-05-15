@@ -24,6 +24,17 @@ class User extends Authenticatable
     // disable rememberMe since we're turning it on by default
     protected $rememberTokenName = false;
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($user) {
+            if (empty($user->name)) {
+                $user->name = fake()->name;
+            }
+        });
+    }
+
     /**
      * Define the relationship with Presets.
      *
