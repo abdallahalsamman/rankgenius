@@ -34,7 +34,9 @@ class PasswordlessAuthenticationController extends Controller
             ['user' => $user->id]
         );
 
-        // return redirect($url);
+        if (app()->environment('local')) {
+            return redirect($url);
+        }
 
         Mail::to($request->email)->send(new SendMail($url));
 

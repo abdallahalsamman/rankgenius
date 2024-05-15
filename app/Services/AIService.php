@@ -22,6 +22,7 @@ class AIService
         "gpt-3.5-turbo-0301" => 0.0015,
         "gpt-3.5-turbo-0125" => 0.0005,
         "gpt-4" => 0.03,
+        "gpt-4o" => 0.005,
         "gpt-4-32k" => 0.06,
         "gpt-4-0125-preview" => 0.01,
     ];
@@ -35,12 +36,17 @@ class AIService
         "gpt-3.5-turbo-0301" => 0.0020,
         "gpt-3.5-turbo-0125" => 0.0015,
         "gpt-4" => 0.06,
+        "gpt-4o" => 0.015,
         "gpt-4-32k" => 0.12,
         "gpt-4-0125-preview" => 0.03,
     ];
 
-    public static function sendPrompt($systemMessage, $userMessage, $model = "gpt-4-0125-preview", $maxtokens = 4000, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
+    static $DEFAULT_MODEL = "gpt-4o";
+
+    public static function sendPrompt($systemMessage, $userMessage, $model = null, $maxtokens = 4000, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
     {
+        $model = $model ?? self::$DEFAULT_MODEL;
+
         $client = OpenAI::factory()
             ->withApiKey(config('services.openai.key'))
             ->withHttpClient(new \GuzzleHttp\Client(['timeout' => config('services.openai.timeout')]))
@@ -104,8 +110,10 @@ class AIService
         return $content;
     }
 
-    public static function sendPromptStream($systemMessage, $userMessage, $model = "gpt-4-0125-preview", $maxtokens = 4000, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
+    public static function sendPromptStream($systemMessage, $userMessage, $model, $maxtokens = 4000, $temperature = 0.7, $topP = 1, $frequencyPenalty = 0, $presencePenalty = 0, $stopSequences = [])
     {
+        $model = $model ?? self::$DEFAULT_MODEL;
+
         $client = OpenAI::client(config('services.openai.key'));
 
         // Log::info('SYSTEM PROMPT: ' . $systemMessage . "\n\nUSER MESSAGE: " . $userMessage);
