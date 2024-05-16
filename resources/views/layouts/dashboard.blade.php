@@ -14,7 +14,7 @@
                     </div>
                 </div>
             </a>
-            <x-badge class="btn-xs ml-3 bg-neutral text-white" value="3 Credits Left" />
+            <!-- <x-badge class="btn-xs ml-3 bg-neutral text-white" value="3 Credits Left" /> -->
         </div>
         <div class="flex items-center gap-5 text-sm">
             <a class="text-gray-600 hover:text-neutral-900" data-canny-link href="https://seoyousoon.canny.io">
