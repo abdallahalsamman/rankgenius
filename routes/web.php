@@ -47,8 +47,8 @@ Route::middleware(['auth'])->group(function () {
     # editorjs helper routes
     Route::post('/dashboard/articles/edit/{id}', [ArticleEdit::class, 'save'])->name('article.save');
     Route::post('/dashboard/articles/edit/{id}/assistant', [ArticleEdit::class, 'assistant'])->name('article.assistant');
-    Route::post('/dashboard/articles/edit/{id}/uploadImage', [ArticleEdit::class, 'uploadImage'])->name('article.upload-image');
-    Route::post('/dashboard/articles/edit/{id}/uploadImageByUrl', [ArticleEdit::class, 'uploadImageByUrl'])->name('article.upload-image-by-url');
+    Route::post('/dashboard/articles/edit/{id}/uploadImage', [ArticleEdit::class, 'uploadImage'])->name('article.upload-image')->middleware('throttle:5,1');
+    Route::post('/dashboard/articles/edit/{id}/uploadImageByUrl', [ArticleEdit::class, 'uploadImageByUrl'])->name('article.upload-image-by-url')->middleware('throttle:5,1');
 
     Route::get('/dashboard/presets', Presets::class)->name('presets');
     Route::get('/dashboard/presets/create', PresetView::class)->name('preset.create');

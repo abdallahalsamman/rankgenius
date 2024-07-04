@@ -12,3 +12,11 @@ get landing page with stripe support
 user login activate email password
 
 user login activate email password
+
+
+
+
+
+
+
+PUT OPTION FOR USERS TO PUT THEIR OWN API KEY
